@@ -1,0 +1,16 @@
+{
+  "main.css": "/client/static/css/main.4ee0477b.chunk.css",
+  "main.js": "/client/static/js/main.c1f7c4af.chunk.js",
+  "main.js.map": "/client/static/js/main.c1f7c4af.chunk.js.map",
+  "static/css/1.e80cbcbd.chunk.css": "/client/static/css/1.e80cbcbd.chunk.css",
+  "static/js/1.8360b41d.chunk.js": "/client/static/js/1.8360b41d.chunk.js",
+  "static/js/1.8360b41d.chunk.js.map": "/client/static/js/1.8360b41d.chunk.js.map",
+  "runtime~main.js": "/client/static/js/runtime~main.dad60270.js",
+  "runtime~main.js.map": "/client/static/js/runtime~main.dad60270.js.map",
+  "static/media/blueprint-icons.css": "/client/static/media/icons-16.989d9c9a.ttf",
+  "static/css/main.4ee0477b.chunk.css.map": "/client/static/css/main.4ee0477b.chunk.css.map",
+  "static/css/1.e80cbcbd.chunk.css.map": "/client/static/css/1.e80cbcbd.chunk.css.map",
+  "index.html": "/client/index.html",
+  "precache-manifest.4c83498f0afff45770905d9bb3c259e0.js": "/client/precache-manifest.4c83498f0afff45770905d9bb3c259e0.js",
+  "service-worker.js": "/client/service-worker.js"
+}
