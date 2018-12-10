@@ -25,10 +25,9 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        // is this the way??
         this.state = {
             isConnected: false,
-            host: window.location.hostname || 'localhost',
+            host: 'localhost',
             port: 10000,
             parameters: [],
         };
@@ -52,7 +51,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
     setHost = (e: any) => {
         this.setState({
-            host: e.currentTarget.value || "localhost",
+            host: e.currentTarget.value as string,
         });
     }
 
@@ -136,7 +135,17 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     private handleAlertConfirm = () => {
-        this.doConnect();
+
+        this.setState({
+            error: undefined
+        });
+
+        if (this.state.host !== undefined && 
+            this.state.host !== "" &&
+            !isNaN(this.state.port))
+        {
+            this.doConnect();
+        }
     }
 
     private resetUI() {
@@ -153,7 +162,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     private doDisconnect = () => {
-        console.log("DO DISCONNECT");
         
         const client = this.state.client;
 
@@ -182,10 +190,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
         const host = this.state.host;
         const port = this.state.port;
-        client.connect(host, port);
+
         this.setState({
             client, error: undefined
         });
+
+        client.connect(host, port);
     }
 
     private connected = () => {
@@ -198,7 +208,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     private disconnected = (event: CloseEvent) => {
         console.log("ConnectionDialog disconneted: " + JSON.stringify(event));
         this.setState({
-            error: "disconneted: " + JSON.stringify(event)
+            error: `disconnected${event.reason ? ": " + JSON.stringify(event.reason) : ""}`
         });
         this.resetUI();
     }
