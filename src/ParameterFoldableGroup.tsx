@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Colors, Text, Collapse, ControlGroup, Button, Icon } from '@blueprintjs/core';
+import { Colors, Text, Collapse, ControlGroup, Icon } from '@blueprintjs/core';
 
 interface Props {
     style?: React.CSSProperties;

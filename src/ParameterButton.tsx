@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Button, Intent, IconName, Alert, IButtonProps } from '@blueprintjs/core';
+import { Button, Intent, Alert, IButtonProps } from '@blueprintjs/core';
 
 interface Props extends IButtonProps {
     className?: string;

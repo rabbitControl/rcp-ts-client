@@ -1,17 +1,15 @@
+import { Card } from '@blueprintjs/core';
+import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter } from 'rabbitcontrol';
 import * as React from 'react';
-import {GroupParameter, SliderWidget, NumberDefinition, RcpTypes, Parameter, ValueParameter, BangParameter, Vector3F32Parameter, BooleanParameter, RGBAParameter, RGBParameter, EnumParameter, ImageParameter} from 'rabbitcontrol';
-import {NumberParameter} from 'rabbitcontrol'
-import { ParameterSliderC } from './ParameterSlider';
-import { Colors, NumericInput, Card, InputGroup, Text, ControlGroup, Icon, Button } from '@blueprintjs/core';
-import { ParameterNumericInputC } from './ParameterNumberInput';
 import { parameterLabelStyle } from './Globals';
-import { ParameterTextInputC } from './ParameterTextInput';
-import { ParameterCheckbox, ParameterCheckboxC } from './ParameterCheckbox';
-import { ParameterColorDivC } from './ParameterColorDiv';
-import { ParameterColorInputC } from './ParameterColorInput';
-import { ParameterHTMLSelectC } from './ParameterHTMLSelect';
 import { ParameterButtonC } from './ParameterButton';
+import { ParameterCheckboxC } from './ParameterCheckbox';
+import { ParameterColorInputC } from './ParameterColorInput';
 import { ParameterFoldableGroupC } from './ParameterFoldableGroup';
+import { ParameterHTMLSelectC } from './ParameterHTMLSelect';
+import { ParameterNumericInputC } from './ParameterNumberInput';
+import { ParameterSliderC } from './ParameterSlider';
+import { ParameterTextInputC } from './ParameterTextInput';
 
 
 interface Props {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { INumericInputProps, Position, Checkbox, HTMLSelect } from '@blueprintjs/core';
+import { INumericInputProps, HTMLSelect } from '@blueprintjs/core';
 import { EnumParameter } from 'rabbitcontrol';
 
 interface Props extends INumericInputProps {
