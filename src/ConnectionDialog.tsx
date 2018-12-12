@@ -248,11 +248,11 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     private parameterRemoved = (parameter: Parameter) => {
 
         const index = this.myParameters.indexOf(parameter, 0);
-        if (index > -1) {
-            const params = this.myParameters.splice(index, 1);
-            this.myParameters = params;
-        }
 
+        if (index > -1) {
+            this.myParameters.splice(index, 1);
+        }
+        
         if (this.removeTimer!== undefined) {
             window.clearTimeout(this.removeTimer);
             this.removeTimer = undefined;
