@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { NumericInput, INumericInputProps, Position } from '@blueprintjs/core';
+import { NumericInput, INumericInputProps, Position, Intent } from '@blueprintjs/core';
 import { NumberDefinition, RcpTypes } from 'rabbitcontrol';
 
 interface Props extends INumericInputProps {
@@ -35,6 +35,7 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
         let min:number|undefined;
         let max:number|undefined;  
         let readOnly:boolean|undefined;
+        let intent:Intent = Intent.NONE;
 
         const param = this.props.parameter;
         if (param) {
@@ -44,19 +45,23 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
 
             const numdef = param.typeDefinition as NumberDefinition;
 
-            if (numdef !== undefined && 
-                numdef.minimum !== undefined && 
-                numdef.maximum !== undefined)
-            {
-                min = numdef.minimum;
-                max = numdef.maximum;
+            if (numdef !== undefined) {
 
-                const valueRange = (numdef.maximum - numdef.minimum);
-                
+                if (numdef.minimum !== undefined && 
+                    numdef.maximum !== undefined)
+                {
+                    if (numdef.minimum < numdef.maximum) {
+                        min = numdef.minimum;
+                        max = numdef.maximum;
+                    } else {
+                        // error on min/max
+                        console.error("NumberInput: minimum >= maximum");                
+                        intent = Intent.DANGER;
+                    }    
+                }
+
                 if (numdef.multipleof) {
                     step = numdef.multipleof;
-                } else if (isFloat) {
-                    // step = valueRange > 0 && this.state.dimensions.width > 0 ? valueRange / this.state.dimensions.width : 1
                 }
             }
         }
@@ -74,6 +79,7 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
                 selectAllOnFocus={true}
                 buttonPosition={Position.RIGHT}
                 placeholder={"-"}
+                intent={intent}
             />      
         );
     }

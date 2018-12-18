@@ -1,5 +1,5 @@
 import { Card } from '@blueprintjs/core';
-import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter } from 'rabbitcontrol';
+import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, DefaultWidget, NumberboxWidget } from 'rabbitcontrol';
 import * as React from 'react';
 import { parameterLabelStyle } from './Globals';
 import { ParameterButtonC } from './ParameterButton';
@@ -10,6 +10,7 @@ import { ParameterHTMLSelectC } from './ParameterHTMLSelect';
 import { ParameterNumericInputC } from './ParameterNumberInput';
 import { ParameterSliderC } from './ParameterSlider';
 import { ParameterTextInputC } from './ParameterTextInput';
+import { ParameterTextWithLabelC } from './ParameterTextWithLabel';
 
 
 interface Props {
@@ -131,6 +132,8 @@ export default class ParameterWidget extends React.Component<Props, State> {
         
         if (widget instanceof SliderWidget) {
             console.log("SLIDER WIDGET");
+        } else if (widget instanceof NumberboxWidget) {
+            console.log("NUMBERBOX WIDGET");
         }
 
         if (parameter instanceof ValueParameter) {
@@ -138,24 +141,31 @@ export default class ParameterWidget extends React.Component<Props, State> {
             if (parameter instanceof NumberParameter) {
 
                 const numdef = parameter.typeDefinition as NumberDefinition;
-                if (numdef !== undefined && 
+                if (!(widget instanceof NumberboxWidget) &&
+                    numdef !== undefined && 
                     numdef.minimum !== undefined && 
                     numdef.maximum !== undefined)
-                {
-                    return ( 
-                        <div>
-                            <div style={parameterLabelStyle}>{parameter.label}</div>
-                            <ParameterSliderC
-                                {...this.props}
-                                value={this.state.value}
-                                handleValue={this.handleValueChange}
-                                continuous={true}
-                            />
-                        </div>
-                    );
+                { 
+                    if (numdef.minimum < numdef.maximum) {
+
+                        return ( 
+                            <div>
+                                <div style={parameterLabelStyle}>{parameter.label}</div>
+                                <ParameterSliderC
+                                    {...this.props}
+                                    value={this.state.value}
+                                    handleValue={this.handleValueChange}
+                                    continuous={true}
+                                />
+                            </div>
+                        );
+                    } else {
+                        console.error("ParameterWidget: minimum >= maximum");
+                        return this.defaultWidet();
+                    }
                 } else {
 
-                    // numberic input
+                    // numeric input
                     return (
                         <div>
                             <div style={parameterLabelStyle}>{parameter.label}</div>
@@ -289,4 +299,15 @@ export default class ParameterWidget extends React.Component<Props, State> {
             </div>
         );
     }
+
+    private defaultWidet() {
+        return (
+            <ParameterTextWithLabelC
+                {...this.props}
+                value={this.state.value}
+                
+            />
+        );
+    }
+
 }

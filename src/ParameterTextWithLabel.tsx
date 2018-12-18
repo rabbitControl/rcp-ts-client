@@ -3,10 +3,11 @@ import { InjectedProps, parameterWrapped } from './ElementWrapper';
 import { Colors } from '@blueprintjs/core';
 import { NumberParameter } from 'rabbitcontrol';
 import { NumberDefinition } from 'rabbitcontrol';
+import { isBuffer } from 'util';
 
 interface Props {
     style?: React.CSSProperties;
-    label: string;
+    label?: string;
     labelDisabled?: boolean;
     labelWidth?: number;
     large?: boolean;
@@ -31,6 +32,11 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
         const param = this.props.parameter;
         let unit = "";
         let value = this.props.defaultValue;
+        let label = this.props.label;
+
+        if (param) {
+            label = param.label;
+        }
         
         if (this.props.value !== undefined && this.props.value !== null) {
             value = this.props.value as string;
@@ -73,7 +79,7 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
                         // fontSize: this.props.large ? "large" : "normal",
                         color: this.props.disabled ? Colors.GRAY1 : Colors.LIGHT_GRAY5,
                     }}>
-                        {this.props.labelDisabled ? "" : this.props.label}
+                        {this.props.labelDisabled ? "" : label}
                     </div>
 
 
