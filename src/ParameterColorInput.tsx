@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
 import { INumericInputProps, InputGroup } from '@blueprintjs/core';
-import { ValueParameter } from 'rabbitcontrol';
+import { ValueParameter, RGBAParameter } from 'rabbitcontrol';
 
 interface Props extends INumericInputProps {
 };
@@ -21,7 +21,15 @@ export class ParameterColorInputC extends React.Component<Props & InjectedProps,
     handleChange = (event: React.FormEvent<HTMLElement>) => {
 
         if (this.props.handleValue) {
-            this.props.handleValue((event.target as HTMLInputElement).value);
+            let value = (event.target as HTMLInputElement).value;
+
+            // we only can handle RGB values, add alpha if needed
+            if (this.props.parameter instanceof RGBAParameter) {
+                while (value.length < 9) {
+                    value += "f";
+                }
+            }
+            this.props.handleValue(value);
         }
 
         if (this.props.onSubmitCb) {
@@ -47,8 +55,13 @@ export class ParameterColorInputC extends React.Component<Props & InjectedProps,
     }
 
     render() {
-        const value = this.props.value as string;
+        let value = this.props.value as string;
         let readOnly:boolean|undefined;
+
+        // we only can handle RGB values
+        if (value.length > 7) {
+            value = value.substr(0, 7);
+        }
 
         const param = this.props.parameter;
         if (param) {
