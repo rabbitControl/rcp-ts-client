@@ -70,7 +70,9 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
                 if (numdef.multipleof) {
                     step = numdef.multipleof;
                 } else if (isFloat) {
-                    step = valueRange > 0 && this.state.dimensions.width > 0 ? valueRange / this.state.dimensions.width : 1
+                    if (this.state !== undefined && this.state.dimensions !== undefined) {                        
+                        step = valueRange > 0 && this.state.dimensions.width > 0 ? valueRange / this.state.dimensions.width : 1
+                    }
                 }
             }
         }
