@@ -62,6 +62,8 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
 
                 if (numdef.multipleof) {
                     step = numdef.multipleof;
+                } else if (isFloat) {
+                    step = 0.1;
                 }
             }
         }
