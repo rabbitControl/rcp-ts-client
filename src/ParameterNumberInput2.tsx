@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
 import { NumericInput, INumericInputProps, Position, Intent } from '@blueprintjs/core';
-import { RcpTypes, Vector3, Vector3F32Definition } from 'rabbitcontrol';
+import { RcpTypes, Vector3, Vector3F32Definition, Vector2 } from 'rabbitcontrol';
 
 interface Props extends INumericInputProps {
 };
@@ -9,7 +9,7 @@ interface Props extends INumericInputProps {
 interface State {
 };
 
-export class ParameterNumericInput3C extends React.Component<Props & InjectedProps, State> {
+export class ParameterNumericInput2C extends React.Component<Props & InjectedProps, State> {
 
     constructor(props: Props & InjectedProps) {
         super(props);
@@ -20,7 +20,7 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
 
     handleChangeX = (value: number, valueAsString: string) => {
 
-        const vec = (this.props.value as Vector3).clone();
+        const vec = (this.props.value as Vector2).clone();
         vec.x = value;
 
         if (this.props.handleValue) {
@@ -33,21 +33,8 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
     }
     handleChangeY = (value: number, valueAsString: string) => {
 
-        const vec = (this.props.value as Vector3).clone();
+        const vec = (this.props.value as Vector2).clone();
         vec.y = value;
-
-        if (this.props.handleValue) {
-            this.props.handleValue(vec);
-        }
-
-        if (this.props.onSubmitCb) {
-            this.props.onSubmitCb();
-        }
-    }
-    handleChangeZ = (value: number, valueAsString: string) => {
-
-        const vec = (this.props.value as Vector3).clone();
-        vec.z = value;
 
         if (this.props.handleValue) {
             this.props.handleValue(vec);
@@ -59,11 +46,11 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
     }
 
     render() {
-        const value = this.props.value as Vector3;
-        let step = new Vector3(1, 1, 1);
+        const value = this.props.value as Vector2;
+        let step = new Vector2(1, 1);
         let isFloat:boolean|undefined;
-        let min:Vector3|undefined;
-        let max:Vector3|undefined; 
+        let min:Vector2|undefined;
+        let max:Vector2|undefined; 
         let readOnly:boolean|undefined;
         let intent:Intent = Intent.NONE;
 
@@ -85,8 +72,7 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
                 {
 
                     if (numdef.minimum.x < numdef.maximum.x &&
-                        numdef.minimum.y < numdef.maximum.y &&
-                        numdef.minimum.z < numdef.maximum.z)
+                        numdef.minimum.y < numdef.maximum.y)
                     {
                         min = numdef.minimum;
                         max = numdef.maximum;
@@ -102,7 +88,6 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
                 } else if (isFloat) {
                     step.x = 0.1;
                     step.y = 0.1;
-                    step.z = 0.1;
                 }
             }
         }
@@ -137,23 +122,9 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
                     placeholder={"-"}
                     intent={intent}
                 />
-                <NumericInput
-                    {...this.props}
-                    value={value ? value.z : 0}
-                    min={min ? min.z : undefined}
-                    max={max ? max.z : undefined}
-                    stepSize={step.z}
-                    minorStepSize={isFloat ? 0.1 : 1}
-                    onValueChange={this.handleChangeZ}
-                    disabled={readOnly === true}
-                    selectAllOnFocus={true}
-                    buttonPosition={Position.RIGHT}
-                    placeholder={"-"}
-                    intent={intent}
-                />
             </div>
         );
     }
 };
 
-export const ParameterNumericInput3 = parameterWrapped()(ParameterNumericInput3C);
+export const ParameterNumericInput2 = parameterWrapped()(ParameterNumericInput2C);

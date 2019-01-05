@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
 import { Slider, ISliderProps } from '@blueprintjs/core';
-import { RcpTypes, Vector3, Vector3F32Definition } from 'rabbitcontrol';
+import { RcpTypes, Vector3, Vector3F32Definition, Vector2, Vector2F32Definition } from 'rabbitcontrol';
 import Measure from 'react-measure';
 
 interface Props extends ISliderProps {
@@ -15,7 +15,7 @@ interface State {
     }; 
 };
 
-export class ParameterSlider3C extends React.Component<Props & InjectedProps, State> {
+export class ParameterSlider2C extends React.Component<Props & InjectedProps, State> {
 
     constructor(props: Props & InjectedProps) {
         super(props);
@@ -30,11 +30,11 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
 
     handleChangeX = (value: number) => {
 
-        const vec3 = (this.props.value as Vector3).clone();
-        vec3.x = value;
+        const vec = (this.props.value as Vector2).clone();
+        vec.x = value;
 
         if (this.props.handleValue) {
-            this.props.handleValue(vec3);
+            this.props.handleValue(vec);
         }
 
         if (this.props.continuous) {
@@ -43,24 +43,11 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
     }
     handleChangeY = (value: number) => {
 
-        const vec3 = (this.props.value as Vector3).clone();
-        vec3.y = value;
+        const vec = (this.props.value as Vector2).clone();
+        vec.y = value;
 
         if (this.props.handleValue) {
-            this.props.handleValue(vec3);
-        }
-
-        if (this.props.continuous) {
-            this.handleRelease(0);
-        }
-    }
-    handleChangeZ = (value: number) => {
-
-        const vec3 = (this.props.value as Vector3).clone();
-        vec3.z = value;
-
-        if (this.props.handleValue) {
-            this.props.handleValue(vec3);
+            this.props.handleValue(vec);
         }
 
         if (this.props.continuous) {
@@ -75,17 +62,17 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
     }
 
     render() {
-        const value = this.props.value as Vector3;
-        let step = new Vector3(1, 1, 1);
+        const value = this.props.value as Vector2;
+        let step = new Vector2(1, 1);
         let isFloat:boolean;
-        let min:Vector3;
-        let max:Vector3;  
+        let min:Vector2;
+        let max:Vector2;  
         let readOnly:boolean|undefined;
 
         const param = this.props.parameter;
         if (param) {
             readOnly = param.readonly;
-            const numdef = param.typeDefinition as Vector3F32Definition;
+            const numdef = param.typeDefinition as Vector2F32Definition;
             if (numdef !== undefined && 
                 numdef.minimum !== undefined && 
                 numdef.maximum !== undefined)
@@ -105,7 +92,6 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
                     if (this.state !== undefined && this.state.dimensions !== undefined) {                        
                         step.x = valueRange.x > 0 && this.state.dimensions.width > 0 ? valueRange.x / this.state.dimensions.width : 1;
                         step.y = valueRange.y > 0 && this.state.dimensions.width > 0 ? valueRange.y / this.state.dimensions.width : 1;
-                        step.z = valueRange.z > 0 && this.state.dimensions.width > 0 ? valueRange.z / this.state.dimensions.width : 1;
                     }
                 }
             }
@@ -144,20 +130,7 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
                         onRelease={this.handleRelease}
                         labelRenderer={this.renderLabel}
                         disabled={readOnly === true}
-                    />
-                    <Slider
-                        {...this.props}
-                        value={value ? value.z : 0}
-                        min={min.z}
-                        max={max.z}
-                        stepSize={step.z}
-                        labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max.z}
-                        onChange={this.handleChangeZ}
-                        onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
-                        disabled={readOnly === true}
-                    />      
+                    />    
                 </div>
             }
             </Measure>      
@@ -176,4 +149,4 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
     }
 };
 
-export const ParameterSlider3 = parameterWrapped()(ParameterSlider3C);
+export const ParameterSlider2 = parameterWrapped()(ParameterSlider2C);

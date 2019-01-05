@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
 import { NumericInput, INumericInputProps, Position, Intent } from '@blueprintjs/core';
-import { RcpTypes, Vector3, Vector3F32Definition } from 'rabbitcontrol';
+import { RcpTypes, Vector3, Vector3F32Definition, Vector4, Vector4F32Definition } from 'rabbitcontrol';
 
 interface Props extends INumericInputProps {
 };
@@ -9,7 +9,7 @@ interface Props extends INumericInputProps {
 interface State {
 };
 
-export class ParameterNumericInput3C extends React.Component<Props & InjectedProps, State> {
+export class ParameterNumericInput4C extends React.Component<Props & InjectedProps, State> {
 
     constructor(props: Props & InjectedProps) {
         super(props);
@@ -20,7 +20,7 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
 
     handleChangeX = (value: number, valueAsString: string) => {
 
-        const vec = (this.props.value as Vector3).clone();
+        const vec = (this.props.value as Vector4).clone();
         vec.x = value;
 
         if (this.props.handleValue) {
@@ -33,7 +33,7 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
     }
     handleChangeY = (value: number, valueAsString: string) => {
 
-        const vec = (this.props.value as Vector3).clone();
+        const vec = (this.props.value as Vector4).clone();
         vec.y = value;
 
         if (this.props.handleValue) {
@@ -46,8 +46,21 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
     }
     handleChangeZ = (value: number, valueAsString: string) => {
 
-        const vec = (this.props.value as Vector3).clone();
+        const vec = (this.props.value as Vector4).clone();
         vec.z = value;
+
+        if (this.props.handleValue) {
+            this.props.handleValue(vec);
+        }
+
+        if (this.props.onSubmitCb) {
+            this.props.onSubmitCb();
+        }
+    }
+    handleChangeT = (value: number, valueAsString: string) => {
+
+        const vec = (this.props.value as Vector4).clone();
+        vec.t = value;
 
         if (this.props.handleValue) {
             this.props.handleValue(vec);
@@ -59,11 +72,11 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
     }
 
     render() {
-        const value = this.props.value as Vector3;
-        let step = new Vector3(1, 1, 1);
+        const value = this.props.value as Vector4;
+        let step = new Vector4(1, 1, 1, 1);
         let isFloat:boolean|undefined;
-        let min:Vector3|undefined;
-        let max:Vector3|undefined; 
+        let min:Vector4|undefined;
+        let max:Vector4|undefined; 
         let readOnly:boolean|undefined;
         let intent:Intent = Intent.NONE;
 
@@ -76,7 +89,7 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
                         param.typeDefinition.datatype === RcpTypes.Datatype.VECTOR3F32 ||
                         param.typeDefinition.datatype === RcpTypes.Datatype.VECTOR4F32;
 
-            const numdef = param.typeDefinition as Vector3F32Definition;
+            const numdef = param.typeDefinition as Vector4F32Definition;
 
             if (numdef !== undefined) {
 
@@ -86,7 +99,8 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
 
                     if (numdef.minimum.x < numdef.maximum.x &&
                         numdef.minimum.y < numdef.maximum.y &&
-                        numdef.minimum.z < numdef.maximum.z)
+                        numdef.minimum.z < numdef.maximum.z &&
+                        numdef.minimum.t < numdef.maximum.t)
                     {
                         min = numdef.minimum;
                         max = numdef.maximum;
@@ -103,6 +117,7 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
                     step.x = 0.1;
                     step.y = 0.1;
                     step.z = 0.1;
+                    step.t = 0.1;
                 }
             }
         }
@@ -151,9 +166,23 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
                     placeholder={"-"}
                     intent={intent}
                 />
+                <NumericInput
+                    {...this.props}
+                    value={value ? value.t : 0}
+                    min={min ? min.t : undefined}
+                    max={max ? max.t : undefined}
+                    stepSize={step.t}
+                    minorStepSize={isFloat ? 0.1 : 1}
+                    onValueChange={this.handleChangeT}
+                    disabled={readOnly === true}
+                    selectAllOnFocus={true}
+                    buttonPosition={Position.RIGHT}
+                    placeholder={"-"}
+                    intent={intent}
+                />
             </div>
         );
     }
 };
 
-export const ParameterNumericInput3 = parameterWrapped()(ParameterNumericInput3C);
+export const ParameterNumericInput4 = parameterWrapped()(ParameterNumericInput4C);

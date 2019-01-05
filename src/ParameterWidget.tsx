@@ -1,5 +1,5 @@
 import { Card } from '@blueprintjs/core';
-import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition } from 'rabbitcontrol';
+import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition } from 'rabbitcontrol';
 import * as React from 'react';
 import { parameterLabelStyle } from './Globals';
 import { ParameterButtonC } from './ParameterButton';
@@ -13,6 +13,10 @@ import { ParameterTextInputC } from './ParameterTextInput';
 import { ParameterTextWithLabelC } from './ParameterTextWithLabel';
 import { ParameterSlider3C } from './ParameterSlider3';
 import { ParameterNumericInput3C } from './ParameterNumberInput3';
+import { ParameterSlider2C } from './ParameterSlider2';
+import { ParameterNumericInput2C } from './ParameterNumberInput2';
+import { ParameterSlider4C } from './ParameterSlider4';
+import { ParameterNumericInput4C } from './ParameterNumberInput4';
 
 
 interface Props {
@@ -138,6 +142,8 @@ export default class ParameterWidget extends React.Component<Props, State> {
             console.log("NUMBERBOX WIDGET");
         }
 
+        
+
         if (parameter instanceof ValueParameter) {
 
             if (parameter instanceof NumberParameter) {
@@ -179,8 +185,51 @@ export default class ParameterWidget extends React.Component<Props, State> {
                         </div>
                     );
                 }
-            } 
-            else if (parameter instanceof Vector3F32Parameter) {
+            }
+            else if (parameter instanceof Vector2F32Parameter ||
+                parameter instanceof Vector2I32Parameter) {
+
+                const def = parameter.typeDefinition as Vector2F32Definition;
+                
+                if (!(widget instanceof NumberboxWidget) &&
+                    def !== undefined && 
+                    def.minimum !== undefined && 
+                    def.maximum !== undefined)
+                { 
+                    if (def.minimum.x < def.maximum.x &&
+                        def.minimum.y < def.maximum.y)
+                    {
+                        return ( 
+                            <div>
+                                <div style={parameterLabelStyle}>{parameter.label}</div>
+                                <ParameterSlider2C
+                                    {...this.props}
+                                    value={this.state.value}
+                                    handleValue={this.handleValueChange}
+                                    continuous={true}
+                                />
+                            </div>
+                        );
+                    } else {
+                        console.error("ParameterWidget: minimum >= maximum");
+                        return this.defaultWidget();
+                    }
+                } else {
+                    // numeric input
+                    return (
+                        <div>
+                            <div style={parameterLabelStyle}>{parameter.label}</div>
+                            <ParameterNumericInput2C
+                                {...this.props}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}
+                            />
+                        </div>
+                    );
+                }
+            }
+            else if (parameter instanceof Vector3F32Parameter ||
+                parameter instanceof Vector3I32Parameter) {
 
                 const def = parameter.typeDefinition as Vector3F32Definition;
                 
@@ -214,6 +263,50 @@ export default class ParameterWidget extends React.Component<Props, State> {
                         <div>
                             <div style={parameterLabelStyle}>{parameter.label}</div>
                             <ParameterNumericInput3C
+                                {...this.props}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}
+                            />
+                        </div>
+                    );
+                }
+            }
+            else if (parameter instanceof Vector4F32Parameter ||
+                parameter instanceof Vector4I32Parameter) {
+
+                const def = parameter.typeDefinition as Vector4F32Definition;
+                
+                if (!(widget instanceof NumberboxWidget) &&
+                    def !== undefined && 
+                    def.minimum !== undefined && 
+                    def.maximum !== undefined)
+                { 
+                    if (def.minimum.x < def.maximum.x &&
+                        def.minimum.y < def.maximum.y &&
+                        def.minimum.z < def.maximum.z &&
+                        def.minimum.t < def.maximum.t)
+                    {
+                        return ( 
+                            <div>
+                                <div style={parameterLabelStyle}>{parameter.label}</div>
+                                <ParameterSlider4C
+                                    {...this.props}
+                                    value={this.state.value}
+                                    handleValue={this.handleValueChange}
+                                    continuous={true}
+                                />
+                            </div>
+                        );
+                    } else {
+                        console.error("ParameterWidget: minimum >= maximum");
+                        return this.defaultWidget();
+                    }
+                } else {
+                    // numeric input
+                    return (
+                        <div>
+                            <div style={parameterLabelStyle}>{parameter.label}</div>
+                            <ParameterNumericInput4C
                                 {...this.props}
                                 value={this.state.value}
                                 handleValue={this.handleValueChange}
