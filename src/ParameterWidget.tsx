@@ -1,5 +1,5 @@
 import { Card } from '@blueprintjs/core';
-import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, DefaultWidget, NumberboxWidget } from 'rabbitcontrol';
+import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition } from 'rabbitcontrol';
 import * as React from 'react';
 import { parameterLabelStyle } from './Globals';
 import { ParameterButtonC } from './ParameterButton';
@@ -11,6 +11,8 @@ import { ParameterNumericInputC } from './ParameterNumberInput';
 import { ParameterSliderC } from './ParameterSlider';
 import { ParameterTextInputC } from './ParameterTextInput';
 import { ParameterTextWithLabelC } from './ParameterTextWithLabel';
+import { ParameterSlider3C } from './ParameterSlider3';
+import { ParameterNumericInput3C } from './ParameterNumberInput3';
 
 
 interface Props {
@@ -161,7 +163,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                         );
                     } else {
                         console.error("ParameterWidget: minimum >= maximum");
-                        return this.defaultWidet();
+                        return this.defaultWidget();
                     }
                 } else {
 
@@ -179,9 +181,46 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 }
             } 
             else if (parameter instanceof Vector3F32Parameter) {
-                return (
-                    <div>vector</div>
-                );
+
+                const def = parameter.typeDefinition as Vector3F32Definition;
+                
+                if (!(widget instanceof NumberboxWidget) &&
+                    def !== undefined && 
+                    def.minimum !== undefined && 
+                    def.maximum !== undefined)
+                { 
+                    if (def.minimum.x < def.maximum.x &&
+                        def.minimum.y < def.maximum.y &&
+                        def.minimum.z < def.maximum.z)
+                    {
+                        return ( 
+                            <div>
+                                <div style={parameterLabelStyle}>{parameter.label}</div>
+                                <ParameterSlider3C
+                                    {...this.props}
+                                    value={this.state.value}
+                                    handleValue={this.handleValueChange}
+                                    continuous={true}
+                                />
+                            </div>
+                        );
+                    } else {
+                        console.error("ParameterWidget: minimum >= maximum");
+                        return this.defaultWidget();
+                    }
+                } else {
+                    // numeric input
+                    return (
+                        <div>
+                            <div style={parameterLabelStyle}>{parameter.label}</div>
+                            <ParameterNumericInput3C
+                                {...this.props}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}
+                            />
+                        </div>
+                    );
+                }
             }
             else if (parameter instanceof BooleanParameter) {
                 return (
@@ -238,6 +277,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 );
             }
             else {
+                // everything else...
                 return (
                     <div>
                         <div style={parameterLabelStyle}>{parameter.label}</div>
@@ -249,8 +289,9 @@ export default class ParameterWidget extends React.Component<Props, State> {
                         />
                     </div>
                 );
-
             }
+
+            // end: value parameter
         } else if (parameter instanceof GroupParameter) {
             return (
                 <ParameterFoldableGroupC
@@ -263,7 +304,6 @@ export default class ParameterWidget extends React.Component<Props, State> {
             );
         } else if (parameter instanceof BangParameter) {
             return (
-                // <button onClick={this.handleButtonClick}>{`${parameter.label}`}</button>
                 <ParameterButtonC
                     {...this.props}
                     value={this.state.value}
@@ -282,9 +322,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
         if (!parameter) {
             console.error("no parameter");            
             return (
-                <div>
-                    no parameter
-                </div>
+                <div>no parameter</div>
             );
         }
 
@@ -300,12 +338,11 @@ export default class ParameterWidget extends React.Component<Props, State> {
         );
     }
 
-    private defaultWidet() {
+    private defaultWidget() {
         return (
             <ParameterTextWithLabelC
                 {...this.props}
-                value={this.state.value}
-                
+                value={this.state.value.toString()}                
             />
         );
     }
