@@ -1,0 +1,123 @@
+import * as React from 'react';
+import { parameterWrapped, InjectedProps } from './ElementWrapper';
+import { RangeSlider, IRangeSliderProps, NumberRange } from '@blueprintjs/core';
+import { NumberDefinition, RcpTypes, Range, RangeDefinition, ValueParameter } from 'rabbitcontrol';
+import Measure from 'react-measure';
+
+interface Props extends IRangeSliderProps {
+    continuous?: boolean;
+    rangeValue?: Range;
+};
+
+interface State {
+    dimensions: {
+        width: -1,
+        height: -1
+    }; 
+};
+
+export class ParameterRangeSliderC extends React.Component<Props & InjectedProps, State> {
+
+    constructor(props: Props & InjectedProps) {
+        super(props);
+    
+        this.state = {
+            dimensions: {
+                width: -1,
+                height: -1
+            },
+        };
+    }    
+
+    handleChange = (value: NumberRange) => {
+        if (this.props.handleValue) {
+            this.props.handleValue(new Range(value[0], value[1]));
+        }
+
+        if (this.props.continuous) {
+            this.handleRelease(value);
+        }
+    }
+
+    handleRelease = (value: NumberRange) => {
+        if (this.props.onSubmitCb) {
+            this.props.onSubmitCb();
+        }
+    }
+
+    render() {
+        
+        const value = this.props.value as Range;
+        let step = 1;
+        let isFloat:boolean;
+        let min:number;
+        let max:number;
+        let default_value:NumberRange;
+        let readOnly:boolean|undefined;
+
+        const param = this.props.parameter;
+        if (param) {
+            readOnly = param.readonly;
+            const numdef = param.typeDefinition as RangeDefinition;
+            const element_type = numdef.elementType as NumberDefinition;
+            if (numdef !== undefined && 
+                element_type.minimum !== undefined && 
+                element_type.maximum !== undefined)
+            {
+                min = element_type.minimum;
+                max = element_type.maximum;
+
+                const valueRange = (max - min);                    
+                isFloat = param.typeDefinition.datatype === RcpTypes.Datatype.FLOAT32 ||
+                                param.typeDefinition.datatype === RcpTypes.Datatype.FLOAT64;
+
+                if (element_type.multipleof) {
+                    step = element_type.multipleof;
+                } else if (isFloat) {
+                    if (this.state !== undefined && this.state.dimensions !== undefined) {                        
+                        step = valueRange > 0 && this.state.dimensions.width > 0 ? valueRange / this.state.dimensions.width : 1
+                    }
+                }
+            }
+        }
+
+        return (        
+            <Measure
+                onResize={(contentRect) => {
+                    this.setState({ dimensions: contentRect.entry })
+                }}
+            >
+            {({ measureRef }) =>
+                <div ref={measureRef}>
+                    <RangeSlider
+                        {...this.props}
+                        value={value ? [value.value1, value.value2] : [0, 1]}
+                        min={min}
+                        max={max}
+                        stepSize={step}
+                        labelPrecision={isFloat ? 2 : 0}
+                        labelStepSize={max}
+                        onChange={this.handleChange}
+                        onRelease={this.handleRelease}
+                        labelRenderer={this.renderLabel}
+                        disabled={readOnly === true}
+                    />      
+                </div>
+            }
+            </Measure>      
+        );
+    }
+
+    private renderLabel = (val: number) => {
+        const param = this.props.parameter
+        const value = val.toFixed(2);
+        let unit;
+        if (param) {
+            unit = (param.typeDefinition as NumberDefinition).unit
+        }
+
+        return <div style={{whiteSpace: "nowrap"}}>{unit ? `${value} ${unit}`: value}</div>
+    }
+};
+
+export const ParameterRangeSlider = parameterWrapped()(ParameterRangeSliderC);

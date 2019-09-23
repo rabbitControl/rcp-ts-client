@@ -1,5 +1,5 @@
 import { Card } from '@blueprintjs/core';
-import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition } from 'rabbitcontrol';
+import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, RangeDefinition } from 'rabbitcontrol';
 import * as React from 'react';
 import { parameterLabelStyle } from './Globals';
 import { ParameterButtonC } from './ParameterButton';
@@ -17,6 +17,7 @@ import { ParameterSlider2C } from './ParameterSlider2';
 import { ParameterNumericInput2C } from './ParameterNumberInput2';
 import { ParameterSlider4C } from './ParameterSlider4';
 import { ParameterNumericInput4C } from './ParameterNumberInput4';
+import { ParameterRangeSliderC } from './ParameterRangeSlider'
 
 
 interface Props {
@@ -366,6 +367,22 @@ export default class ParameterWidget extends React.Component<Props, State> {
                         <div style={parameterLabelStyle}>{parameter.label}</div>
                         <br/>
                         <img src={url} alt="IMAGE" height={200}/>
+                    </div>
+                );
+            }
+            else if (parameter instanceof RangeParameter) {
+                
+                const Range = parameter.value;
+
+                return (
+                    <div>
+                        <div style={parameterLabelStyle}>{parameter.label}</div>
+                        <br/>
+                        <ParameterRangeSliderC                        
+                            {...this.props}
+                            value={this.state.value}
+                            handleValue={this.handleValueChange}
+                        />
                     </div>
                 );
             }
