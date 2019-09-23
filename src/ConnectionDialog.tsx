@@ -213,12 +213,17 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         this.resetUI();
     }
 
-    private onError = () => {
-        console.log("error on socket!")
-        this.setState({
-            error: "error on socket!",
-        });
-        this.resetUI();
+    private onError = (error: any) => {
+
+        if (error instanceof Error) {
+            console.error(error.message);
+        } else {
+            this.setState({
+                error: error,
+            });
+            this.resetUI();
+        }
+
     }
 
     /**
