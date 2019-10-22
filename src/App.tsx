@@ -5,10 +5,6 @@ import ConnectionDialog from './ConnectionDialog';
 /*
   use with local tcp-ts:
   $ npm link ../rcp-ts
-
-  unlink with:
-  $ npm unlink rabbitcontrol
-  $ npm install
 */
 
 class App extends Component {
