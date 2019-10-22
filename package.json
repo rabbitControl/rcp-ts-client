@@ -4,16 +4,16 @@
   "homepage": "https://rabbitcontrol.github.io/client/",
   "private": true,
   "dependencies": {
-    "@blueprintjs/core": "^3.10.0",
-    "@blueprintjs/select": "^3.4.0",
+    "@blueprintjs/core": "^3.19.1",
+    "@blueprintjs/select": "^3.11.1",
     "@types/jest": "23.3.10",
     "@types/node": "10.12.12",
     "@types/react": "16.7.13",
     "@types/react-dom": "16.0.11",
-    "@types/react-measure": "^2.0.4",
-    "rabbitcontrol": "0.0.16",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
+    "@types/react-measure": "^2.0.5",
+    "rabbitcontrol": "0.0.17",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
     "react-measure": "2.1.3",
     "react-scripts": "2.1.1",
     "typescript": "3.2.1"
@@ -36,6 +36,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "gh-pages": "^2.0.1"
+    "gh-pages": "^2.1.1"
   }
 }
