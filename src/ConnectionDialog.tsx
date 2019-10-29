@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
-import { Alert, Intent, InputGroup, ControlGroup, Text } from '@blueprintjs/core';
+import { Alert, Intent, InputGroup, ControlGroup, Text, Colors } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 
@@ -14,6 +14,8 @@ type State = {
     host: string;
     port: number;
     parameters: Parameter[];
+    serverVersion: string;
+    serverApplicationId: string;
 };
 
 export default class ConnectionDialog extends React.Component<Props, State> {
@@ -30,6 +32,8 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             host: 'localhost',
             port: 10000,
             parameters: [],
+            serverVersion: "",
+            serverApplicationId: ""
         };
     }
 
@@ -69,6 +73,15 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         return <section>
 
             {this.createWidgets(this.state.parameters)}
+
+            <div style={{
+                color: Colors.GRAY1, 
+                fontSize: "0.8em",
+                marginTop: 5,
+                marginLeft: 2,
+            }}>
+                {this.state.serverApplicationId !== "" ? `connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
+            </div>
 
             <Alert
                 className={"bp3-dark"}
@@ -158,6 +171,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             isConnected: false, 
             client: undefined, 
             parameters: this.myParameters,
+            serverVersion: ""
         });
     }
 
@@ -185,8 +199,8 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         Client.VERBOSE = true
         const client = new Client(new WebSocketClientTransporter())
 
-        const { connected, disconnected, parameterAdded, parameterRemoved, onError } = this;
-        Object.assign(client, { connected, disconnected, parameterAdded, parameterRemoved, onError });
+        const { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo } = this;
+        Object.assign(client, { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo });
 
         const host = this.state.host;
         const port = this.state.port;
@@ -198,10 +212,13 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         client.connect(host, port);
     }
 
+    /**
+     * client callbacks - socket
+     */
     private connected = () => {
         this.setState({
             isConnected: true,
-        })
+        });
         console.log("ConnectionDialog connected!");
     }
 
@@ -227,7 +244,17 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     /**
-     * 
+     * client callbacks info
+     */
+    private onServerInfo = (version: string, applicationId: string) => {
+        this.setState({
+            serverVersion: version,
+            serverApplicationId: applicationId
+        });
+    }
+
+    /**
+     * client callbacks parameter
      */
     private parameterAdded = (parameter: Parameter) => {
 
@@ -270,6 +297,9 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         }, 100);
     }
 
+    /**
+     * 
+     */
     private stopTimers() {
 
         if (this.addTimer !== undefined) {
