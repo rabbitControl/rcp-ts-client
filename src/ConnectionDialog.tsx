@@ -171,7 +171,8 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             isConnected: false, 
             client: undefined, 
             parameters: this.myParameters,
-            serverVersion: ""
+            serverVersion: "",
+            serverApplicationId: "",
         });
     }
 
