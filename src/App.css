@@ -1,3 +1,53 @@
 .App {
   text-align: left;
 }
+
+/* bluepring style overwrites*/
+.bp3-slider-label{
+  -webkit-transform:translate(0%, 20px);
+          transform:translate(0%, 20px);
+}
+
+.bp3-slider-axis :nth-child(2){
+  -webkit-transform:translate(-100%, 20px);
+          transform:translate(-100%, 20px); 
+}
+
+.bp3-slider-handle .bp3-slider-label{
+  -webkit-transform:translate(-50%, -20px);
+          transform:translate(-50%, -20px);
+}
+
+/* gui styles */
+.parameter-label {
+  white-space: nowrap;
+  color: gray;
+  font-size: 16;  
+  margin-bottom: 4px;
+}
+
+.parameter-wrapper {
+  padding-top: 4px;
+  padding-bottom: 0px;  
+}
+
+.parameter-wrapper .inner{
+  padding: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 4px;
+}
+
+.rootgroup-wrapper {
+  padding: 5px;
+  padding-top: 0px;
+  padding-bottom: 4px;
+  border-radius: 4px;
+  border: 1px solid #454545;
+}
+
+.serverid {
+  font-size: 0.8em;
+  margin-top: 5px;
+  margin-left: 2px;
+}

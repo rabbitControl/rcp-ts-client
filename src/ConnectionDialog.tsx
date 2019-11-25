@@ -72,13 +72,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
         return <section>
 
-            {this.createWidgets(this.state.parameters)}
+            <div className="rootgroup-wrapper">
+                {this.createWidgets(this.state.parameters)}
+            </div>
 
-            <div style={{
+            <div className="serverid" style={{
                 color: Colors.GRAY1, 
-                fontSize: "0.8em",
-                marginTop: 5,
-                marginLeft: 2,
             }}>
                 {this.state.serverApplicationId !== "" ? `connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
             </div>

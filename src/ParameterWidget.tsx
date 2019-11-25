@@ -1,7 +1,6 @@
-import { Card } from '@blueprintjs/core';
+import { Card, Colors } from '@blueprintjs/core';
 import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, RangeDefinition } from 'rabbitcontrol';
 import * as React from 'react';
-import { parameterLabelStyle } from './Globals';
 import { ParameterButtonC } from './ParameterButton';
 import { ParameterCheckboxC } from './ParameterCheckbox';
 import { ParameterColorInputC } from './ParameterColorInput';
@@ -159,7 +158,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
                         return ( 
                             <div>
-                                <div style={parameterLabelStyle}>{parameter.label}</div>
+                                <div className="parameter-label">{parameter.label}</div>
                                 <ParameterSliderC
                                     {...this.props}
                                     value={this.state.value}
@@ -177,7 +176,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <div>
-                            <div style={parameterLabelStyle}>{parameter.label}</div>
+                            <div className="parameter-label">{parameter.label}</div>
                             <ParameterNumericInputC
                                 {...this.props}
                                 value={this.state.value}
@@ -202,7 +201,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {
                         return ( 
                             <div>
-                                <div style={parameterLabelStyle}>{parameter.label}</div>
+                                <div className="parameter-label">{parameter.label}</div>
                                 <ParameterSlider2C
                                     {...this.props}
                                     value={this.state.value}
@@ -219,7 +218,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <div>
-                            <div style={parameterLabelStyle}>{parameter.label}</div>
+                            <div className="parameter-label">{parameter.label}</div>
                             <ParameterNumericInput2C
                                 {...this.props}
                                 value={this.state.value}
@@ -245,7 +244,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {
                         return ( 
                             <div>
-                                <div style={parameterLabelStyle}>{parameter.label}</div>
+                                <div className="parameter-label">{parameter.label}</div>
                                 <ParameterSlider3C
                                     {...this.props}
                                     value={this.state.value}
@@ -262,7 +261,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <div>
-                            <div style={parameterLabelStyle}>{parameter.label}</div>
+                            <div className="parameter-label">{parameter.label}</div>
                             <ParameterNumericInput3C
                                 {...this.props}
                                 value={this.state.value}
@@ -289,7 +288,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {
                         return ( 
                             <div>
-                                <div style={parameterLabelStyle}>{parameter.label}</div>
+                                <div className="parameter-label">{parameter.label}</div>
                                 <ParameterSlider4C
                                     {...this.props}
                                     value={this.state.value}
@@ -306,7 +305,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <div>
-                            <div style={parameterLabelStyle}>{parameter.label}</div>
+                            <div className="parameter-label">{parameter.label}</div>
                             <ParameterNumericInput4C
                                 {...this.props}
                                 value={this.state.value}
@@ -319,8 +318,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             else if (parameter instanceof BooleanParameter) {
                 return (
                     <div>
-                        <div style={parameterLabelStyle}>{parameter.label}</div>
-                        <br/>
+                        <div className="parameter-label">{parameter.label}</div>
                         <ParameterCheckboxC
                             {...this.props}
                             value={this.state.value}
@@ -334,8 +332,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             {
                 return (
                     <div>
-                        <div style={parameterLabelStyle}>{parameter.label}</div>
-                        <br/>
+                        <div className="parameter-label">{parameter.label}</div>
                         <ParameterColorInputC
                             {...this.props}
                             value={this.state.value}
@@ -347,8 +344,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             else if (parameter instanceof EnumParameter) {
                 return (
                     <div>
-                        <div style={parameterLabelStyle}>{parameter.label}</div>
-                        <br/>
+                        <div className="parameter-label">{parameter.label}</div>
                         <ParameterHTMLSelectC
                             {...this.props}
                             value={this.state.value}
@@ -364,8 +360,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
                 return (
                     <div>
-                        <div style={parameterLabelStyle}>{parameter.label}</div>
-                        <br/>
+                        <div className="parameter-label">{parameter.label}</div>
                         <img src={url} alt="IMAGE" height={200}/>
                     </div>
                 );
@@ -376,8 +371,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
                 return (
                     <div>
-                        <div style={parameterLabelStyle}>{parameter.label}</div>
-                        <br/>
+                        <div className="parameter-label">{parameter.label}</div>
                         <ParameterRangeSliderC                        
                             {...this.props}
                             value={this.state.value}
@@ -390,8 +384,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 // everything else...
                 return (
                     <div>
-                        <div style={parameterLabelStyle}>{parameter.label}</div>
-                        <br/>
+                        <div className="parameter-label">{parameter.label}</div>
                         <ParameterTextInputC
                             {...this.props}
                             value={this.state.value}
@@ -437,13 +430,14 @@ export default class ParameterWidget extends React.Component<Props, State> {
         }
 
         return (        
-            <div style={{
-                marginTop: 20,
-                marginBottom: 0,
-            }}>
-                <Card interactive={false}>
-                    {this.renderValue(parameter)}                    
-                </Card>
+            <div className="parameter-wrapper">
+                
+                <div className="inner" style={{                    
+                    border: (parameter instanceof GroupParameter) ? "1px solid #454545" : "1px solid #353535",
+                    background: (parameter instanceof GroupParameter) ? "transparent" : Colors.DARK_GRAY3
+                }}>
+                    {this.renderValue(parameter)}
+                </div>
             </div>
         );
     }
