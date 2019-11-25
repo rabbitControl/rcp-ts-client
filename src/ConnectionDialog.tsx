@@ -50,7 +50,9 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     createWidgets(parameter: Parameter[]) {
-        return parameter.map( (param) => { return this.createParameterWidget(param); });
+        return parameter.sort((a: Parameter, b: Parameter): number => {
+            return ((a.order || 0) - (b.order || 0));
+        }).map((param) => { return this.createParameterWidget(param); });
     }
 
     setHost = (e: any) => {
@@ -253,6 +255,14 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         });
     }
 
+    private parameterChangeListener = (parameter: Parameter) => {
+        if (!parameter.onlyValueChanged())
+        {
+            //force redraw
+            this.forceUpdate();
+        }
+    }
+
     /**
      * client callbacks parameter
      */
@@ -263,6 +273,8 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             params.push(parameter);
             this.myParameters = params;
         }
+
+        parameter.addChangeListener(this.parameterChangeListener);
 
         // deferer setstate
         if (this.addTimer !== undefined) {
@@ -284,6 +296,8 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         if (index > -1) {
             this.myParameters.splice(index, 1);
         }
+
+        parameter.removeChangedListener(this.parameterChangeListener);
         
         if (this.removeTimer!== undefined) {
             window.clearTimeout(this.removeTimer);

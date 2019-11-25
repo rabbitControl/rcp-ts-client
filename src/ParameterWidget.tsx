@@ -95,7 +95,9 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
     renderChildren(parameter: Parameter) {
         if (parameter instanceof GroupParameter) {
-            return parameter.children.map( (p) => { return this.createChildWidget(p); });
+            return parameter.children.sort((a: Parameter, b: Parameter): number => {
+                return ((a.order || 0) - (b.order || 0));
+            }).map( (p) => { return this.createChildWidget(p); });
         }
     }
 
