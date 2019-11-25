@@ -32,11 +32,12 @@ export class ParameterFoldableGroupC extends React.Component<Props & InjectedPro
 
         return (
             <div style={this.props.style}>
-                <ControlGroup vertical={false} style={{marginBottom: this.state.isOpen ? 10 : 0}}>
-                    <Icon 
-                        icon={this.state.isOpen ? "remove" : "add"}
-                        onClick={this.handleButtonClick}
-                    />
+                <ControlGroup 
+                    style={{marginBottom: this.state.isOpen ? 5 : 0}}
+                    vertical={false} 
+                    onClick={this.handleButtonClick}
+                >
+                    <Icon icon={this.state.isOpen ? "remove" : "add"}/>
                     <div style={{marginLeft: 10}}/>
                     <Text>{label}</Text>
                 </ControlGroup>

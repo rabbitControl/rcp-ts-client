@@ -51,12 +51,7 @@ class App extends React.Component<Props, State> {
       <section className={"bp3-dark"}>
 
         <div className="App" 
-          style={{
-            margin: "30px",
-            marginBottom: "-30px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
+          style={{            
             minHeight: this.state.height-40
         }}>
 
@@ -66,13 +61,9 @@ class App extends React.Component<Props, State> {
             flex: 2
           }}></div>
 
-          <div style={{
-            marginBottom: 5,
-            marginTop: 20,
-            width: "100%",
-            textAlign: "center",
-            fontSize: "0.8em",
-            color: Colors.GRAY1
+          <div className="credits" 
+              style={{            
+                color: Colors.GRAY1
           }}>
             written by&nbsp;
             <a style={{
