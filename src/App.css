@@ -15,7 +15,14 @@
 
 .bp3-slider-axis :nth-child(2){
   -webkit-transform:translate(-100%, 20px);
-          transform:translate(-100%, 20px); 
+          transform:translate(-100%, 20px);
+}
+
+.bp3-slider-axis :nth-child(3){
+  -webkit-transform:translate(-100%, 20px);
+          transform:translate(-100%, 20px);
+
+  right: 0 px;
 }
 
 .bp3-slider-handle .bp3-slider-label{
