@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
 import { Slider, ISliderProps } from '@blueprintjs/core';
-import { RcpTypes, Vector3, Vector3F32Definition, Vector2, Vector2F32Definition } from 'rabbitcontrol';
+import { RcpTypes, Vector3F32Definition, Vector2, Vector2F32Definition } from 'rabbitcontrol';
 import Measure from 'react-measure';
 
 interface Props extends ISliderProps {
@@ -64,14 +64,14 @@ export class ParameterSlider2C extends React.Component<Props & InjectedProps, St
     render() {
         const value = this.props.value as Vector2;
         let step = new Vector2(1, 1);
-        let isFloat:boolean;
-        let min:Vector2;
-        let max:Vector2;  
-        let readOnly:boolean|undefined;
+        let isFloat:boolean = false;
+        let min:Vector2|undefined = undefined;
+        let max:Vector2|undefined = undefined;  
+        let readOnly:boolean = false;
 
         const param = this.props.parameter;
         if (param) {
-            readOnly = param.readonly;
+            readOnly = param.readonly || false;
             const numdef = param.typeDefinition as Vector2F32Definition;
             if (numdef !== undefined && 
                 numdef.minimum !== undefined && 
@@ -108,11 +108,11 @@ export class ParameterSlider2C extends React.Component<Props & InjectedProps, St
                     <Slider
                         {...this.props}
                         value={value ? value.x : 0}
-                        min={min.x}
-                        max={max.x}
+                        min={min ? min.x : undefined}
+                        max={max ? max.x : undefined}
                         stepSize={step.x}
                         labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max.x}
+                        labelStepSize={max ? max.x : 0}
                         onChange={this.handleChangeX}
                         onRelease={this.handleRelease}
                         labelRenderer={this.renderLabel}
@@ -121,11 +121,11 @@ export class ParameterSlider2C extends React.Component<Props & InjectedProps, St
                     <Slider
                         {...this.props}
                         value={value ? value.y : 0}
-                        min={min.y}
-                        max={max.y}
+                        min={min ? min.y : undefined}
+                        max={max ? max.y : undefined}
                         stepSize={step.y}
                         labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max.y}
+                        labelStepSize={max ? max.y : 0}
                         onChange={this.handleChangeY}
                         onRelease={this.handleRelease}
                         labelRenderer={this.renderLabel}

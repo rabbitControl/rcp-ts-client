@@ -47,14 +47,14 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
     render() {
         const value = this.props.value as number;
         let step = 1;
-        let isFloat:boolean;
-        let min:number;
-        let max:number;  
-        let readOnly:boolean|undefined;
+        let isFloat:boolean = false;
+        let min:number|undefined = undefined;
+        let max:number|undefined = undefined;
+        let readOnly:boolean = false;
 
         const param = this.props.parameter;
         if (param) {
-            readOnly = param.readonly;
+            readOnly = param.readonly || false;
             const numdef = param.typeDefinition as NumberDefinition;
             if (numdef !== undefined && 
                 numdef.minimum !== undefined && 

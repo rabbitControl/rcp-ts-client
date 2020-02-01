@@ -74,16 +74,16 @@ export class ParameterNumericInput4C extends React.Component<Props & InjectedPro
     render() {
         const value = this.props.value as Vector4;
         let step = new Vector4(1, 1, 1, 1);
-        let isFloat:boolean|undefined;
-        let min:Vector4|undefined;
-        let max:Vector4|undefined; 
-        let readOnly:boolean|undefined;
+        let isFloat:boolean = false;
+        let min:Vector4|undefined = undefined;
+        let max:Vector4|undefined = undefined; 
+        let readOnly:boolean = false;
         let intent:Intent = Intent.NONE;
 
         const param = this.props.parameter;
         if (param) {
 
-            readOnly = param.readonly;
+            readOnly = param.readonly || false;
 
             isFloat = param.typeDefinition.datatype === RcpTypes.Datatype.VECTOR2F32 ||
                         param.typeDefinition.datatype === RcpTypes.Datatype.VECTOR3F32 ||

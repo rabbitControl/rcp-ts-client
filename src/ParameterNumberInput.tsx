@@ -31,19 +31,20 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
     render() {
         const value = this.props.value as number;
         let step = 1;
-        let isFloat:boolean|undefined;
-        let min:number|undefined;
-        let max:number|undefined;  
-        let readOnly:boolean|undefined;
+        let isFloat:boolean = false;        
+        let readOnly:boolean = false;
         let intent:Intent = Intent.NONE;
+
+        const numdef = this.props.parameter ? this.props.parameter.typeDefinition as NumberDefinition : undefined;
+
+        let min:number|undefined = numdef ? numdef.typeMin() : undefined;
+        let max:number|undefined = numdef ? numdef.typeMax() : undefined;
 
         const param = this.props.parameter;
         if (param) {
-            readOnly = param.readonly;
+            readOnly = param.readonly || false;
             isFloat = param.typeDefinition.datatype === RcpTypes.Datatype.FLOAT32 ||
                     param.typeDefinition.datatype === RcpTypes.Datatype.FLOAT64;
-
-            const numdef = param.typeDefinition as NumberDefinition;
 
             if (numdef !== undefined) {
 
@@ -67,7 +68,7 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
                 }
             }
         }
-
+        
         return (        
             <NumericInput
                 {...this.props}

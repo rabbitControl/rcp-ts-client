@@ -1,4 +1,4 @@
-import { Card, Colors } from '@blueprintjs/core';
+import { Colors } from '@blueprintjs/core';
 import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, RangeDefinition } from 'rabbitcontrol';
 import * as React from 'react';
 import { ParameterButtonC } from './ParameterButton';
@@ -44,7 +44,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
         if (this.props.parameter instanceof ValueParameter && 
             this.props.parameter.value != null)
         {
-            value = this.props.parameter.value;
+            value = this.props.parameter.valueConstrained();
         }
 
         this.state = {
@@ -69,7 +69,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             param.addValueChangeListener((p) => {
                 if (p instanceof ValueParameter) {
                     this.setState({
-                        value: p.value
+                        value: p.valueConstrained()
                     });
                 }
             });
@@ -124,7 +124,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             } else {
                 // set string value failed... 
                 console.error("could not set stringvalue...");                
-                this.setState({ value: this.props.parameter.value });
+                this.setState({ value: this.props.parameter.valueConstrained() });
             }
         }
     }

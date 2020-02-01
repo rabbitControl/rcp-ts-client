@@ -48,16 +48,16 @@ export class ParameterNumericInput2C extends React.Component<Props & InjectedPro
     render() {
         const value = this.props.value as Vector2;
         let step = new Vector2(1, 1);
-        let isFloat:boolean|undefined;
-        let min:Vector2|undefined;
-        let max:Vector2|undefined; 
-        let readOnly:boolean|undefined;
+        let isFloat:boolean = false;
+        let min:Vector2|undefined = undefined;
+        let max:Vector2|undefined = undefined; 
+        let readOnly:boolean = false;
         let intent:Intent = Intent.NONE;
 
         const param = this.props.parameter;
         if (param) {
 
-            readOnly = param.readonly;
+            readOnly = param.readonly || false;
 
             isFloat = param.typeDefinition.datatype === RcpTypes.Datatype.VECTOR2F32 ||
                         param.typeDefinition.datatype === RcpTypes.Datatype.VECTOR3F32 ||

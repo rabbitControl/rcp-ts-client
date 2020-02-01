@@ -77,14 +77,14 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
     render() {
         const value = this.props.value as Vector3;
         let step = new Vector3(1, 1, 1);
-        let isFloat:boolean;
-        let min:Vector3;
-        let max:Vector3;  
-        let readOnly:boolean|undefined;
+        let isFloat:boolean = false;
+        let min:Vector3|undefined = undefined;
+        let max:Vector3|undefined = undefined;
+        let readOnly:boolean = false;
 
         const param = this.props.parameter;
         if (param) {
-            readOnly = param.readonly;
+            readOnly = param.readonly || false;
             const numdef = param.typeDefinition as Vector3F32Definition;
             if (numdef !== undefined && 
                 numdef.minimum !== undefined && 
@@ -122,11 +122,11 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
                     <Slider
                         {...this.props}
                         value={value ? value.x : 0}
-                        min={min.x}
-                        max={max.x}
+                        min={min ? min.x : undefined}
+                        max={max ? max.x : undefined}
                         stepSize={step.x}
                         labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max.x}
+                        labelStepSize={max ? max.x : 0}
                         onChange={this.handleChangeX}
                         onRelease={this.handleRelease}
                         labelRenderer={this.renderLabel}
@@ -135,11 +135,11 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
                     <Slider
                         {...this.props}
                         value={value ? value.y : 0}
-                        min={min.y}
-                        max={max.y}
+                        min={min ? min.y : undefined}
+                        max={max ? max.y : undefined}
                         stepSize={step.y}
                         labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max.y}
+                        labelStepSize={max ? max.y : 0}
                         onChange={this.handleChangeY}
                         onRelease={this.handleRelease}
                         labelRenderer={this.renderLabel}
@@ -148,11 +148,11 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
                     <Slider
                         {...this.props}
                         value={value ? value.z : 0}
-                        min={min.z}
-                        max={max.z}
+                        min={min ? min.z : undefined}
+                        max={max ? max.z : undefined}
                         stepSize={step.z}
                         labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max.z}
+                        labelStepSize={max ? max.z : 0}
                         onChange={this.handleChangeZ}
                         onRelease={this.handleRelease}
                         labelRenderer={this.renderLabel}
