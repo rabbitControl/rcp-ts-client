@@ -37,6 +37,22 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         };
     }
 
+    componentDidMount = () => {
+        /**
+         * If a hash is provided, try to connect right away
+         */
+        if (location.hash !== '') {
+            const [host, port] = location.hash.replace('#', '').split(':');
+            const portAsInt = parseInt(port, 10)
+
+            this.setState({
+                host, port: portAsInt
+            })
+
+            this.doConnect(host, portAsInt);
+        }
+    }
+
     updateClient = () => {
         if (this.state.client) {
             this.state.client.update();
@@ -197,15 +213,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         this.resetUI();
     }
 
-    private doConnect = () => {
+    private doConnect = (host = this.state.host, port = this.state.port) => {
         Client.VERBOSE = true
         const client = new Client(new WebSocketClientTransporter())
 
         const { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo } = this;
         Object.assign(client, { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo });
-
-        const host = this.state.host;
-        const port = this.state.port;
 
         this.setState({
             client, error: undefined
