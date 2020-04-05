@@ -251,7 +251,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             console.error(error.message);
         } else {
             this.setState({
-                error: error,
+                error: error.toString(),
             });
             this.resetUI();
         }
