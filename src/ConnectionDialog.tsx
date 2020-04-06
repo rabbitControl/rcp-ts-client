@@ -35,20 +35,20 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             serverVersion: "",
             serverApplicationId: ""
         };
+
+        Client.VERBOSE = true;
     }
 
     componentDidMount = () => {
+        
         /**
          * If a hash is provided, try to connect right away
          */
         if (location.hash !== '') {
             const [host, port] = location.hash.replace('#', '').split(':');
-            const portAsInt = parseInt(port, 10)
+            const portAsInt = parseInt(port, 10);        
 
-            this.setState({
-                host, port: portAsInt
-            })
-
+            console.log("autoconnect: " + host + ":" + portAsInt);
             this.doConnect(host, portAsInt);
         }
     }
@@ -170,12 +170,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             error: undefined
         });
 
-        if (this.state.host !== undefined && 
-            this.state.host !== "" &&
-            !isNaN(this.state.port))
-        {
-            this.doConnect();
-        }
+        this.doConnect(this.state.host, this.state.port);
     }
 
     private resetUI() {
@@ -213,18 +208,38 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         this.resetUI();
     }
 
-    private doConnect = (host = this.state.host, port = this.state.port) => {
-        Client.VERBOSE = true
-        const client = new Client(new WebSocketClientTransporter())
+    private doConnect = (host: string, port: number) => {
 
-        const { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo } = this;
-        Object.assign(client, { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo });
+        if (host !== undefined &&
+            host !== "" &&
+            !isNaN(port))
+        {
+            // disconnect first
+            this.doDisconnect();
 
-        this.setState({
-            client, error: undefined
-        });
+            // set info
+            this.setState({
+                host: host,
+                port: port,
+                error: undefined
+            });
 
-        client.connect(host, port);
+            const client = new Client(new WebSocketClientTransporter())
+    
+            const { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo } = this;
+            Object.assign(client, { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo });
+    
+            try {
+                client.connect(host, port);
+
+                this.setState({
+                    client: client
+                });
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
     }
 
     /**
