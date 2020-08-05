@@ -1,5 +1,5 @@
 import { Colors } from '@blueprintjs/core';
-import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, RangeDefinition } from 'rabbitcontrol';
+import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, RangeDefinition, RcpTypes } from 'rabbitcontrol';
 import * as React from 'react';
 import { ParameterButtonC } from './ParameterButton';
 import { ParameterCheckboxC } from './ParameterCheckbox';
@@ -17,11 +17,13 @@ import { ParameterNumericInput2C } from './ParameterNumberInput2';
 import { ParameterSlider4C } from './ParameterSlider4';
 import { ParameterNumericInput4C } from './ParameterNumberInput4';
 import { ParameterRangeSliderC } from './ParameterRangeSlider'
+import { ParameterTabsGroupC } from './ParameterTabsGroup';
 
 
 interface Props {
     parameter: Parameter;
     onSubmitCb: () => void;
+    renderchildrenintabs?: string;
 };
 
 interface State {
@@ -93,8 +95,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
                                 onSubmitCb={this.props.onSubmitCb}/>;
     }
 
-    renderChildren(parameter: Parameter) {
-        if (parameter instanceof GroupParameter) {
+    renderChildren(parameter: Parameter)
+    {
+        if (parameter instanceof GroupParameter)
+        {
             return parameter.children.sort((a: Parameter, b: Parameter): number => {
                 return ((a.order || 0) - (b.order || 0));
             }).map( (p) => { return this.createChildWidget(p); });
@@ -134,7 +138,9 @@ export default class ParameterWidget extends React.Component<Props, State> {
         this.props.onSubmitCb();        
     }
 
-    renderValue(parameter: Parameter) {
+    renderValue(parameter: Parameter)
+    {
+        console.log("renderValue: " + parameter.label);
 
         const widget = parameter.widget;        
         
@@ -145,7 +151,6 @@ export default class ParameterWidget extends React.Component<Props, State> {
         }
 
         
-
         if (parameter instanceof ValueParameter) {
 
             if (parameter instanceof NumberParameter) {
@@ -397,7 +402,53 @@ export default class ParameterWidget extends React.Component<Props, State> {
             }
 
             // end: value parameter
-        } else if (parameter instanceof GroupParameter) {
+        } 
+        else if (parameter instanceof GroupParameter) 
+        {
+            console.log("group: " + parameter.label);
+
+            if (parameter.widget !== undefined)
+            {
+                console.log("with widget");
+
+                if (parameter.widget.widgetType === RcpTypes.Widgettype.TABS)
+                {
+                    console.log("TABS!! " + parameter.label + " : " + parameter.label);
+
+                    if (false)
+                    {
+                        return (
+                            <ParameterTabsGroupC
+                                {...this.props}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}                
+                            >
+                                {this.renderChildren(parameter)}
+                            </ParameterTabsGroupC>
+                        );
+                    }
+
+                    return (
+                        <ParameterTabsGroupC
+                            {...this.props}
+                            value={this.state.value}
+                            handleValue={this.handleValueChange}               
+                        />                            
+                    );
+                }
+            }
+
+            // if (parameter.parent !== undefined)
+            // {
+            //     if (parameter.parent.widget !== undefined)
+            //     {
+            //         if (parameter.parent.widget.widgetType === RcpTypes.Widgettype.TABS)
+            //         {
+            //             return <div>SOME</div>
+            //         }
+            //     }
+            // }
+
             return (
                 <ParameterFoldableGroupC
                     {...this.props}
@@ -407,7 +458,9 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {this.renderChildren(parameter)}
                 </ParameterFoldableGroupC>
             );
-        } else if (parameter instanceof BangParameter) {
+        } 
+        else if (parameter instanceof BangParameter)
+        {
             return (
                 <ParameterButtonC
                     {...this.props}
@@ -423,12 +476,21 @@ export default class ParameterWidget extends React.Component<Props, State> {
     render() {
 
         const parameter = this.props.parameter;
+        const isParentTabs = (parameter instanceof GroupParameter)
+                            && (parameter.parent instanceof GroupParameter) 
+                            && parameter.parent.widget !== undefined
+                            && parameter.parent.widget.widgetType === RcpTypes.Widgettype.TABS;
 
         if (!parameter) {
             console.error("no parameter");            
             return (
                 <div>no parameter</div>
             );
+        }
+
+        if (isParentTabs)
+        {
+            return <div></div>
         }
 
         return (        
