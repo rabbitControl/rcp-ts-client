@@ -99,9 +99,14 @@ export default class ParameterWidget extends React.Component<Props, State> {
     {
         if (parameter instanceof GroupParameter)
         {
-            return parameter.children.sort((a: Parameter, b: Parameter): number => {
+            return parameter.children
+            .sort((a: Parameter, b: Parameter): number => 
+            {
                 return ((a.order || 0) - (b.order || 0));
-            }).map( (p) => { return this.createChildWidget(p); });
+            }).
+            map( (p) => { 
+                return this.createChildWidget(p); 
+            });
         }
     }
 
@@ -405,7 +410,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
         } 
         else if (parameter instanceof GroupParameter) 
         {
-            console.log("group: " + parameter.label);
+            console.log("group: " + parameter.label + " children: " + parameter.children.length);
 
             if (parameter.widget !== undefined)
             {
@@ -413,7 +418,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
                 if (parameter.widget.widgetType === RcpTypes.Widgettype.TABS)
                 {
-                    console.log("TABS!! " + parameter.label + " : " + parameter.label);
+                    console.log("TABS!! " + parameter.label);
 
                     if (false)
                     {
@@ -473,13 +478,9 @@ export default class ParameterWidget extends React.Component<Props, State> {
         return;
     }
 
-    render() {
-
+    render()
+    {
         const parameter = this.props.parameter;
-        const isParentTabs = (parameter instanceof GroupParameter)
-                            && (parameter.parent instanceof GroupParameter) 
-                            && parameter.parent.widget !== undefined
-                            && parameter.parent.widget.widgetType === RcpTypes.Widgettype.TABS;
 
         if (!parameter) {
             console.error("no parameter");            
@@ -488,9 +489,14 @@ export default class ParameterWidget extends React.Component<Props, State> {
             );
         }
 
-        if (isParentTabs)
+        if (parameter.widget !== undefined
+            && parameter.widget.widgetType === RcpTypes.Widgettype.TABS)
         {
-            return <div></div>
+            return (        
+                <div className="parameter-wrapper">                    
+                    {this.renderValue(parameter)}
+                </div>
+            );
         }
 
         return (        

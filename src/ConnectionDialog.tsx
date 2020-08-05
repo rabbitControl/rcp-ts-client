@@ -77,7 +77,8 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
     createWidgets(parameter: Parameter[])
     {
-        return parameter.filter(param => this.state.rootWithTabs === false || !(param instanceof GroupParameter))
+        return parameter
+        .filter(param => this.state.rootWithTabs === false || !(param instanceof GroupParameter))
         .sort((a: Parameter, b: Parameter): number => 
         {
             return ((a.order || 0) - (b.order || 0));
