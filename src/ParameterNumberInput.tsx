@@ -68,10 +68,12 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
                 }
             }
         }
+
+        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
         
         return (        
             <NumericInput
-                {...this.props}
+                {...filteredProps}
                 value={value ? value : 0}
                 min={min}
                 max={max}

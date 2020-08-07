@@ -38,9 +38,11 @@ export class ParameterCheckboxC extends React.Component<Props & InjectedProps, S
             readOnly = param.readonly;        
         }
 
+        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+
         return (
             <Checkbox
-                {...this.props}
+                {...filteredProps}
                 checked={value ? value : false}
                 onChange={this.handleChange}
                 disabled={readOnly === true}

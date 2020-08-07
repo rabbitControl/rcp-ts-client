@@ -50,10 +50,12 @@ export class ParameterButtonC extends React.Component<Props & InjectedProps, Sta
             label = this.props.parameter.label;
         }
 
+        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+
         return (
             <section>
                 <Button style={{whiteSpace: "nowrap", }}
-                    {...this.props}
+                    {...filteredProps}
                     text={ld ? "" : label}
                     onClick={this.handleClick}
                 />

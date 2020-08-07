@@ -107,10 +107,12 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
             }
         }
 
+        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+
         return (
             <div>
                 <NumericInput
-                    {...this.props}
+                    {...filteredProps}
                     value={value ? value.x : 0}
                     min={min ? min.x : undefined}
                     max={max ? max.x : undefined}
@@ -124,7 +126,7 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
                     intent={intent}
                 />
                 <NumericInput
-                    {...this.props}
+                    {...filteredProps}
                     value={value ? value.y : 0}
                     min={min ? min.y : undefined}
                     max={max ? max.y : undefined}
@@ -138,7 +140,7 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
                     intent={intent}
                 />
                 <NumericInput
-                    {...this.props}
+                    {...filteredProps}
                     value={value ? value.z : 0}
                     min={min ? min.z : undefined}
                     max={max ? max.z : undefined}

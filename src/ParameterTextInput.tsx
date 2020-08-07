@@ -51,10 +51,12 @@ export class ParameterTextInputC extends React.Component<Props & InjectedProps, 
             readOnly = param.readonly;            
         }
 
+        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+
         return (     
             <form onSubmit={this.handleSubmit}>
                 <InputGroup
-                    {...this.props}
+                    {...filteredProps}
                     value={value}
                     onChange={this.handleChange}
                     disabled={readOnly === true}

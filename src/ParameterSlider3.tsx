@@ -111,6 +111,8 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
             }
         }
 
+        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+
         return (        
             <Measure
                 onResize={(contentRect) => {
@@ -120,7 +122,7 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
             {({ measureRef }) =>
                 <div ref={measureRef}>
                     <Slider
-                        {...this.props}
+                        {...filteredProps}
                         value={value ? value.x : 0}
                         min={min ? min.x : undefined}
                         max={max ? max.x : undefined}
@@ -133,7 +135,7 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
                         disabled={readOnly === true}
                     />
                     <Slider
-                        {...this.props}
+                        {...filteredProps}
                         value={value ? value.y : 0}
                         min={min ? min.y : undefined}
                         max={max ? max.y : undefined}
@@ -146,7 +148,7 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
                         disabled={readOnly === true}
                     />
                     <Slider
-                        {...this.props}
+                        {...filteredProps}
                         value={value ? value.z : 0}
                         min={min ? min.z : undefined}
                         max={max ? max.z : undefined}

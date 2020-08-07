@@ -81,6 +81,8 @@ export class ParameterRangeSliderC extends React.Component<Props & InjectedProps
             }
         }
 
+        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+
         return (        
             <Measure
                 onResize={(contentRect) => {
@@ -90,7 +92,7 @@ export class ParameterRangeSliderC extends React.Component<Props & InjectedProps
             {({ measureRef }) =>
                 <div ref={measureRef}>
                     <RangeSlider
-                        {...this.props}
+                        {...filteredProps}
                         value={value ? [value.value1, value.value2] : [0, 1]}
                         min={min}
                         max={max}

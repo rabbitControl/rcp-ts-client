@@ -41,12 +41,11 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
             entries = param.enumDefinition.entries;
         }
 
-        console.log("selected:" + value);
-        console.log("entries:" + entries);
+        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
 
         return (
             <HTMLSelect
-                {...this.props}
+                {...filteredProps}
                 onChange={this.handleChange}
                 disabled={readOnly === true}
                 className="test"
