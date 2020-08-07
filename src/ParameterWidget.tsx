@@ -1,5 +1,5 @@
 import { Colors } from '@blueprintjs/core';
-import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, RangeDefinition, RcpTypes } from 'rabbitcontrol';
+import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, RangeDefinition, RcpTypes, TabsWidget, ListWidget, ListPageWidget } from 'rabbitcontrol';
 import * as React from 'react';
 import { ParameterButtonC } from './ParameterButton';
 import { ParameterCheckboxC } from './ParameterCheckbox';
@@ -23,7 +23,6 @@ import { ParameterTabsGroupC } from './ParameterTabsGroup';
 interface Props {
     parameter: Parameter;
     onSubmitCb: () => void;
-    renderchildrenintabs?: string;
 };
 
 interface State {
@@ -89,27 +88,6 @@ export default class ParameterWidget extends React.Component<Props, State> {
         return 1;
     }
 
-    createChildWidget(param: Parameter): any {
-        return <ParameterWidget key={param.id}
-                                parameter={param} 
-                                onSubmitCb={this.props.onSubmitCb}/>;
-    }
-
-    renderChildren(parameter: Parameter)
-    {
-        if (parameter instanceof GroupParameter)
-        {
-            return parameter.children
-            .sort((a: Parameter, b: Parameter): number => 
-            {
-                return ((a.order || 0) - (b.order || 0));
-            }).
-            map( (p) => { 
-                return this.createChildWidget(p); 
-            });
-        }
-    }
-
     handleValueChange = (value: any) => {
 
         // set parameter value
@@ -145,8 +123,6 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
     renderValue(parameter: Parameter)
     {
-        console.log("renderValue: " + parameter.label);
-
         const widget = parameter.widget;        
         
         if (widget instanceof SliderWidget) {
@@ -407,63 +383,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             }
 
             // end: value parameter
-        } 
-        else if (parameter instanceof GroupParameter) 
-        {
-            console.log("group: " + parameter.label + " children: " + parameter.children.length);
-
-            if (parameter.widget !== undefined)
-            {
-                console.log("with widget");
-
-                if (parameter.widget.widgetType === RcpTypes.Widgettype.TABS)
-                {
-                    console.log("TABS!! " + parameter.label);
-
-                    if (false)
-                    {
-                        return (
-                            <ParameterTabsGroupC
-                                {...this.props}
-                                value={this.state.value}
-                                handleValue={this.handleValueChange}                
-                            >
-                                {this.renderChildren(parameter)}
-                            </ParameterTabsGroupC>
-                        );
-                    }
-
-                    return (
-                        <ParameterTabsGroupC
-                            {...this.props}
-                            value={this.state.value}
-                            handleValue={this.handleValueChange}               
-                        />                            
-                    );
-                }
-            }
-
-            // if (parameter.parent !== undefined)
-            // {
-            //     if (parameter.parent.widget !== undefined)
-            //     {
-            //         if (parameter.parent.widget.widgetType === RcpTypes.Widgettype.TABS)
-            //         {
-            //             return <div>SOME</div>
-            //         }
-            //     }
-            // }
-
-            return (
-                <ParameterFoldableGroupC
-                    {...this.props}
-                    value={this.state.value}
-                    handleValue={this.handleValueChange}
-                >
-                    {this.renderChildren(parameter)}
-                </ParameterFoldableGroupC>
-            );
-        } 
+        }
         else if (parameter instanceof BangParameter)
         {
             return (
@@ -471,6 +391,35 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {...this.props}
                     value={this.state.value}
                     handleValue={this.handleButtonClick}
+                />
+            );
+        }
+        else if (parameter instanceof GroupParameter) 
+        {
+            if (parameter.widget instanceof TabsWidget)
+            {
+                return (
+                    <ParameterTabsGroupC
+                        {...this.props}
+                        value={this.state.value}
+                        handleValue={this.handleValueChange}  
+                    />                            
+                );
+            }
+            else if (parameter.widget instanceof ListWidget)
+            {
+            }
+            else if (parameter.widget instanceof ListPageWidget)
+            {
+                // ?
+            }
+
+            // default: foldable group
+            return (
+                <ParameterFoldableGroupC
+                    {...this.props}
+                    value={this.state.value}
+                    handleValue={this.handleValueChange}
                 />
             );
         }
@@ -489,8 +438,8 @@ export default class ParameterWidget extends React.Component<Props, State> {
             );
         }
 
-        if (parameter.widget !== undefined
-            && parameter.widget.widgetType === RcpTypes.Widgettype.TABS)
+        // less framing for tabs widgets
+        if (parameter.widget instanceof TabsWidget)
         {
             return (        
                 <div className="parameter-wrapper">                    
@@ -499,6 +448,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             );
         }
 
+        // default framing
         return (        
             <div className="parameter-wrapper">
                 

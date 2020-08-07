@@ -1,9 +1,8 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
-import { Alert, Intent, InputGroup, ControlGroup, Text, Colors, Tab, Tabs } from '@blueprintjs/core';
+import { Alert, Intent, InputGroup, ControlGroup, Text, Colors, Checkbox } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
-import { ParameterTabsGroupC } from './ParameterTabsGroup';
 
 type Props = {
 };
@@ -39,7 +38,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             parameters: [],
             serverVersion: "",
             serverApplicationId: "",
-            rootWithTabs: true,
+            rootWithTabs: false,
         };
 
         Client.VERBOSE = true;
@@ -101,32 +100,29 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         });
     }
 
+    setTabsInRoot = (e: React.FormEvent<HTMLElement>) => {
+        this.setState({
+            rootWithTabs: (e.target as HTMLInputElement).checked,
+        });
+    }
 
 
     render() 
     {
-        const host = this.state.host;
-        const port = this.state.port;
-
         return <section>
 
             <div className="rootgroup-wrapper">
-
-                {/* {this.createWidgets(this.state.parameters)} */}
-
-                {this.state.rootWithTabs === true ? 
+                {
+                this.state.rootWithTabs === true
+                ?
                     <ParameterWidget 
                         key={this.rootParam.id}
                         parameter={this.rootParam} 
                         onSubmitCb={this.updateClient}                        
-                    />
-                
-                : this.createWidgets(this.state.parameters) }
-            
-                
-                {this.state.rootWithTabs === true ?
-                    this.createWidgets(this.rootParam.children)
-                : ""}
+                    />                
+                : 
+                    this.createWidgets(this.state.parameters)
+                }
             </div>
 
 
@@ -150,7 +146,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                 <ControlGroup style={{alignItems: "center"}}>
                     <Text>Host:&nbsp;</Text>
                     <InputGroup
-                        value={host}
+                        value={this.state.host}
                         type="text"
                         onChange={this.setHost}
                     />
@@ -159,7 +155,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                 <ControlGroup style={{alignItems: "center"}}>
                     <Text>Port:&nbsp;</Text>                    
                     <InputGroup
-                        value={port.toFixed(0)}
+                        value={this.state.port.toFixed(0)}
                         min={1024}
                         max={65535}
                         type="number"
@@ -167,6 +163,14 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                     />
                 </ControlGroup>
                 <br/>
+
+                <Checkbox
+                    checked={this.state.rootWithTabs}
+                    onChange={this.setTabsInRoot}
+                >
+                    Tabs in Root
+                </Checkbox>
+
                 <div>
                     {this.state.error ? this.state.error : undefined}
                     {this.returnSSLInfo()}

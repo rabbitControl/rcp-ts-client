@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
 import { Colors, Text, Collapse, ControlGroup, Icon } from '@blueprintjs/core';
+import { GroupParameter, Parameter } from 'rabbitcontrol';
+import ParameterWidget from './ParameterWidget';
 
 interface Props {
     style?: React.CSSProperties;
@@ -21,9 +23,38 @@ export class ParameterFoldableGroupC extends React.Component<Props & InjectedPro
             isOpen: false,
         };
     } 
-    
-    render() {
 
+    onSubmit = () =>
+    {
+        if (this.props.onSubmitCb)
+        {
+            this.props.onSubmitCb();
+        }
+    }
+
+    renderChildren()
+    {
+        const parameter = this.props.parameter;
+
+        if (parameter === undefined)
+        {
+            return ("");
+        }
+
+        return (parameter as GroupParameter).children
+            .sort((a: Parameter, b: Parameter): number => 
+            {
+                return ((a.order || 0) - (b.order || 0));
+            }).
+            map( (p) => { 
+                return <ParameterWidget key={p.id}
+                parameter={p} 
+                onSubmitCb={this.onSubmit}/>
+            });
+    }
+    
+    render()
+    {
         let label = "no label";
         const param = this.props.parameter;
         if (param && param.label !== undefined) {
@@ -42,7 +73,7 @@ export class ParameterFoldableGroupC extends React.Component<Props & InjectedPro
                     <Text>{label}</Text>
                 </ControlGroup>
                 <Collapse isOpen={this.state.isOpen}>
-                    {this.props.children}                
+                    {this.renderChildren()}
                 </Collapse>
             </div>
         );
