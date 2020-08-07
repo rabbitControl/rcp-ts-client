@@ -47,9 +47,13 @@ export class ParameterFoldableGroupC extends React.Component<Props & InjectedPro
                 return ((a.order || 0) - (b.order || 0));
             }).
             map( (p) => { 
-                return <ParameterWidget key={p.id}
-                parameter={p} 
-                onSubmitCb={this.onSubmit}/>
+                return (
+                    <ParameterWidget 
+                        key={p.id}
+                        parameter={p} 
+                        onSubmitCb={this.onSubmit}
+                    />
+                );
             });
     }
     
