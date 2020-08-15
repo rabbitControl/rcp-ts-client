@@ -30,6 +30,10 @@
           transform:translate(-50%, -20px);
 }
 
+.bp3-tab-list {
+  flex-flow: row wrap;
+}
+
 /* gui styles */
 .parameter-label {
   white-space: nowrap;
