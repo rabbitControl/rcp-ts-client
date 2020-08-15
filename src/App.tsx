@@ -32,16 +32,18 @@ class App extends React.Component<Props, State> {
     };
   }
 
-  componentDidMount() {
-    console.log("did mount!");    
+  componentDidMount() 
+  {
     window.addEventListener('resize', this.onWindowResize);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount() 
+  {
     window.removeEventListener('resize', this.onWindowResize);
   }
 
-  onWindowResize = () => {
+  onWindowResize = () => 
+  {
     this.setState({ height: window.innerHeight });
   }
 
