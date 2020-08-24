@@ -11,7 +11,7 @@
     "@types/react": "16.7.13",
     "@types/react-dom": "16.0.11",
     "@types/react-measure": "^2.0.4",
-    "rabbitcontrol": "0.0.28",
+    "rabbitcontrol": "0.0.29",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-measure": "2.1.3",

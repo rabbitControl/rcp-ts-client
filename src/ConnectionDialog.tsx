@@ -23,8 +23,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     
     private addTimer?: number;
     private removeTimer?: number;
-    private myParameters: Parameter[] = [];
-
     private rootParam = new GroupParameter(0);
     
 
@@ -219,13 +217,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
         this.stopTimers();
 
-        this.myParameters = [];
         this.rootParam.children = [];
 
         this.setState({
             isConnected: false, 
             client: undefined, 
-            parameters: this.myParameters,
+            parameters: this.rootParam.children,
             serverVersion: "",
             serverApplicationId: "",
         });
@@ -336,6 +333,24 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     {
         if (!parameter.onlyValueChanged())
         {
+            if (parameter.parent !== undefined)
+            {
+                console.log("parameter changed: " +  parameter.parent.label);
+            }
+            else if (parameter.parentChanged())
+            {
+                // this.rootParam.addChild(parameter);
+                parameter.parent = this.rootParam;
+
+                this.setState({
+                    parameters: this.rootParam.children,
+                });
+            }
+            else
+            {
+                console.log("paraemter changed: no parent");                
+            }
+            
             //force redraw
             this.forceUpdate();
         }
@@ -348,17 +363,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     {
         if (!parameter.parent)
         {
-            if (this.state.rootWithTabs === true)
-            {
-                this.rootParam.addChild(parameter);
-                this.myParameters = this.rootParam.children;
-            }
-            else
-            {
-                const params = this.myParameters.slice();
-                params.push(parameter);
-                this.myParameters = params;
-            }
+            parameter.parent = this.rootParam;
         }
 
         parameter.addChangeListener(this.parameterChangeListener);
@@ -371,27 +376,15 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
         this.addTimer = window.setTimeout(() => {
             this.setState({
-                parameters: this.myParameters,
+                parameters: this.rootParam.children,
             });
         }, 100);
     }
 
     private parameterRemoved = (parameter: Parameter) =>
     {
-        if (this.state.rootWithTabs === true)
-        {
-            this.rootParam.removeChild(parameter);
-            this.myParameters = this.rootParam.children;
-        }
-        else
-        {
-            const index = this.myParameters.indexOf(parameter, 0);
-    
-            if (index > -1) {
-                this.myParameters.splice(index, 1);
-            }
-        }
-
+        // this.rootParam.removeChild(parameter);
+        parameter.removeFromParent();
 
         parameter.removeChangedListener(this.parameterChangeListener);
         
@@ -402,7 +395,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
         this.removeTimer = window.setTimeout(() => {
             this.setState({
-                parameters: this.myParameters,
+                parameters: this.rootParam.children,
             });
         }, 100);
     }
