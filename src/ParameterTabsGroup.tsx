@@ -83,15 +83,11 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
     renderChildren()
     {
         // render non-group chilren of this GroupParameter
-
         const parameter = this.props.parameter;
 
-        if (parameter === undefined)
+        if (parameter !== undefined)
         {
-            return ("");
-        }
-
-        return (parameter as GroupParameter).children
+            return (parameter as GroupParameter).children
             .filter(param => !(param instanceof GroupParameter))
             .sort((a: Parameter, b: Parameter): number => ((a.order || 0) - (b.order || 0)))
             .map((p) =>
@@ -104,6 +100,9 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
                     />
                 );
             });
+        }        
+        
+        return ("");
     }
 
     createTabWidgets(parameter: Parameter[])
@@ -117,6 +116,7 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
 
         return parameter
         .filter(param => param instanceof GroupParameter)
+        .sort((a: Parameter, b: Parameter): number => ((a.order || 0) - (b.order || 0)))
         .map((param, index) => 
         {
             const g_param = (param as GroupParameter);
