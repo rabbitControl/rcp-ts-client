@@ -1,5 +1,5 @@
 import { Colors } from '@blueprintjs/core';
-import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, RangeDefinition, RcpTypes, TabsWidget, ListWidget, ListPageWidget } from 'rabbitcontrol';
+import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, RangeDefinition, RcpTypes, TabsWidget, ListWidget, ListPageWidget, RadiobuttonWidget } from 'rabbitcontrol';
 import * as React from 'react';
 import { ParameterButtonC } from './ParameterButton';
 import { ParameterCheckboxC } from './ParameterCheckbox';
@@ -18,6 +18,7 @@ import { ParameterSlider4C } from './ParameterSlider4';
 import { ParameterNumericInput4C } from './ParameterNumberInput4';
 import { ParameterRangeSliderC } from './ParameterRangeSlider'
 import { ParameterTabsGroupC } from './ParameterTabsGroup';
+import { ParameterRadioC } from './ParameterRadio';
 
 
 interface Props {
@@ -329,17 +330,35 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     </div>
                 );
             } 
-            else if (parameter instanceof EnumParameter) {
-                return (
-                    <div>
-                        <div className="parameter-label">{parameter.label}</div>
-                        <ParameterHTMLSelectC
-                            {...this.props}
-                            value={this.state.value}
-                            handleValue={this.handleValueChange}
-                        />
-                    </div>
-                );
+            else if (parameter instanceof EnumParameter)
+            {
+                if (parameter.widget instanceof RadiobuttonWidget)
+                {
+                    return (
+                        <div>
+                            <div className="parameter-label">{parameter.label}</div>
+                            <ParameterRadioC
+                                {...this.props}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}
+                            />
+                        </div>
+                    );
+                }
+                else
+                {
+                    return (
+                        <div>
+                            <div className="parameter-label">{parameter.label}</div>
+                            <ParameterHTMLSelectC
+                                {...this.props}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}
+                            />
+                        </div>
+                    );
+                }
+
             }
             else if (parameter instanceof ImageParameter) {
                 
