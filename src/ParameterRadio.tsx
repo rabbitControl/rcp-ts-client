@@ -44,19 +44,18 @@ export class ParameterRadioC extends React.Component<Props & InjectedProps, Stat
 
         if (param instanceof EnumParameter) {
             entries = param.enumDefinition.entries;
-        }
 
-        console.log("entries: " + entries);
-        
+            // TODO: use a multiselectable RadioGroup
+            multiSelect = param.enumDefinition.multiselect;
+        }
 
         const { onSubmitCb, handleValue, ...filteredProps } = this.props;
 
-        return (
+        return (            
             <RadioGroup
                 {...filteredProps}
                 onChange={this.handleChange}
                 disabled={readOnly === true}
-                className="test"
                 selectedValue={value}
             >
                 {this.renderOptions(value, entries)}            

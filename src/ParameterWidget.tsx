@@ -99,9 +99,9 @@ export default class ParameterWidget extends React.Component<Props, State> {
         this.setState({ value: value });
     }
 
-    handleValueSubmit = (event: any) => {
+    handleValueSubmit = (event: any) =>
+    {
         //
-        console.log("submit");
         if (event && event.preventDefault) {
             event.preventDefault();
         }        
@@ -336,7 +336,11 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 {
                     return (
                         <div>
-                            <div className="parameter-label">{parameter.label}</div>
+                            <div className="parameter-label"
+                                style={{marginBottom: 15}}
+                            >
+                                {parameter.label}
+                            </div>
                             <ParameterRadioC
                                 {...this.props}
                                 value={this.state.value}
@@ -422,11 +426,12 @@ export default class ParameterWidget extends React.Component<Props, State> {
                         {...this.props}
                         value={this.state.value}
                         handleValue={this.handleValueChange}  
-                    />                            
+                    />
                 );
             }
             else if (parameter.widget instanceof ListWidget)
             {
+                // TODO
             }
             else if (parameter.widget instanceof ListPageWidget)
             {
