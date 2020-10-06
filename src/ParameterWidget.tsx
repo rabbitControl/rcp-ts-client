@@ -19,6 +19,8 @@ import { ParameterRangeSliderC } from './ParameterRangeSlider'
 import { ParameterTabsGroupC } from './ParameterTabsGroup';
 import { ParameterRadioC } from './ParameterRadio';
 import { ParameterImageC } from './ParameterImage';
+import { ParameterTabsSwitcherC } from './ParameterTabsSwitcher';
+import { ParameterFoldableGroupSWC } from './ParameterFoldableGroupWithSwitch';
 
 
 interface Props {
@@ -392,6 +394,35 @@ export default class ParameterWidget extends React.Component<Props, State> {
             else if (parameter.widget instanceof ListPageWidget)
             {
                 // ?
+            }
+            else if (parameter.widget instanceof CustomWidget)
+            {
+                // check uuid
+                if (parameter.widget.uuid != undefined)
+                {
+                    if (parameter.widget.uuid.compare("01299e6c-58f3-4c70-a0a5-3472ccb9ef0b"))
+                    {
+                        // custom tab-widget - TabSwitcher
+                        return (
+                            <ParameterTabsSwitcherC
+                                {...this.props}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}  
+                            />
+                        );
+                    }
+                    else if(parameter.widget.uuid.compare("ec373dce-9489-4ecf-bf5b-29d83e07e1a2"))
+                    {
+                        // group with switch
+                        return (
+                            <ParameterFoldableGroupSWC 
+                                {...this.props}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}  
+                            />                            
+                        );
+                    }
+                }
             }
 
             // default: foldable group
