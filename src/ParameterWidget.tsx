@@ -68,8 +68,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
         if (param instanceof ValueParameter) {
 
-            param.addValueChangeListener((p) => {
-                if (p instanceof ValueParameter) {
+            param.addValueChangeListener((p) => 
+            {
+                if (p instanceof ValueParameter)
+                {
                     this.setState({
                         value: p.valueConstrained()
                     });

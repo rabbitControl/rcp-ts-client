@@ -22,9 +22,7 @@ type State = {
 export default class ConnectionDialog extends React.Component<Props, State> {
     
     private addTimer?: number;
-    private removeTimer?: number;
-    private rootParam = new GroupParameter(0);
-    
+    private removeTimer?: number;    
 
     constructor(props: Props) {
         super(props);
@@ -40,9 +38,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         };
 
         Client.VERBOSE = true;
-
-        this.rootParam.label = "root";
-        this.rootParam.widget = new TabsWidget();
     }
 
     componentDidMount = () => {
@@ -113,11 +108,14 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                 {
                 this.state.rootWithTabs === true
                 ?
-                    <ParameterWidget 
-                        key={this.rootParam.id}
-                        parameter={this.rootParam} 
-                        onSubmitCb={this.updateClient}                        
-                    />                
+                    this.state.client ?
+                        <ParameterWidget 
+                            key={0}
+                            parameter={this.state.client.getRootGroup()} 
+                            onSubmitCb={this.updateClient}                        
+                        />
+                    :
+                        "Error: no client"
                 : 
                     this.createWidgets(this.state.parameters)
                 }
@@ -217,12 +215,10 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
         this.stopTimers();
 
-        this.rootParam.children = [];
-
         this.setState({
             isConnected: false, 
             client: undefined, 
-            parameters: this.rootParam.children,
+            parameters: [],
             serverVersion: "",
             serverApplicationId: "",
         });
@@ -265,6 +261,9 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             });
 
             const client = new Client(new WebSocketClientTransporter())
+
+            // NOTE: needed??
+            client.setRootWidget(new TabsWidget());
     
             const { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo } = this;
             Object.assign(client, { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo });
@@ -339,12 +338,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             }
             else if (parameter.parentChanged())
             {
-                // this.rootParam.addChild(parameter);
-                parameter.parent = this.rootParam;
-
-                this.setState({
-                    parameters: this.rootParam.children,
-                });
+                if (this.state.client)
+                {
+                    this.setState({
+                        parameters: this.state.client.getRootGroup().children,
+                    });
+                }
             }
             else
             {
@@ -361,23 +360,22 @@ export default class ConnectionDialog extends React.Component<Props, State> {
      */
     private parameterAdded = (parameter: Parameter) => 
     {
-        if (!parameter.parent)
-        {
-            parameter.parent = this.rootParam;
-        }
-
         parameter.addChangeListener(this.parameterChangeListener);
 
-        // deferer setstate
+        // delay setting parameter
+        // more paramater might arrive in quick succession
         if (this.addTimer !== undefined) {
             window.clearTimeout(this.addTimer);
             this.addTimer = undefined;
         }
 
         this.addTimer = window.setTimeout(() => {
-            this.setState({
-                parameters: this.rootParam.children,
-            });
+            if (this.state.client)
+            {
+                this.setState({
+                    parameters: this.state.client.getRootGroup().children,
+                });
+            }
         }, 100);
     }
 
@@ -394,9 +392,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         }
 
         this.removeTimer = window.setTimeout(() => {
-            this.setState({
-                parameters: this.rootParam.children,
-            });
+            if (this.state.client)
+            {
+                this.setState({
+                    parameters: this.state.client.getRootGroup().children,
+                });
+            }
         }, 100);
     }
 
