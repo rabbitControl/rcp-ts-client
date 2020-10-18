@@ -24,7 +24,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "node deploy"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -36,6 +36,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "gh-pages": "^2.0.1"
+    "ftp-deploy": "^2.3.8"
   }
 }
