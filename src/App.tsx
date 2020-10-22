@@ -67,12 +67,19 @@ class App extends React.Component<Props, State> {
               style={{            
                 color: Colors.GRAY1
           }}>
-            written by&nbsp;
             <a style={{
               color: Colors.GRAY1,
               textDecoration: "underline"
             }}
-              href="https://github.com/rabbitControl/rcp-ts-client" target="#">
+              href="https://github.com/rabbitcontrol/" target="#">
+              rcp-ts-client
+            </a>
+              &nbsp;written by&nbsp;
+            <a style={{
+              color: Colors.GRAY1,
+              textDecoration: "underline"
+            }}
+              href="https://ingorandolf.info/" target="#">
               i-n-g-o
             </a>
             &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -80,7 +87,7 @@ class App extends React.Component<Props, State> {
               color: Colors.GRAY1,
               textDecoration: "underline"
             }}
-              href="https://rabbitcontrol.github.io/" target="#">
+              href="http://rabbitcontrol.cc/" target="#">
               rabbitControl
             </a>
             <br/>
@@ -89,7 +96,7 @@ class App extends React.Component<Props, State> {
               color: Colors.GRAY1,
               textDecoration: "underline"
             }}
-              href="https://blueprintjs.com/">
+              href="https://blueprintjs.com/" target="#">
               blueprintjs
             </a>
           </div>
