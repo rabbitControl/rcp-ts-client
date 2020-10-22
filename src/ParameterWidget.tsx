@@ -21,8 +21,9 @@ import { ParameterRadioC } from './ParameterRadio';
 import { ParameterImageC } from './ParameterImage';
 import { ParameterTabsSwitcherC } from './ParameterTabsSwitcher';
 import { ParameterFoldableGroupSWC } from './ParameterFoldableGroupWithSwitch';
-import { WIDGET_GROUPWITHSWITCH_STR, WIDGET_TABSWITCHER_STR, WIDGET_HORIZONTALLAYOUT_STR, WIDGET_NOWIDGET_STR } from './WidgetConfig';
+import { WIDGET_GROUPWITHSWITCH_STR, WIDGET_TABSWITCHER_STR, WIDGET_HORIZONTALLAYOUT_STR, WIDGET_NOWIDGET_STR, WIDGET_SWITCH_STR, TOGGLE_LABEL } from './WidgetConfig';
 import { ParameterGroupHorizontalLayoutC } from './ParameterGroupHorizontalLayout';
+import { ParameterSwitchC } from './ParameterSwitch';
 
 interface Props {
     parameter: Parameter;
@@ -305,7 +306,24 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     );
                 }
             }
-            else if (parameter instanceof BooleanParameter) {
+            else if (parameter instanceof BooleanParameter)
+            {
+                const is_switch = parameter.userid === WIDGET_SWITCH_STR || parameter.label === TOGGLE_LABEL;
+
+                if (is_switch)
+                {
+                    return (
+                        <div>
+                            <ParameterSwitchC
+                                {...filteredProps}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}
+                            />
+                        </div>
+                    );
+                }                
+
+                // default ceckbox
                 return (
                     <ParameterCheckboxC
                         {...this.props}

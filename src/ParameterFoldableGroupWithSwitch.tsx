@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
 import { Colors, Text, Collapse, ControlGroup } from '@blueprintjs/core';
-import { BooleanParameter, GroupParameter, Parameter, ValueParameter } from 'rabbitcontrol';
+import { BooleanParameter, GroupParameter, Parameter } from 'rabbitcontrol';
 import ParameterWidget from './ParameterWidget';
 import { ParameterCheckboxC } from './ParameterCheckbox';
+import { TOGGLE_LABEL } from './WidgetConfig';
+import { ParameterSwitchC } from './ParameterSwitch';
 
 interface Props {
     style?: React.CSSProperties;
@@ -17,8 +19,6 @@ interface State {
 export class ParameterFoldableGroupSWC extends React.Component<Props & InjectedProps, State> {
 
     static readonly COMPONENT_DEFAULT_COLOR = Colors.GRAY1;
-
-    private static TOGGLE_LABEL = "_onoff";
 
     constructor(props: Props & InjectedProps) {
         super(props);
@@ -48,7 +48,7 @@ export class ParameterFoldableGroupSWC extends React.Component<Props & InjectedP
         return (parameter as GroupParameter).children
             .filter( (p) => 
             {
-                return !(p instanceof BooleanParameter) && p.label !== ParameterFoldableGroupSWC.TOGGLE_LABEL;
+                return !(p instanceof BooleanParameter) && p.label !== TOGGLE_LABEL;
             })
             .sort((a: Parameter, b: Parameter): number => 
             {
@@ -79,7 +79,7 @@ export class ParameterFoldableGroupSWC extends React.Component<Props & InjectedP
             (param as GroupParameter).children.forEach(element =>
             {
                 if (element instanceof BooleanParameter
-                    && element.label === ParameterFoldableGroupSWC.TOGGLE_LABEL)
+                    && element.label === TOGGLE_LABEL)
                 {
                     if (this.state.switchParameter != element)
                     {
@@ -111,12 +111,13 @@ export class ParameterFoldableGroupSWC extends React.Component<Props & InjectedP
                 >
                     <Text>{label}</Text>
                     <div style={{flexGrow:1}}></div>
-                    <ParameterCheckboxC
-                            {...filteredProps}
-                            parameter={this.state.switchParameter}
-                            handleValue={this.handleToggleChange}
-                            value={this.state.isOpen}
-                            disabled={this.state.switchParameter === undefined}
+                    <ParameterSwitchC
+                        {...filteredProps}
+                        parameter={this.state.switchParameter}
+                        handleValue={this.handleToggleChange}
+                        value={this.state.isOpen}
+                        disabled={this.state.switchParameter === undefined}
+                        labelDisabled={true}
                         />
                 </ControlGroup>
                 <Collapse isOpen={this.state.isOpen}>
