@@ -395,33 +395,47 @@ export default class ParameterWidget extends React.Component<Props, State> {
             {
                 // ?
             }
-            else if (parameter.widget instanceof CustomWidget)
+            else if (parameter.widget instanceof CustomWidget
+                    || parameter.userid !== "")
             {
-                // check uuid
-                if (parameter.widget.uuid != undefined)
+                var is_tab_switcher = false;
+                var is_group_with_switch = false;
+
+                if (parameter.widget instanceof CustomWidget
+                    && parameter.widget.uuid != undefined)
                 {
-                    if (parameter.widget.uuid.compare("01299e6c-58f3-4c70-a0a5-3472ccb9ef0b"))
-                    {
-                        // custom tab-widget - TabSwitcher
-                        return (
-                            <ParameterTabsSwitcherC
-                                {...this.props}
-                                value={this.state.value}
-                                handleValue={this.handleValueChange}  
-                            />
-                        );
-                    }
-                    else if(parameter.widget.uuid.compare("ec373dce-9489-4ecf-bf5b-29d83e07e1a2"))
-                    {
-                        // group with switch
-                        return (
-                            <ParameterFoldableGroupSWC 
-                                {...this.props}
-                                value={this.state.value}
-                                handleValue={this.handleValueChange}  
-                            />                            
-                        );
-                    }
+                    is_tab_switcher = parameter.widget.uuid.compare("01299e6c-58f3-4c70-a0a5-3472ccb9ef0b");
+                    is_group_with_switch = parameter.widget.uuid.compare("ec373dce-9489-4ecf-bf5b-29d83e07e1a2");
+                }
+                else
+                {
+                    is_tab_switcher = parameter.userid === "tabswitcher";
+                    is_group_with_switch = parameter.userid === "groupwithswitch";                    
+                }
+
+                if (is_tab_switcher)
+                {
+                    // custom tab-widget - TabSwitcher
+                    return (
+                        <ParameterTabsSwitcherC
+                            {...this.props}
+                            value={this.state.value}
+                            handleValue={this.handleValueChange}  
+                        />
+                    );
+                }
+                else if(is_group_with_switch)
+                {
+                    console.log("grou with switch: " + parameter.label);
+                    
+                    // group with switch
+                    return (
+                        <ParameterFoldableGroupSWC 
+                            {...this.props}
+                            value={this.state.value}
+                            handleValue={this.handleValueChange}  
+                        />                            
+                    );
                 }
             }
 
