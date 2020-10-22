@@ -68,7 +68,7 @@ export class ParameterColorInputC extends React.Component<Props & InjectedProps,
             readOnly = param.readonly;            
         }
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, defaultValue, ...filteredProps } = this.props;
 
         return (     
             <InputGroup
