@@ -3,6 +3,7 @@ import { InjectedProps, parameterWrapped } from './ElementWrapper';
 import { GroupParameter, Parameter } from 'rabbitcontrol';
 import ParameterWidget from './ParameterWidget';
 import { Accordion, AccordionItem } from 'carbon-components-react';
+import { WIDGET_EXPANDEDBYDEFAULT_STR, WIDGET_NOTFOLDABLE_STR } from './WidgetConfig';
 
 interface Props {
     style?: React.CSSProperties;
@@ -16,9 +17,15 @@ export class ParameterFoldableGroupC extends React.Component<Props & InjectedPro
 {
     constructor(props: Props & InjectedProps) {
         super(props);
+
+        let is_open = false;
+        if (props.parameter)
+        {
+            is_open = props.parameter.userid === WIDGET_EXPANDEDBYDEFAULT_STR;
+        }
     
         this.state = {
-            isOpen: false,
+            isOpen: is_open,
         };
     } 
 
@@ -58,9 +65,14 @@ export class ParameterFoldableGroupC extends React.Component<Props & InjectedPro
     render()
     {
         let label = "no label";
+        let foldable = true;
         const param = this.props.parameter;
-        if (param && param.label !== undefined) {
-            label = param.label;
+        if (param) {
+            if (param.label !== undefined)
+            {
+                label = param.label;
+            }
+            foldable = param.userid !== WIDGET_NOTFOLDABLE_STR;
         }
 
         return (

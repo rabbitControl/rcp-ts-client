@@ -21,7 +21,7 @@ import { ParameterRadioC } from './ParameterRadio';
 import { ParameterImageC } from './ParameterImage';
 import { ParameterTabsSwitcherC } from './ParameterTabsSwitcher';
 import { ParameterFoldableGroupSWC } from './ParameterFoldableGroupWithSwitch';
-
+import { WIDGET_GROUPWITHSWITCH_STR, WIDGET_TABSWITCHER_STR } from './WidgetConfig';
 
 interface Props {
     parameter: Parameter;
@@ -409,8 +409,8 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 }
                 else
                 {
-                    is_tab_switcher = parameter.userid === "tabswitcher";
-                    is_group_with_switch = parameter.userid === "groupwithswitch";                    
+                    is_tab_switcher = parameter.userid === WIDGET_TABSWITCHER_STR;
+                    is_group_with_switch = parameter.userid === WIDGET_GROUPWITHSWITCH_STR;                    
                 }
 
                 if (is_tab_switcher)
@@ -425,9 +425,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     );
                 }
                 else if(is_group_with_switch)
-                {
-                    console.log("grou with switch: " + parameter.label);
-                    
+                {                   
                     // group with switch
                     return (
                         <ParameterFoldableGroupSWC 
