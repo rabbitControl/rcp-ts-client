@@ -106,18 +106,20 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
             <div className="rootgroup-wrapper">
                 {
-                this.state.rootWithTabs === true
-                ?
                     this.state.client ?
-                        <ParameterWidget 
-                            key={0}
-                            parameter={this.state.client.getRootGroup()} 
-                            onSubmitCb={this.updateClient}                        
-                        />
+
+                        this.state.rootWithTabs === true ?
+
+                            <ParameterWidget
+                                key={0}
+                                parameter={this.state.client.getRootGroup()}
+                                onSubmitCb={this.updateClient}
+                            />
+                        :
+                            this.createWidgets(this.state.parameters)
+
                     :
-                        "Error: no client"
-                : 
-                    this.createWidgets(this.state.parameters)
+                        ""
                 }
             </div>
 
