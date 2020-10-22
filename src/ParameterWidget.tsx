@@ -21,11 +21,14 @@ import { ParameterRadioC } from './ParameterRadio';
 import { ParameterImageC } from './ParameterImage';
 import { ParameterTabsSwitcherC } from './ParameterTabsSwitcher';
 import { ParameterFoldableGroupSWC } from './ParameterFoldableGroupWithSwitch';
-import { WIDGET_GROUPWITHSWITCH_STR, WIDGET_TABSWITCHER_STR } from './WidgetConfig';
+import { WIDGET_GROUPWITHSWITCH_STR, WIDGET_TABSWITCHER_STR, WIDGET_HORIZONTALLAYOUT_STR, WIDGET_NOWIDGET_STR } from './WidgetConfig';
+import { ParameterGroupHorizontalLayoutC } from './ParameterGroupHorizontalLayout';
 
 interface Props {
     parameter: Parameter;
     onSubmitCb: () => void;
+    vertical?: boolean;
+    className?: string;
 };
 
 interface State {
@@ -128,12 +131,27 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
     renderValue(parameter: Parameter)
     {
-        const widget = parameter.widget;        
-        
-        if (widget instanceof SliderWidget) {
-            console.log("SLIDER WIDGET");
-        } else if (widget instanceof NumberboxWidget) {
-            console.log("NUMBERBOX WIDGET");
+        const { vertical, className, ...filteredProps } = this.props;    
+        const widget = parameter.widget;                
+
+        // check for special user-id
+        if (parameter.userid === WIDGET_NOWIDGET_STR)
+        {
+            return (
+                <ControlGroup
+                    vertical={this.props.vertical}
+                    fill={this.props.vertical}
+                >
+                    <div className="parameter-label">{parameter.label}</div>
+                    <div className={`${this.props.vertical !== true ? "spacer" : ""}`}/>
+                    <ParameterTextWithLabelC
+                        {...filteredProps}
+                        value={this.state.value}
+                        handleValue={this.handleValueChange}
+                        labelDisabled={true}
+                    />
+                </ControlGroup>
+            );            
         }
 
         
@@ -356,7 +374,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 // everything else...
                 return (
                         <ParameterTextInputC
-                            {...this.props}
+                            {...filteredProps}
                             value={this.state.value}
                             handleValue={this.handleValueChange}
                         />
@@ -369,7 +387,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
         {
             return (
                 <ParameterButtonC
-                    {...this.props}
+                    {...filteredProps}
                     value={this.state.value}
                     handleValue={this.handleButtonClick}
                 />
@@ -381,7 +399,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             {
                 return (
                     <ParameterTabsGroupC
-                        {...this.props}
+                        {...filteredProps}
                         value={this.state.value}
                         handleValue={this.handleValueChange}  
                     />
@@ -400,6 +418,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             {
                 var is_tab_switcher = false;
                 var is_group_with_switch = false;
+                var is_horizontal_layout = false;
 
                 if (parameter.widget instanceof CustomWidget
                     && parameter.widget.uuid != undefined)
@@ -410,7 +429,8 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 else
                 {
                     is_tab_switcher = parameter.userid === WIDGET_TABSWITCHER_STR;
-                    is_group_with_switch = parameter.userid === WIDGET_GROUPWITHSWITCH_STR;                    
+                    is_group_with_switch = parameter.userid === WIDGET_GROUPWITHSWITCH_STR;
+                    is_horizontal_layout = parameter.userid === WIDGET_HORIZONTALLAYOUT_STR;
                 }
 
                 if (is_tab_switcher)
@@ -418,18 +438,29 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // custom tab-widget - TabSwitcher
                     return (
                         <ParameterTabsSwitcherC
-                            {...this.props}
+                            {...filteredProps}
                             value={this.state.value}
                             handleValue={this.handleValueChange}  
                         />
                     );
                 }
-                else if(is_group_with_switch)
+                else if (is_group_with_switch)
                 {                   
                     // group with switch
                     return (
                         <ParameterFoldableGroupSWC 
-                            {...this.props}
+                            {...filteredProps}
+                            value={this.state.value}
+                            handleValue={this.handleValueChange}  
+                        />                            
+                    );
+                }
+                else if (is_horizontal_layout)
+                {
+                    // horizontal layout
+                    return (
+                        <ParameterGroupHorizontalLayoutC 
+                            {...filteredProps}
                             value={this.state.value}
                             handleValue={this.handleValueChange}  
                         />                            
@@ -440,7 +471,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             // default: foldable group
             return (
                 <ParameterFoldableGroupC
-                    {...this.props}
+                    {...filteredProps}
                     value={this.state.value}
                     handleValue={this.handleValueChange}
                 />
@@ -479,10 +510,13 @@ export default class ParameterWidget extends React.Component<Props, State> {
         );
     }
 
-    private defaultWidget() {
+    private defaultWidget()
+    {
+        const { vertical, className, ...filteredProps } = this.props;
+
         return (
             <ParameterTextWithLabelC
-                {...this.props}
+                {...filteredProps}
                 value={this.state.value.toString()}                
             />
         );

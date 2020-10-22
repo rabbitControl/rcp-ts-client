@@ -90,6 +90,7 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
                         }}>
                             {value}
                         </div>
+
                     </div>
 
                 </div>
