@@ -1,3 +1,3 @@
-module.exports = {
-    // config values
+module.exports.default = {
+    host: ""
 };
