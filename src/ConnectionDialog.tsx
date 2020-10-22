@@ -35,7 +35,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             parameters: [],
             serverVersion: "",
             serverApplicationId: "",
-            rootWithTabs: false,
+            rootWithTabs: true,
         };
     }
 
