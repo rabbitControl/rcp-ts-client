@@ -20,10 +20,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "zip": "bestzip client.zip build/*",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && npm run zip",
     "deploy": "node deploy"
   },
   "eslintConfig": {
@@ -36,6 +37,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "bestzip": "^2.1.7",
     "ftp-deploy": "^2.3.8"
   }
 }
