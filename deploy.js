@@ -1,5 +1,7 @@
 var config = require('./config');
 var FtpDeploy = require("ftp-deploy");
+var fs = require('fs')
+
 var ftpDeploy = new FtpDeploy();
 
 //default config
@@ -12,6 +14,30 @@ if (process.argv.length > 2)
 
 if (conf !== undefined)
 {
+    if (conf.includeClient === true)
+    {
+        // include client.zip - move it into build/
+        fs.renameSync("client.zip", "build/client.zip", function (err)
+        {
+            if (err)
+            {
+                console.error("could not move client.zip into build folder");
+                throw err;
+            }
+        });
+    }
+    else
+    {
+        // make sure not to include client.zip
+        try {
+            fs.unlinkSync("build/client.zip");
+        }
+        catch (err)
+        {
+            // could not delete, ok - nop
+        }
+    }
+
     console.log("deploying to: " + conf.host);
     
     ftpDeploy
