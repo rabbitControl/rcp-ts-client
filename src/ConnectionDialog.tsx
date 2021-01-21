@@ -1,8 +1,9 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
 import { Alert, Intent, InputGroup, ControlGroup, Text, Colors, Checkbox } from '@blueprintjs/core';
-import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
+import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget, StringParameter } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
+import { Classes } from '@blueprintjs/core';
 import App from './App';
 
 type Props = {
@@ -13,7 +14,7 @@ type State = {
     error?: string;
     client?: Client;
     host: string;
-    port: number;
+    protocol?: string[];
     parameters: Parameter[];
     serverVersion: string;
     serverApplicationId: string;
@@ -23,46 +24,47 @@ type State = {
 export default class ConnectionDialog extends React.Component<Props, State> {
     
     private addTimer?: number;
+    private removeTimer?: number;
+
+    private apikey = "";
+    private projectname = "";
 
     constructor(props: Props) {
         super(props);
 
         this.state = {
             isConnected: false,
-            host: 'localhost',
-            port: 10000,
+            host: window.location.hostname+(window.location.port !== "" ? (":"+window.location.port) : "")+'/clientend',
             parameters: [],
             serverVersion: "",
             serverApplicationId: "",
-            rootWithTabs: false,
+            rootWithTabs: false,        
         };
     }
 
-    componentDidMount = () => {
-        
-        // paarse parameters
-        if (window.location.search !== "") {
-            const params = new URLSearchParams(window.location.search);
-
-            // t: tabs in roots
-            if (params.has("t")) {
-                this.setState({rootWithTabs: (parseInt(params.get("t") || "0") || 0) > 0});
-            }
-
-            // d: debug
-            if (params.has("d")) {
-                Client.VERBOSE = (parseInt(params.get("d") || "0") || 0) > 0 || false;
-                App.VERBOSE_LOG = Client.VERBOSE;
+    componentDidMount = () =>
+    {        
+        /**
+         * If a hash is provided, try to connect right away
+         */
+        if (location.hash !== '')
+        {
+            this.splitRcpKey(location.hash.replace('#', ''));
+            if (this.apikey !== "" && this.projectname !== "")
+            {
+                console.log("autoconnect");
+                this.doConnect(this.state.host);
             }
         }
+    }
 
-         // autoconnect
-         if (window.location.hash !== '') {
-            const [host, port] = window.location.hash.replace('#', '').split(':');
-            const portAsInt = parseInt(port, 10);
-
-            if (Client.VERBOSE) console.log("autoconnect: " + host + ":" + portAsInt);
-            this.doConnect(host, portAsInt);
+    private splitRcpKey(key: string, connect = false)
+    {
+        const keyparts = key.split(/[\s,]+/);
+        if (keyparts.length == 2)
+        {
+            this.apikey = keyparts[0];
+            this.projectname = keyparts[1];
         }
     }
 
@@ -93,16 +95,8 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         });
     }
 
-    setHost = (e: any) => {
-        this.setState({
-            host: e.currentTarget.value as string,
-        });
-    }
-
-    setPort = (e: any) => {
-        this.setState({
-            port: parseInt(e.currentTarget.value, 10),
-        });
+    setRcpKey = (e: any) => {
+        this.splitRcpKey(e.currentTarget.value as string);
     }
 
     setTabsInRoot = (e: React.FormEvent<HTMLElement>) => {
@@ -143,6 +137,10 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             </div>
 
             <Alert
+                style={{
+                    maxWidth: '800px',
+                    width: '100%'
+                }}
                 className={"bp3-dark"}
                 confirmButtonText="Connect"
                 icon="offline"
@@ -150,29 +148,17 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                 isOpen={this.state.isConnected !== true }
                 onConfirm={this.handleAlertConfirm}
             >
-                <Text><strong>Connect to a RabbitControl server</strong></Text>
+                <Text><strong>Connect to a RCP Tunnel</strong></Text>
                 <br/>
                 <br/>
-                <ControlGroup style={{alignItems: "center"}}>
-                    <Text>Host:&nbsp;</Text>
+                <ControlGroup style={{alignItems: "center"}} fill={true}>
+                    <Text className={Classes.FIXED}>Rcp Key:&nbsp;</Text>
                     <InputGroup
-                        value={this.state.host}
                         type="text"
-                        onChange={this.setHost}
+                        onChange={this.setRcpKey}
                     />
                 </ControlGroup>
-                <br/>
-                <ControlGroup style={{alignItems: "center"}}>
-                    <Text>Port:&nbsp;</Text>                    
-                    <InputGroup
-                        value={this.state.port.toFixed(0)}
-                        min={1024}
-                        max={65535}
-                        type="number"
-                        onChange={this.setPort}
-                    />
-                </ControlGroup>
-                <br/>
+                <br />
 
                 <Checkbox
                     checked={this.state.rootWithTabs}
@@ -220,7 +206,14 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             error: undefined
         });
 
-        this.doConnect(this.state.host, this.state.port);
+        if (this.apikey !== "" && this.projectname !== "")
+        {
+            this.doConnect(this.state.host);
+        }
+        else
+        {
+            console.error("no api key and/or project");
+        }
     }
 
     private resetUI()
@@ -258,11 +251,10 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         this.resetUI();
     }
 
-    private doConnect = (host: string, port: number) => {
+    private doConnect = (host: string) => {
 
         if (host !== undefined &&
-            host !== "" &&
-            !isNaN(port))
+            host !== "")
         {
             // disconnect first
             this.doDisconnect();
@@ -270,11 +262,15 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             // set info
             this.setState({
                 host: host,
-                port: port,
                 error: undefined
             });
 
-            const client = new Client(new WebSocketClientTransporter())
+            console.log("this.apikey: " + this.apikey);
+            console.log("this.projectname: " + this.projectname);
+
+            const transporter = new WebSocketClientTransporter([this.apikey, this.projectname]);
+            transporter.doSSL = document.location ? document.location.protocol.startsWith("https") : false;
+            const client = new Client(transporter);
 
             // NOTE: needed??
             client.setRootWidget(new TabsWidget());
@@ -283,7 +279,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             Object.assign(client, { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo });
     
             try {
-                client.connect(host, port);
+                client.connect(host);
 
                 this.setState({
                     client: client
