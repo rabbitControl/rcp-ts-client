@@ -1,24 +1,30 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
-import { Alert, Intent, InputGroup, ControlGroup, Text, Colors, Checkbox } from '@blueprintjs/core';
+import { Alert, Intent, InputGroup, ControlGroup, Text, Colors, Checkbox, Label } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget, StringParameter } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 import { Classes } from '@blueprintjs/core';
 import App from './App';
 
+
 type Props = {
+    public?: boolean;
+    rcpkey?: string;
+    embedded?: boolean;
+    onDisconnect?: () => void;
 };
 
 type State = {
     isConnected: boolean;
     error?: string;
     client?: Client;
-    host: string;
     protocol?: string[];
     parameters: Parameter[];
     serverVersion: string;
     serverApplicationId: string;
     rootWithTabs: boolean;
+    public: boolean;
+    connecting: boolean;
 };
 
 export default class ConnectionDialog extends React.Component<Props, State> {
@@ -26,47 +32,102 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     private addTimer?: number;
     private removeTimer?: number;
 
-    private apikey = "";
-    private projectname = "";
+    private rcpKey = "";
+
+    private readonly clientEnd = "/rcpclient/connect";
+    private readonly publicClientEnd = "/public/rcpclient/connect";
+
+    private host = "";
 
     constructor(props: Props) {
         super(props);
 
         this.state = {
-            isConnected: false,
-            host: window.location.hostname+(window.location.port !== "" ? (":"+window.location.port) : "")+'/clientend',
+            isConnected: true,                     
             parameters: [],
             serverVersion: "",
             serverApplicationId: "",
-            rootWithTabs: false,        
+            rootWithTabs: false,   
+            public: props.public !== undefined ? props.public : true,
+            connecting: false
         };
+
+        this.rcpKey = props.rcpkey !== undefined ? props.rcpkey : "";
+
+        Client.VERBOSE = true;
     }
 
     componentDidMount = () =>
-    {        
+    {
+        if (this.rcpKey !== undefined && this.rcpKey !== "")
+        {
+            console.log("direct autoconnect - public: " + (this.props.public === true));
+
+            // set host
+            if (this.props.public === true)
+            {
+                this.host = window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.publicClientEnd;
+            }
+            else
+            {
+                this.host = window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.clientEnd;
+            }
+
+            this.host += `?key=${this.rcpKey}`;
+
+            this.doConnect();
+            return;
+        }
+
+        let url = new URL(location.href);
+        let mode = url.searchParams.get("mode");
+        if (mode === "private")
+        {
+            console.log("switching to private");
+            
+            this.host = window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.clientEnd;
+                
+            this.setState({
+                public: false
+            });
+
+            console.log("switching to private: " + this.host);
+        }
+        else
+        {
+            this.host = window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.publicClientEnd;
+            console.log("public!");
+        }
+
         /**
          * If a hash is provided, try to connect right away
          */
         if (location.hash !== '')
         {
-            this.splitRcpKey(location.hash.replace('#', ''));
-            if (this.apikey !== "" && this.projectname !== "")
+            this.rcpKey = location.hash.replace('#', '');
+            if (this.rcpKey != "")
             {
+                this.host += `?key=${this.rcpKey}`;
+                
                 console.log("autoconnect");
-                this.doConnect(this.state.host);
+                this.doConnect();
             }
+        }
+        else
+        {
+            // no hash - show dialog
+            this.setState({
+                isConnected: false
+            });
         }
     }
 
-    private splitRcpKey(key: string, connect = false)
+    componentWillUnmount = () =>
     {
-        const keyparts = key.split(/[\s,]+/);
-        if (keyparts.length == 2)
-        {
-            this.apikey = keyparts[0];
-            this.projectname = keyparts[1];
-        }
+        console.log("will unmount!");
+        this.disposeClient();
     }
+
 
     updateClient = () => {
         if (this.state.client) {
@@ -96,7 +157,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     setRcpKey = (e: any) => {
-        this.splitRcpKey(e.currentTarget.value as string);
+        this.rcpKey = e.currentTarget.value as string;        
     }
 
     setTabsInRoot = (e: React.FormEvent<HTMLElement>) => {
@@ -109,6 +170,19 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     render() 
     {
         return <section>
+
+            <div style={{
+                display: this.state.connecting ? "block" : "none",
+                position: "fixed",
+                zIndex: 100,
+                width: "100%",
+                textAlign: "center",
+                minHeight: "50px"
+            }}>
+                <br></br><br></br>
+                waiting for rcp-server to connect...<br></br>
+                 {/* <img src="/hole.png" width="200" height="200"></img> */}
+            </div>
 
             <div className="rootgroup-wrapper">
                 {
@@ -145,21 +219,29 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                 confirmButtonText="Connect"
                 icon="offline"
                 intent={Intent.NONE}
-                isOpen={this.state.isConnected !== true }
+                isOpen={this.state.isConnected !== true && this.state.connecting !== true && this.props.embedded !== true}
                 onConfirm={this.handleAlertConfirm}
             >
                 <Text><strong>Connect to a RCP Tunnel</strong></Text>
                 <br/>
                 <br/>
                 <ControlGroup style={{alignItems: "center"}} fill={true}>
-                    <Text className={Classes.FIXED}>Rcp Key:&nbsp;</Text>
+                    <Text className={Classes.FIXED}>Tunnel Name:&nbsp;</Text>
                     <InputGroup
                         type="text"
+                        fill={true}
                         onChange={this.setRcpKey}
                     />
                 </ControlGroup>
                 <br />
 
+                <div>
+                    <Label style={{color: Colors.GRAY2}}>
+                    { this.state.public ? "Using public tunnels may cause mixups. Use unique tunnel with at least 4 characters" : "" }
+                    </Label>
+                </div>
+
+                <br></br>
                 <Checkbox
                     checked={this.state.rootWithTabs}
                     onChange={this.setTabsInRoot}
@@ -167,10 +249,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                     Tabs in Root
                 </Checkbox>
 
-                <div>
-                    {this.state.error ? this.state.error : undefined}
-                    {this.returnSSLInfo()}
-                </div>
 
             </Alert>
         
@@ -200,19 +278,15 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         }
     }
 
-    private handleAlertConfirm = () => {
-
-        this.setState({
-            error: undefined
-        });
-
-        if (this.apikey !== "" && this.projectname !== "")
+    private handleAlertConfirm = () =>
+    {
+        if (this.rcpKey !== "")
         {
-            this.doConnect(this.state.host);
+            this.doConnect();
         }
         else
         {
-            console.error("no api key and/or project");
+            console.error("no rcp-key");
         }
     }
 
@@ -228,10 +302,11 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             parameters: [],
             serverVersion: "",
             serverApplicationId: "",
+            connecting: false
         });
     }
 
-    private doDisconnect = () => {
+    private disposeClient = () => {
         
         const client = this.state.client;
 
@@ -247,28 +322,23 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             // dispose client
             client.dispose();
         }
-
-        this.resetUI();
     }
 
-    private doConnect = (host: string) => {
-
-        if (host !== undefined &&
-            host !== "")
+    private doConnect = () =>
+    {
+        if (this.host !== undefined &&
+            this.host !== "")
         {
-            // disconnect first
-            this.doDisconnect();
+            this.disposeClient();
 
             // set info
             this.setState({
-                host: host,
-                error: undefined
+                error: undefined                
             });
 
-            console.log("this.apikey: " + this.apikey);
-            console.log("this.projectname: " + this.projectname);
+            console.log("using rcp-key/tunnel-name: " + this.rcpKey);
 
-            const transporter = new WebSocketClientTransporter([this.apikey, this.projectname]);
+            const transporter = new WebSocketClientTransporter();
             transporter.doSSL = document.location ? document.location.protocol.startsWith("https") : false;
             const client = new Client(transporter);
 
@@ -279,10 +349,11 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             Object.assign(client, { connected, disconnected, parameterAdded, parameterRemoved, onError, onServerInfo });
     
             try {
-                client.connect(host);
+                client.connect(this.host);
 
                 this.setState({
-                    client: client
+                    client: client,                
+                    connecting: true
                 });
 
             } catch (e) {
@@ -297,7 +368,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     private connected = () => 
     {
         this.setState({
-            isConnected: true,
+            isConnected: true
         });
 
         if (Client.VERBOSE) console.log("ConnectionDialog connected!");
@@ -311,20 +382,32 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             error: `disconnected${event.reason ? ": " + JSON.stringify(event.reason) : ""}`
         });
 
+        if (this.props.onDisconnect)
+        {
+            this.props.onDisconnect();
+        }
+
         this.resetUI();
     }
 
-    private onError = (error: any) => {
-
-        if (error instanceof Error) {
+    private onError = (error: any) =>
+    {
+        if (this.props.onDisconnect)
+        {
+            this.props.onDisconnect();
+        }
+        
+        if (error instanceof Error)
+        {
             console.error(error.message);
-        } else {
+        }
+        else
+        {
             this.setState({
                 error: error.toString(),
             });
             this.resetUI();
         }
-
     }
 
     /**
@@ -387,6 +470,10 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                 });
             }
         }, 100);
+
+        this.setState({
+            connecting: false
+        });
     }
 
     private parameterRemoved = (parameter: Parameter) =>
