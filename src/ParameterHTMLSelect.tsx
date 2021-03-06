@@ -56,17 +56,20 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
     }
 
     private renderOptions(sel: string, entries?: string[]) {
-        if (entries) {
+        if (entries)
+        {
             return entries.map( e => 
-                { 
-                    return <option 
-                            {...e === sel ? "selected": null} 
-                            key={e} 
-                            value={e}>
-                                {e}
-                            </option>
-                });
+            {               
+                return <option 
+                        {...e === sel ? "selected" : null} 
+                        key={e}
+                        value={e}>
+                            {e}
+                        </option>
+            });
         }
+
+        return "";
     }
 };
 
