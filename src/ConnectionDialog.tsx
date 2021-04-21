@@ -30,7 +30,6 @@ type State = {
 export default class ConnectionDialog extends React.Component<Props, State> {
     
     private addTimer?: number;
-    private removeTimer?: number;
 
     private rcpKey = "";
 
@@ -477,12 +476,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     private parameterRemoved = (parameter: Parameter) =>
-    {        
+    {
         // this.rootParam.removeChild(parameter);
         parameter.removeFromParent();
 
-        parameter.removeChangedListener(this.parameterChangeListener);        
-
+        parameter.removeChangedListener(this.parameterChangeListener);
+        
         if (this.state.client)
         {
             this.setState({
