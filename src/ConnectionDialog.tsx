@@ -22,7 +22,6 @@ type State = {
 export default class ConnectionDialog extends React.Component<Props, State> {
     
     private addTimer?: number;
-    private removeTimer?: number;    
 
     constructor(props: Props) {
         super(props);
@@ -382,25 +381,18 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     private parameterRemoved = (parameter: Parameter) =>
-    {
+    {        
         // this.rootParam.removeChild(parameter);
         parameter.removeFromParent();
 
-        parameter.removeChangedListener(this.parameterChangeListener);
-        
-        if (this.removeTimer!== undefined) {
-            window.clearTimeout(this.removeTimer);
-            this.removeTimer = undefined;
-        }
+        parameter.removeChangedListener(this.parameterChangeListener);        
 
-        this.removeTimer = window.setTimeout(() => {
-            if (this.state.client)
-            {
-                this.setState({
-                    parameters: this.state.client.getRootGroup().children,
-                });
-            }
-        }, 100);
+        if (this.state.client)
+        {
+            this.setState({
+                parameters: this.state.client.getRootGroup().children,
+            });
+        }
     }
 
     /**
@@ -411,11 +403,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         if (this.addTimer !== undefined) {
             window.clearTimeout(this.addTimer);
             this.addTimer = undefined;
-        }
-
-        if (this.removeTimer!== undefined) {
-            window.clearTimeout(this.removeTimer);
-            this.removeTimer = undefined;
         }
 
     }
