@@ -179,7 +179,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     private returnSSLInfo() {
-        const isSSL = document.location ? document.location.toString().startsWith("https") : false;
+        const isSSL = window.location ? window.location.toString().startsWith("https") : false;
         const isFirefox = navigator.userAgent.indexOf("Firefox") != -1;
 
         if (isSSL && isFirefox) {
