@@ -78,7 +78,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             return;
         }
 
-        let url = new URL(location.href);
+        let url = new URL(window.location.href);
         let mode = url.searchParams.get("mode");
         if (mode === "private")
         {
@@ -101,9 +101,9 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         /**
          * If a hash is provided, try to connect right away
          */
-        if (location.hash !== '')
+        if (window.location.hash !== '')
         {
-            this.rcpKey = location.hash.replace('#', '');
+            this.rcpKey = window.location.hash.replace('#', '');
             if (this.rcpKey != "")
             {
                 this.host += `?key=${this.rcpKey}`;
@@ -338,7 +338,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             console.log("using rcp-key/tunnel-name: " + this.rcpKey);
 
             const transporter = new WebSocketClientTransporter();
-            transporter.doSSL = document.location ? document.location.protocol.startsWith("https") : false;
+            transporter.doSSL = window.location ? window.location.protocol.startsWith("https") : false;
             const client = new Client(transporter);
 
             // NOTE: needed??
