@@ -44,8 +44,8 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         /**
          * If a hash is provided, try to connect right away
          */
-        if (location.hash !== '') {
-            const [host, port] = location.hash.replace('#', '').split(':');
+        if (window.location.hash !== '') {
+            const [host, port] = window.location.hash.replace('#', '').split(':');
             const portAsInt = parseInt(port, 10);        
 
             console.log("autoconnect: " + host + ":" + portAsInt);
