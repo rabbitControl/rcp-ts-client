@@ -31,7 +31,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     
     private addTimer?: number;
 
-    private rcpKey = "";
+    private rcpKey: string = "";
 
     private readonly clientEnd = "/rcpclient/connect";
     private readonly publicClientEnd = "/public/rcpclient/connect";
@@ -52,15 +52,28 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         };
 
         this.rcpKey = props.rcpkey !== undefined ? props.rcpkey : "";
-
-        Client.VERBOSE = true;
     }
 
     componentDidMount = () =>
     {
-        if (this.rcpKey !== undefined && this.rcpKey !== "")
+        // paarse parameters
+        const params = new URLSearchParams(window.location.search);
+
+        // t: tabs in roots
+        if (params.has("t")) {
+            this.setState({ rootWithTabs: (parseInt(params.get("t") || "0") || 0) > 0 });
+        }
+
+        // d: debug
+        if (params.has("d")) {
+            Client.VERBOSE = (parseInt(params.get("d") || "0") || 0) > 0 || false;
+            App.VERBOSE_LOG = Client.VERBOSE;
+        }
+
+
+        if (this.rcpKey !== "")
         {
-            console.log("direct autoconnect - public: " + (this.props.public === true));
+            if (Client.VERBOSE) console.log("direct autoconnect - public: " + (this.props.public === true));
 
             // set host
             if (this.props.public === true)
@@ -78,29 +91,22 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             return;
         }
 
-        let url = new URL(window.location.href);
-        let mode = url.searchParams.get("mode");
-        if (mode === "private")
+        if (params.get("mode") === "private")
         {
-            console.log("switching to private");
-            
             this.host = window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.clientEnd;
                 
             this.setState({
                 public: false
             });
 
-            console.log("switching to private: " + this.host);
+            if (Client.VERBOSE) console.log("private: " + this.host);
         }
         else
         {
             this.host = window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.publicClientEnd;
-            console.log("public!");
         }
 
-        /**
-         * If a hash is provided, try to connect right away
-         */
+        // If a hash is provided, try to connect right away
         if (window.location.hash !== '')
         {
             this.rcpKey = window.location.hash.replace('#', '');
@@ -108,7 +114,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             {
                 this.host += `?key=${this.rcpKey}`;
                 
-                console.log("autoconnect");
+                if (Client.VERBOSE) console.log("autoconnect: " + this.host);
                 this.doConnect();
             }
         }
@@ -123,7 +129,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
     componentWillUnmount = () =>
     {
-        console.log("will unmount!");
         this.disposeClient();
     }
 
@@ -291,8 +296,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
     private resetUI()
     {
-        if (Client.VERBOSE) console.log("reset UI");
-
         this.stopTimers();
 
         this.setState({
