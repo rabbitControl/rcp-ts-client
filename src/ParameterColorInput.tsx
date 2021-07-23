@@ -44,7 +44,7 @@ export class ParameterColorInputC extends React.Component<Props & InjectedProps,
         }
 
         if (this.props.parameter instanceof ValueParameter) {
-            if (this.props.parameter.setStringValue(this.props.value)) {
+            if (this.props.parameter.setStringValue(this.props.value || "")) {
                 if (this.props.onSubmitCb) {
                     this.props.onSubmitCb();
                 }
@@ -55,7 +55,7 @@ export class ParameterColorInputC extends React.Component<Props & InjectedProps,
     }
 
     render() {
-        let value = this.props.value as string;
+        let value = this.props.value as string || "#000000";
         let readOnly:boolean|undefined;
 
         // we only can handle RGB values

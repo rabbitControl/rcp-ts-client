@@ -31,7 +31,7 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
 
         const param = this.props.parameter;
         let unit = "";
-        let value = this.props.defaultValue;
+        let value = this.props.defaultValue || "";
         let label = this.props.label;
 
         if (param) {

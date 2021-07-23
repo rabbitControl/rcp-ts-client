@@ -32,7 +32,7 @@ export class ParameterRadioC extends React.Component<Props & InjectedProps, Stat
     }
 
     render() {
-        const value = this.props.value as string;    
+        const value = this.props.value as string || "";
         let readOnly:boolean|undefined;
         let entries:string[]|undefined;
         let multiSelect:boolean|undefined;

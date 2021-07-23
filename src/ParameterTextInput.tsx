@@ -43,7 +43,7 @@ export class ParameterTextInputC extends React.Component<Props & InjectedProps, 
     }
 
     render() {
-        const value = this.props.value as string;
+        const value = this.props.value as string || "";
         let readOnly:boolean|undefined;
 
         const param = this.props.parameter;

@@ -29,7 +29,7 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
     }
 
     render() {
-        const value = this.props.value as number;
+        const value = this.props.value as number || 0;
         let step = 1;
         let isFloat:boolean = false;        
         let readOnly:boolean = false;
@@ -74,7 +74,7 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
         return (        
             <NumericInput
                 {...filteredProps}
-                value={value ? value : 0}
+                value={value}
                 min={min}
                 max={max}
                 stepSize={step}

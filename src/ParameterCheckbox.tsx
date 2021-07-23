@@ -29,7 +29,7 @@ export class ParameterCheckboxC extends React.Component<Props & InjectedProps, S
     }
 
     render() {
-        const value = this.props.value as boolean;    
+        const value = this.props.value as boolean || false;
         let readOnly:boolean|undefined;
 
 
@@ -43,7 +43,7 @@ export class ParameterCheckboxC extends React.Component<Props & InjectedProps, S
         return (
             <Checkbox
                 {...filteredProps}
-                checked={value ? value : false}
+                checked={value}
                 onChange={this.handleChange}
                 disabled={readOnly === true}
                 alignIndicator={Position.LEFT}

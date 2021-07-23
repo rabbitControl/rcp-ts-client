@@ -45,7 +45,7 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
     }
 
     render() {
-        const value = this.props.value as number;
+        const value = this.props.value as number || 0;
         let step = 1;
         let isFloat:boolean = false;
         let min:number|undefined = undefined;
@@ -89,7 +89,7 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
                 <div ref={measureRef}>
                     <Slider
                         {...filteredProps}
-                        value={value ? value : 0}
+                        value={value}
                         min={min}
                         max={max}
                         stepSize={step}
