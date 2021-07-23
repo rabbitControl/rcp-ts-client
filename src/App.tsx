@@ -31,7 +31,7 @@ class App extends React.Component<Props, State> {
       height: window.innerHeight,
     };
 
-    console.log("rabbitcontrol web client - version: 0.1.2");
+    console.log("rabbitcontrol web client - version: 0.1.3");
   }
 
   componentDidMount() 
