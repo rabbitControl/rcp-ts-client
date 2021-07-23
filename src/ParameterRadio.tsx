@@ -12,16 +12,12 @@ interface State {
 export class ParameterRadioC extends React.Component<Props & InjectedProps, State> {
 
     constructor(props: Props & InjectedProps)
-    {
-        
+    {        
         super(props);    
-        console.log("create radio parameter");
     }    
 
     handleChange = (event: React.FormEvent<HTMLInputElement>) => 
     {
-        console.log("radio changed: "+ (event.target as HTMLInputElement).value);
-        
         if (this.props.handleValue) {
             this.props.handleValue((event.target as HTMLInputElement).value);
         }

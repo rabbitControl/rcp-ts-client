@@ -3,6 +3,7 @@ import ParameterWidget from './ParameterWidget'
 import { Alert, Intent, InputGroup, ControlGroup, Text, Colors, Checkbox } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
+import App from './App';
 
 type Props = {
 };
@@ -35,20 +36,32 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             serverApplicationId: "",
             rootWithTabs: false,
         };
-
-        Client.VERBOSE = true;
     }
 
     componentDidMount = () => {
         
-        /**
-         * If a hash is provided, try to connect right away
-         */
-        if (window.location.hash !== '') {
-            const [host, port] = window.location.hash.replace('#', '').split(':');
-            const portAsInt = parseInt(port, 10);        
+        // paarse parameters
+        if (window.location.search !== "") {
+            const params = new URLSearchParams(window.location.search);
 
-            console.log("autoconnect: " + host + ":" + portAsInt);
+            // t: tabs in roots
+            if (params.has("t")) {
+                this.setState({rootWithTabs: (parseInt(params.get("t") || "0") || 0) > 0});
+            }
+
+            // d: debug
+            if (params.has("d")) {
+                Client.VERBOSE = (parseInt(params.get("d") || "0") || 0) > 0 || false;
+                App.VERBOSE_LOG = Client.VERBOSE;
+            }
+        }
+
+         // autoconnect
+         if (window.location.hash !== '') {
+            const [host, port] = window.location.hash.replace('#', '').split(':');
+            const portAsInt = parseInt(port, 10);
+
+            if (Client.VERBOSE) console.log("autoconnect: " + host + ":" + portAsInt);
             this.doConnect(host, portAsInt);
         }
     }
@@ -212,7 +225,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
     private resetUI()
     {
-        console.log("reset UI");
+        if (Client.VERBOSE) console.log("reset UI");
 
         this.stopTimers();
 
@@ -291,12 +304,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             isConnected: true,
         });
 
-        console.log("ConnectionDialog connected!");
+        if (Client.VERBOSE) console.log("ConnectionDialog connected!");
     }
 
     private disconnected = (event: CloseEvent) => 
     {
-        console.log("ConnectionDialog disconneted: " + JSON.stringify(event));
+        if (Client.VERBOSE) console.log("ConnectionDialog disconneted: " + JSON.stringify(event));
 
         this.setState({
             error: `disconnected${event.reason ? ": " + JSON.stringify(event.reason) : ""}`
@@ -335,7 +348,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         {
             if (parameter.parent !== undefined)
             {
-                console.log("parameter changed: " +  parameter.parent.label);
+                if (Client.VERBOSE) console.log("parameter changed: " +  parameter.parent.label);
             }
             else if (parameter.parentChanged())
             {
@@ -348,7 +361,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             }
             else
             {
-                console.log("paraemter changed: no parent");                
+                if (Client.VERBOSE) console.log("paraemter changed: no parent");                
             }
             
             //force redraw

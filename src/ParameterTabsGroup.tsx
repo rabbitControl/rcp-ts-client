@@ -155,14 +155,8 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
     
     render() 
     {
-        let label = "";
         const param = this.props.parameter;
-        
-        if (param 
-            && param.label !== undefined) 
-        {
-            label = param.label;
-        }
+        const label = param !== undefined ? (param.label || "") : "";
 
         return (
             <div style={this.props.style}>
