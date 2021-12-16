@@ -56,14 +56,13 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
                 if (param.value < td.minimum || param.value > td.maximum) {
                     value = "Err";
                 }
-            }
-            
+            }            
         }
 
         return (
             
             <section style={this.props.style}>
-                
+
                 <div style={{                    
                     display: "flex",
                     flexDirection: "row",
@@ -75,7 +74,7 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
                     <div style={{
                         width: this.props.labelDisabled ? 0 : (this.props.labelWidth ? this.props.labelWidth : undefined),
                         // fontSize: this.props.large ? "large" : "normal",
-                        color: this.props.disabled ? GRAY1 : LIGHT_GRAY5,
+                        // color: this.props.disabled ? GRAY1 : LIGHT_GRAY5,
                     }}>
                         {this.props.labelDisabled ? "" : label}
                     </div>
@@ -83,7 +82,7 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
 
                     <div style={{
                         marginLeft: this.props.labelDisabled ? 0 : "6px",
-                        background: DARK_GRAY1,
+                        // background: DARK_GRAY1,
                         flex: "content",
                         flexGrow: 1,
                     }}>
@@ -91,7 +90,7 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
                         <div style={{
                             margin: this.props.labelDisabled ? 0 : "0px 0px 0px 6px",
                             // fontSize: this.props.large ? "large" : "normal",
-                            color: this.props.disabled ? GRAY1 : LIGHT_GRAY5,
+                            // color: this.props.disabled ? GRAY1 : LIGHT_GRAY5,
                             whiteSpace: "nowrap",
                         }}>
                             {value}
