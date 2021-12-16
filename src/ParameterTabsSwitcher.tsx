@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Colors, Tabs, Tab, TabId, ControlGroup, Label, Button, ButtonGroup } from '@blueprintjs/core';
-import { Parameter, GroupParameter, TabsWidget } from 'rabbitcontrol';
+import { Parameter, GroupParameter } from 'rabbitcontrol';
 import ParameterWidget from './ParameterWidget';
+import { Button, ButtonSet } from 'carbon-components-react';
+import { ChevronLeft32, ChevronRight32 } from '@carbon/icons-react';
 
 interface Props {
     style?: React.CSSProperties;
@@ -12,10 +13,8 @@ interface State {
     currentChild: number;    
 };
 
-export class ParameterTabsSwitcherC extends React.Component<Props & InjectedProps, State> {
-
-    static readonly COMPONENT_DEFAULT_COLOR = Colors.GRAY1;
-
+export class ParameterTabsSwitcherC extends React.Component<Props & InjectedProps, State>
+{
     private childNames: string[];
     private groupChildren: GroupParameter[];
 
@@ -117,21 +116,24 @@ export class ParameterTabsSwitcherC extends React.Component<Props & InjectedProp
         return (
             <div style={this.props.style}>
 
-                <ControlGroup 
-                    style={{
-                        alignItems: "center",
-                        
-                    }}
-                    fill={false}
-                >
-                    <Label style={{margin: "inherit",marginLeft: 10, color: "lightgray",}}>{label}</Label>
-                    <Label style={{margin: "inherit",marginLeft: 10, fontSize: "120%",}}>{current_name}</Label>
-                    <Label style={{margin: "inherit",marginLeft: 10, fontSize: "80%",}}>{`(${this.state.currentChild+1}/${this.childNames.length})`}</Label>
-                    <ButtonGroup style={{marginLeft: 10,}}                        >
-                        <Button icon="caret-left" onClick={this.onPreviousChild} disabled={this.childNames.length === 0}></Button>
-                        <Button icon="caret-right" onClick={this.onNextChild} disabled={this.childNames.length === 0}></Button>
-                    </ButtonGroup>
-                </ControlGroup>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    // justifyContent: "center"
+                }}>                    
+                    <label style={{margin: "auto",marginLeft: 10, color: "lightgray",}}>{label}</label>
+                    <label style={{margin: "auto",marginLeft: 10, }}>{current_name}</label>
+                    <label style={{margin: "auto",marginLeft: 10, }}>{`(${this.state.currentChild+1}/${this.childNames.length})`}</label>
+                    
+                    <div style={{
+                        display: "flex",
+                        flexDirection: "row",
+                    }}>
+                        <Button hasIconOnly renderIcon={ChevronLeft32} iconDescription="previous group" onClick={this.onPreviousChild} disabled={this.childNames.length === 0}></Button>
+                        <Button hasIconOnly renderIcon={ChevronRight32} iconDescription="next group" onClick={this.onNextChild} disabled={this.childNames.length === 0}></Button>
+                    </div>
+                </div>
+
 
                 { this.renderCurrentChildren() }       
                 {/* non-groupparameter children are ignored for now */}

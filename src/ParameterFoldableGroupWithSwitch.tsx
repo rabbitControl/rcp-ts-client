@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Colors, Text, Collapse, ControlGroup } from '@blueprintjs/core';
 import { BooleanParameter, GroupParameter, Parameter } from 'rabbitcontrol';
 import ParameterWidget from './ParameterWidget';
-import { ParameterCheckboxC } from './ParameterCheckbox';
 import { TOGGLE_LABEL } from './WidgetConfig';
 import { ParameterSwitchC } from './ParameterSwitch';
+import { Accordion, AccordionItem, Button, FormGroup, FormLabel, FormLabel as label, Switch, Toggle } from 'carbon-components-react';
 
 interface Props {
     style?: React.CSSProperties;
@@ -16,10 +15,8 @@ interface State {
     switchParameter?: BooleanParameter;
 };
 
-export class ParameterFoldableGroupSWC extends React.Component<Props & InjectedProps, State> {
-
-    static readonly COMPONENT_DEFAULT_COLOR = Colors.GRAY1;
-
+export class ParameterFoldableGroupSWC extends React.Component<Props & InjectedProps, State>
+{
     constructor(props: Props & InjectedProps) {
         super(props);
     
@@ -104,25 +101,37 @@ export class ParameterFoldableGroupSWC extends React.Component<Props & InjectedP
         const { parameter, ...filteredProps } = this.props;
 
         return (
-            <div style={this.props.style}>
-                <ControlGroup 
-                    style={{marginBottom: this.state.isOpen ? 5 : 0}}
-                    vertical={false} 
+
+            <div>
+                <Accordion
+                    id={param?.id.toString() || "group"}
+                    title="ParameterFoldableGroupSWC"
                 >
-                    <Text>{label}</Text>
-                    <div style={{flexGrow:1}}></div>
-                    <ParameterSwitchC
-                        {...filteredProps}
-                        parameter={this.state.switchParameter}
-                        handleValue={this.handleToggleChange}
-                        value={this.state.isOpen}
-                        disabled={this.state.switchParameter === undefined}
-                        labelDisabled={true}
-                        />
-                </ControlGroup>
-                <Collapse isOpen={this.state.isOpen}>
-                    {this.renderChildren()}
-                </Collapse>
+                    <AccordionItem
+                        title={label + "_ParameterFoldableGroupSWC"}
+                        open={this.state.isOpen}
+                        renderExpando={() =>
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "center"
+                            }}>
+                                <FormLabel className="grouplabel bx--label">{label}</FormLabel>
+                                <div style={{flexGrow:100}}></div>
+                                <ParameterSwitchC
+                                    {...filteredProps}
+                                    parameter={this.state.switchParameter}
+                                    handleValue={this.handleToggleChange}
+                                    value={this.state.isOpen}
+                                    disabled={this.state.switchParameter === undefined}
+                                    labelDisabled={true}
+                                />
+                            </div>
+                        }
+                    >
+                        {this.renderChildren()}
+                    </AccordionItem>
+                </Accordion>
             </div>
         );
     }

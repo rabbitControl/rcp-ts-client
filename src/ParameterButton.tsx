@@ -1,6 +1,7 @@
-import { Button, Modal } from 'carbon-components-react';
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
+import { Button, Modal } from 'carbon-components-react';
+import { ChevronLeft32, ChevronRight32 } from '@carbon/icons-react';
 
 interface Props {
     className?: string;
@@ -54,12 +55,40 @@ export class ParameterButtonC extends React.Component<Props & InjectedProps, Sta
 
         return (
             <section>
-                <Button style={{whiteSpace: "nowrap", }}
-                    {...filteredProps}
-                    onClick={this.handleClick}
-                >
-                    {ld ? "" : label}
-                </Button>
+
+                {/* deal with special labels "<" and ">" - use icons instead */}
+                {
+                    label === "<" ?
+                        <Button
+                            {...filteredProps}
+                            onClick={this.handleClick}
+                            hasIconOnly
+                            renderIcon={ChevronLeft32}
+                            iconDescription="previous group"
+                        />
+
+                        :
+
+                        label === ">" ?
+                            
+                            <Button
+                                {...filteredProps}
+                                onClick={this.handleClick}
+                                hasIconOnly
+                                renderIcon={ChevronRight32}
+                                iconDescription="next group"
+                            />
+
+                            :
+
+                            <Button style={{whiteSpace: "nowrap", }}
+                                {...filteredProps}
+                                onClick={this.handleClick}
+                            >
+                                {ld ? "" : label}
+                            </Button>
+                }
+
 
                 <Modal
                     className={`bp3-dark ${this.props.className}`}

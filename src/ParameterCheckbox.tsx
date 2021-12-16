@@ -48,9 +48,7 @@ export class ParameterCheckboxC extends React.Component<Props & InjectedProps, S
                 labelText={param?.label || ""}
                 checked={value}
                 onChange={this.handleChange}
-                disabled={readOnly === true}
-                // alignIndicator={Position.LEFT}
-                // large={true}
+                disabled={readOnly === true || filteredProps.disabled === true}
             />
         );
     }

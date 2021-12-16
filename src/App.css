@@ -51,6 +51,22 @@
   text-decoration: "underline";
 }
 
+.grouplabel {
+  margin: auto;
+  font-size: 1.2em !important;
+}
+
+.parameter-wrapper .h_element:first-child {
+  flex-grow: 10;
+}
+.parameter-wrapper .h_element:not(:first-child) {
+  flex-grow: 0;
+}
+
+.spacer {
+  flex-grow: 2;
+}
+
 .flex-h {
   display: flex;
   flex-direction: row;

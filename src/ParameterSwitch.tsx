@@ -1,8 +1,8 @@
+import { Switch, Toggle } from 'carbon-components-react';
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { INumericInputProps, Position, Switch, Colors } from '@blueprintjs/core';
 
-interface Props extends INumericInputProps {
+interface Props {
     labelDisabled?: boolean;
 };
 
@@ -42,16 +42,15 @@ export class ParameterSwitchC extends React.Component<Props & InjectedProps, Sta
         const { onSubmitCb, handleValue, ...filteredProps } = this.props;
 
         return (
-            <Switch
+            <Toggle
+                id={param?.id.toString() || "toggle"}
+                labelA={this.props.labelDisabled === true ? "" : param ? param.label : ""}
+                labelB=""
                 {...filteredProps}
-                checked={value ? value : false}
+                toggled={value ? value : false}
                 onChange={this.handleChange}
                 disabled={readOnly === true || filteredProps.disabled === true}
-                alignIndicator={Position.LEFT}
-                large={true}
-                label={this.props.labelDisabled === true ? "" : param ? param.label : ""}
-                color={Colors.GREEN2}
-            />      
+            />
         );
     }
 };

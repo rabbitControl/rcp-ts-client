@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Colors, Text, Collapse, ControlGroup, Icon } from '@blueprintjs/core';
 import { GroupParameter, Parameter } from 'rabbitcontrol';
 import ParameterWidget from './ParameterWidget';
 import { WIDGET_EXPANDEDBYDEFAULT_STR, WIDGET_NOTFOLDABLE_STR } from './WidgetConfig';
-import { ParameterTextWithLabel, ParameterTextWithLabelC } from './ParameterTextWithLabel';
 
 interface Props {
     style?: React.CSSProperties;
@@ -14,10 +12,8 @@ interface State {
     isOpen: boolean;
 };
 
-export class ParameterGroupHorizontalLayoutC extends React.Component<Props & InjectedProps, State> {
-
-    static readonly COMPONENT_DEFAULT_COLOR = Colors.GRAY1;
-
+export class ParameterGroupHorizontalLayoutC extends React.Component<Props & InjectedProps, State>
+{
     constructor(props: Props & InjectedProps) {
         super(props);
 
@@ -69,27 +65,24 @@ export class ParameterGroupHorizontalLayoutC extends React.Component<Props & Inj
     
     render()
     {
-        let label = "no label";
         let foldable = true;
         const param = this.props.parameter;
-        if (param) {
-            if (param.label !== undefined)
-            {
-                label = param.label;
-            }
+        const label = param?.label || "no label";
+        if (param)
+        {
             foldable = param.userid !== WIDGET_NOTFOLDABLE_STR;
         }
 
         return (
             <div style={this.props.style}>
-                <ControlGroup
+                <div
                     className="horizontallayout"
-                    vertical={false}
-                    fill={true}
-                >
-
+                    style={{
+                    display: "flex",
+                    flexDirection: "row",
+                }}>
                     {this.renderChildren()}
-                </ControlGroup>
+                </div>
             </div>
         );
     }

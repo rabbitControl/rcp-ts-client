@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, TabsWidget, ListWidget, ListPageWidget, RadiobuttonWidget } from 'rabbitcontrol';
+import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, TabsWidget, ListWidget, ListPageWidget, RadiobuttonWidget, CustomWidget } from 'rabbitcontrol';
 import { ParameterButtonC } from './ParameterButton';
 import { ParameterCheckboxC } from './ParameterCheckbox';
 import { ParameterColorInputC } from './ParameterColorInput';
@@ -132,18 +132,22 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
     renderValue(parameter: Parameter)
     {
-        const { vertical, className, ...filteredProps } = this.props;    
-        const widget = parameter.widget;                
+        const { vertical, className, ...filteredProps } = this.props;
+        const widget = parameter.widget;
 
         // check for special user-id
         if (parameter.userid === WIDGET_NOWIDGET_STR)
         {
             return (
-                <ControlGroup
-                    vertical={this.props.vertical}
-                    fill={this.props.vertical}
-                >
-                    <div className="parameter-label">{parameter.label}</div>
+                <div style={{
+                    display: "flex",
+                    flexDirection: this.props.vertical ? "column" : "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    marginRight: "1em",
+                }}>
+                    <label className="bx--label">{parameter?.label || ""}</label>
                     <div className={`${this.props.vertical !== true ? "spacer" : ""}`}/>
                     <ParameterTextWithLabelC
                         {...filteredProps}
@@ -151,7 +155,8 @@ export default class ParameterWidget extends React.Component<Props, State> {
                         handleValue={this.handleValueChange}
                         labelDisabled={true}
                     />
-                </ControlGroup>
+                </div>
+
             );            
         }
 
@@ -170,7 +175,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
                         return ( 
                             <ParameterSliderC
-                                {...this.props}
+                                {...filteredProps}
                                 value={this.state.value}
                                 handleValue={this.handleValueChange}
                                 continuous={true}
@@ -188,7 +193,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <ParameterNumericInputC
-                            {...this.props}
+                            {...filteredProps}
                             value={this.state.value}
                             handleValue={this.handleValueChange}
                         />
@@ -210,7 +215,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {
                         return (
                             <ParameterSlider2C
-                                {...this.props}
+                                {...filteredProps}
                                 value={this.state.value}
                                 handleValue={this.handleValueChange}
                                 continuous={true}
@@ -224,7 +229,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <ParameterNumericInput2C
-                            {...this.props}
+                            {...filteredProps}
                             value={this.state.value}
                             handleValue={this.handleValueChange}
                         />
@@ -247,7 +252,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {
                         return ( 
                             <ParameterSlider3C
-                                {...this.props}
+                                {...filteredProps}
                                 value={this.state.value}
                                 handleValue={this.handleValueChange}
                                 continuous={true}
@@ -261,7 +266,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <ParameterNumericInput3C
-                            {...this.props}
+                            {...filteredProps}
                             value={this.state.value}
                             handleValue={this.handleValueChange}
                         />
@@ -285,7 +290,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {
                         return ( 
                             <ParameterSlider4C
-                                {...this.props}
+                                {...filteredProps}
                                 value={this.state.value}
                                 handleValue={this.handleValueChange}
                                 continuous={true}
@@ -299,7 +304,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <ParameterNumericInput4C
-                            {...this.props}
+                            {...filteredProps}
                             value={this.state.value}
                             handleValue={this.handleValueChange}
                         />
@@ -326,7 +331,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 // default ceckbox
                 return (
                     <ParameterCheckboxC
-                        {...this.props}
+                        {...filteredProps}
                         value={this.state.value}
                         handleValue={this.handleValueChange}
                     />
@@ -337,7 +342,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             {
                 return (
                     <ParameterColorInputC
-                        {...this.props}
+                        {...filteredProps}
                         value={this.state.value}
                         handleValue={this.handleValueChange}
                     />
@@ -349,7 +354,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 {
                     return (    
                         <ParameterRadioC
-                            {...this.props}
+                            {...filteredProps}
                             value={this.state.value}
                             handleValue={this.handleValueChange}
                         />
@@ -359,7 +364,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 {
                     return (
                         <ParameterHTMLSelectC
-                            {...this.props}
+                            {...filteredProps}
                             value={this.state.value}
                             handleValue={this.handleValueChange}
                         />
@@ -371,7 +376,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             {
                 return (
                     <ParameterImageC
-                        {...this.props}
+                        {...filteredProps}
                         value={parameter.value}
                         handleValue={this.handleValueChange}
                     />
@@ -381,7 +386,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             {
                 return (
                     <ParameterRangeSliderC
-                        {...this.props}
+                        {...filteredProps}
                         value={this.state.value}
                         handleValue={this.handleValueChange}
                         continuous={true}
@@ -451,8 +456,13 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     is_horizontal_layout = parameter.userid === WIDGET_HORIZONTALLAYOUT_STR;
                 }
 
+                console.log("is_tab_switcher: " + is_tab_switcher);
+                
+
                 if (is_tab_switcher)
                 {
+                    console.log("is_tab_switcher!!");
+                    
                     // custom tab-widget - TabSwitcher
                     return (
                         <ParameterTabsSwitcherC
@@ -509,12 +519,13 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 <div>no parameter</div>
             );
         }
+        
 
         // less framing for tabs widgets
         if (parameter.widget instanceof TabsWidget)
         {
             return (        
-                <div className="parameter-wrapper">                    
+                <div className={"parameter-wrapper " + this.props.className}>
                     {this.renderValue(parameter)}
                 </div>
             );
@@ -522,7 +533,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
         // default framing
         return (        
-            <div className="parameter-wrapper">                
+            <div className={"parameter-wrapper " + this.props.className}>
                 {this.renderValue(parameter)}
             </div>
         );
@@ -533,10 +544,13 @@ export default class ParameterWidget extends React.Component<Props, State> {
         const { vertical, className, ...filteredProps } = this.props;
 
         return (
-            <ParameterTextWithLabelC
-                {...filteredProps}
-                value={this.state.value.toString()}                
-            />
+            <div>
+                <label className="bx--label">{this.props.parameter.label || ""}</label>
+                <ParameterTextWithLabelC
+                    {...filteredProps}
+                    value={this.state.value.toString()}                
+                />
+            </div>
         );
     }
 
