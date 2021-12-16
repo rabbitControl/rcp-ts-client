@@ -16,6 +16,8 @@
     "extends": "react-app"
   },
   "dependencies": {
+    "@carbon/colors": "^10.34.0",
+    "@types/carbon__colors": "^10.31.0",
     "@types/carbon-components-react": "^7.46.1",
     "@types/jest": "^23.3.10",
     "@types/react": "^16.9.53",
