@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { NumericInput, INumericInputProps, Position, Intent } from '@blueprintjs/core';
 import { RcpTypes, Vector3, Vector3F32Definition } from 'rabbitcontrol';
+import { NumberInput } from 'carbon-components-react';
 
-interface Props extends INumericInputProps {
+interface Props {
 };
 
 interface State {
@@ -18,7 +18,7 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
         };
     }    
 
-    handleChangeX = (value: number, valueAsString: string) => {
+    handleChangeX = (e: any, direction: any, value: any) => {
 
         const vec = (this.props.value as Vector3).clone();
         vec.x = value;
@@ -31,7 +31,7 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
             this.props.onSubmitCb();
         }
     }
-    handleChangeY = (value: number, valueAsString: string) => {
+    handleChangeY = (e: any, direction: any, value: any) => {
 
         const vec = (this.props.value as Vector3).clone();
         vec.y = value;
@@ -44,7 +44,7 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
             this.props.onSubmitCb();
         }
     }
-    handleChangeZ = (value: number, valueAsString: string) => {
+    handleChangeZ = (e: any, direction: any, value: any) => {
 
         const vec = (this.props.value as Vector3).clone();
         vec.z = value;
@@ -65,7 +65,6 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
         let min:Vector3|undefined = undefined;
         let max:Vector3|undefined = undefined; 
         let readOnly:boolean = false;
-        let intent:Intent = Intent.NONE;
 
         const param = this.props.parameter;
         if (param) {
@@ -93,7 +92,6 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
                     } else {
                         // error on min/max
                         console.error("NumberInput: minimum >= maximum");                
-                        intent = Intent.DANGER;
                     }
                 }
 
@@ -111,47 +109,39 @@ export class ParameterNumericInput3C extends React.Component<Props & InjectedPro
 
         return (
             <div>
-                <NumericInput
+                <label className="bx--label">{param?.label || ""}</label>
+                <NumberInput
+                    id={param?.id.toString()+"_1" || "number_1"}
                     {...filteredProps}
                     value={value ? value.x : 0}
                     min={min ? min.x : undefined}
                     max={max ? max.x : undefined}
-                    stepSize={step.x}
-                    minorStepSize={isFloat ? 0.1 : 1}
-                    onValueChange={this.handleChangeX}
+                    step={step.x}
+                    onChange={this.handleChangeX}
                     disabled={readOnly === true}
-                    selectAllOnFocus={true}
-                    buttonPosition={Position.RIGHT}
                     placeholder={"-"}
-                    intent={intent}
                 />
-                <NumericInput
+                <NumberInput
+                    id={param?.id.toString()+"_2" || "number_2"}
                     {...filteredProps}
                     value={value ? value.y : 0}
                     min={min ? min.y : undefined}
                     max={max ? max.y : undefined}
-                    stepSize={step.y}
-                    minorStepSize={isFloat ? 0.1 : 1}
-                    onValueChange={this.handleChangeY}
+                    step={step.y}
+                    onChange={this.handleChangeY}
                     disabled={readOnly === true}
-                    selectAllOnFocus={true}
-                    buttonPosition={Position.RIGHT}
                     placeholder={"-"}
-                    intent={intent}
                 />
-                <NumericInput
+                <NumberInput
+                    id={param?.id.toString()+"_3" || "number_3"}
                     {...filteredProps}
                     value={value ? value.z : 0}
                     min={min ? min.z : undefined}
                     max={max ? max.z : undefined}
-                    stepSize={step.z}
-                    minorStepSize={isFloat ? 0.1 : 1}
-                    onValueChange={this.handleChangeZ}
+                    step={step.z}
+                    onChange={this.handleChangeZ}
                     disabled={readOnly === true}
-                    selectAllOnFocus={true}
-                    buttonPosition={Position.RIGHT}
                     placeholder={"-"}
-                    intent={intent}
                 />
             </div>
         );

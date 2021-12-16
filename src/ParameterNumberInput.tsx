@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { NumericInput, INumericInputProps, Position, Intent } from '@blueprintjs/core';
 import { NumberDefinition, RcpTypes } from 'rabbitcontrol';
+import { NumberInput } from 'carbon-components-react';
 
-interface Props extends INumericInputProps {
+interface Props {
 };
 
 interface State {
@@ -18,7 +18,7 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
         };
     }    
 
-    handleChange = (value: number, valueAsString: string) => {
+    handleChange = (e: any, direction: any, value: any) => {
         if (this.props.handleValue) {
             this.props.handleValue(value);
         }
@@ -33,7 +33,6 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
         let step = 1;
         let isFloat:boolean = false;        
         let readOnly:boolean = false;
-        let intent:Intent = Intent.NONE;
 
         const numdef = this.props.parameter ? this.props.parameter.typeDefinition as NumberDefinition : undefined;
 
@@ -57,7 +56,6 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
                     } else {
                         // error on min/max
                         console.error("NumberInput: minimum >= maximum");                
-                        intent = Intent.DANGER;
                     }    
                 }
 
@@ -72,19 +70,17 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
         const { onSubmitCb, handleValue, ...filteredProps } = this.props;
         
         return (        
-            <NumericInput
+            <NumberInput
+                id={param?.id.toString() || "number"}
+                label={param?.label}
                 {...filteredProps}
                 value={value}
                 min={min}
                 max={max}
-                stepSize={step}
-                minorStepSize={isFloat ? 0.1 : 1}
-                onValueChange={this.handleChange}
+                step={step}
+                onChange={this.handleChange}
                 disabled={readOnly === true}
-                selectAllOnFocus={true}
-                buttonPosition={Position.RIGHT}
                 placeholder={"-"}
-                intent={intent}
             />      
         );
     }

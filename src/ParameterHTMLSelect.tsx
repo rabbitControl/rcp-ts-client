@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { INumericInputProps, HTMLSelect } from '@blueprintjs/core';
 import { EnumParameter } from 'rabbitcontrol';
+import { Dropdown, OnChangeData } from 'carbon-components-react';
 
-interface Props extends INumericInputProps {
+interface Props {
 };
 
 interface State {
@@ -15,10 +15,10 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
         super(props);    
     }    
 
-    handleChange = (event: React.FormEvent<HTMLElement>) => {
+    handleChange = (data: OnChangeData<string>) => {
 
         if (this.props.handleValue) {
-            this.props.handleValue((event.target as HTMLInputElement).value);
+            this.props.handleValue(data.selectedItem);
         }
 
         if (this.props.onSubmitCb) {
@@ -44,14 +44,19 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
         const { onSubmitCb, handleValue, ...filteredProps } = this.props;
 
         return (
-            <HTMLSelect
+            <Dropdown
+                id={param?.id.toString() || "dropdown"}
                 {...filteredProps}
+                titleText={param?.label}
                 onChange={this.handleChange}
                 disabled={readOnly === true}
                 className="test"
+                items={entries || []}
+                label="label"
+                selectedItem={value}
             >
-                {this.renderOptions(value, entries)}            
-            </HTMLSelect>      
+                {/* {this.renderOptions(value, entries)} */}
+            </Dropdown>      
         );
     }
 

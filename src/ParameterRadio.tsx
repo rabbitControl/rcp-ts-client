@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { RadioGroup, Radio } from '@blueprintjs/core';
 import { EnumParameter } from 'rabbitcontrol';
+import { RadioButton, RadioButtonGroup, RadioButtonGroupProps, RadioButtonValue } from 'carbon-components-react';
 
 interface Props {
 };
@@ -16,7 +16,7 @@ export class ParameterRadioC extends React.Component<Props & InjectedProps, Stat
         super(props);    
     }    
 
-    handleChange = (event: React.FormEvent<HTMLInputElement>) => 
+    handleChange = (newSelection: RadioButtonValue, name: RadioButtonGroupProps["name"], event: React.ChangeEvent<HTMLInputElement>) => 
     {
         if (this.props.handleValue) {
             this.props.handleValue((event.target as HTMLInputElement).value);
@@ -48,23 +48,24 @@ export class ParameterRadioC extends React.Component<Props & InjectedProps, Stat
         const { onSubmitCb, handleValue, ...filteredProps } = this.props;
 
         return (            
-            <RadioGroup
+            <RadioButtonGroup
                 {...filteredProps}
+                name={param?.id.toString() || "radiogroup"}
+                legendText={param?.label || ""}
                 onChange={this.handleChange}
                 disabled={readOnly === true}
-                selectedValue={value}
+                defaultSelected={value}
             >
                 {this.renderOptions(value, entries)}            
-            </RadioGroup>      
+            </RadioButtonGroup> 
         );
     }
 
-    private renderOptions(sel: string, entries?: string[]) {
-        if (entries) {            
-            return entries.map( e => 
-                {
-                    return <Radio key={e} label={e} value={e} />
-                });
+    private renderOptions(sel: string, entries?: string[])
+    {
+        if (entries)
+        {
+            return entries.map( e => <RadioButton key={e} labelText={e} value={e} />);
         }
     }
 };

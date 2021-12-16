@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { Slider, ISliderProps } from '@blueprintjs/core';
 import { NumberDefinition, RcpTypes } from 'rabbitcontrol';
 import Measure from 'react-measure';
+import { Slider, SliderOnChangeArg } from 'carbon-components-react';
 
-interface Props extends ISliderProps {
+interface Props {
     continuous?: boolean;
 };
 
@@ -28,9 +28,9 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
         };
     }    
 
-    handleChange = (value: number) => {
+    handleChange = (value: SliderOnChangeArg) => {
         if (this.props.handleValue) {
-            this.props.handleValue(value);
+            this.props.handleValue(value.value);
         }
 
         if (this.props.continuous) {
@@ -38,7 +38,7 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
         }
     }
 
-    handleRelease = (value: number) => {
+    handleRelease = (value: SliderOnChangeArg) => {
         if (this.props.onSubmitCb) {
             this.props.onSubmitCb();
         }
@@ -88,33 +88,21 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
             {({ measureRef }) =>
                 <div ref={measureRef}>
                     <Slider
+                        id={param?.id.toString() || "slider"}
+                        labelText={param?.label}
                         {...filteredProps}
                         value={value}
-                        min={min}
-                        max={max}
-                        stepSize={step}
-                        labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max}
+                        min={min || 0}
+                        max={max || 1}
+                        step={step}
                         onChange={this.handleChange}
                         onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
                         disabled={readOnly === true}
                     />      
                 </div>
             }
             </Measure>      
         );
-    }
-
-    private renderLabel = (val: number) => {
-        const param = this.props.parameter
-        const value = val.toFixed(2);
-        let unit;
-        if (param) {
-            unit = (param.typeDefinition as NumberDefinition).unit
-        }
-
-        return <div style={{whiteSpace: "nowrap"}}>{unit ? `${value} ${unit}`: value}</div>
     }
 };
 

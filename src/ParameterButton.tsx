@@ -1,8 +1,8 @@
+import { Button, Modal } from 'carbon-components-react';
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Button, Intent, Alert, IButtonProps } from '@blueprintjs/core';
 
-interface Props extends IButtonProps {
+interface Props {
     className?: string;
     label?: string;
     labelDisabled?: boolean;
@@ -56,27 +56,29 @@ export class ParameterButtonC extends React.Component<Props & InjectedProps, Sta
             <section>
                 <Button style={{whiteSpace: "nowrap", }}
                     {...filteredProps}
-                    text={ld ? "" : label}
                     onClick={this.handleClick}
-                />
-
-                <Alert
-                    className={`bp3-dark ${this.props.className}`}
-                    canEscapeKeyCancel={true}
-                    cancelButtonText="Cancel"
-                    confirmButtonText="Send"
-                    icon="warning-sign"
-                    intent={Intent.DANGER}
-                    isOpen={this.state.isOpen}
-                    onCancel={this.handleDialogCancel}
-                    onConfirm={this.handleDialogConfirm}
                 >
-                    <p>
-                        {this.props.confirmationText ? this.props.confirmationText : `text ${label}?`}
-                        <br/>
-                        {(this.props.parameter && this.props.parameter.description) ? `(${this.props.parameter.description})` : ""}
-                    </p>
-                </Alert>
+                    {ld ? "" : label}
+                </Button>
+
+                <Modal
+                    className={`bp3-dark ${this.props.className}`}
+                    // canEscapeKeyCancel={true}
+                    // cancelButtonText="Cancel"
+                    // confirmButtonText="Send"
+                    // icon="warning-sign"
+                    // intent={Intent.DANGER}
+                    open={this.state.isOpen}
+                    onSecondarySubmit={this.handleDialogCancel}
+                    onRequestSubmit={this.handleDialogConfirm}
+
+                    modalHeading={this.props.confirmationText ? this.props.confirmationText : `text ${label}?`}
+                    modalLabel={(this.props.parameter && this.props.parameter.description) ? `(${this.props.parameter.description})` : ""}
+
+                    primaryButtonText="Send"
+                    secondaryButtonText="Cancel"
+                >
+                </Modal>
             </section>
         );
 

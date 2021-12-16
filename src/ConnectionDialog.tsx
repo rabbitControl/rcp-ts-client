@@ -1,9 +1,10 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
-import { Alert, Intent, InputGroup, ControlGroup, Text, Colors, Checkbox } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
-import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
+import { GRAY1, SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 import App from './App';
+import { Button, Checkbox, ComposedModal, Modal, ModalBody, ModalFooter, ModalHeader, NumberInput, NumberInputOnChangeDataVariant, TextInput } from 'carbon-components-react';
+
 
 type Props = {
 };
@@ -99,24 +100,24 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         });
     }
 
-    setPort = (e: any) => {
+    setPort = (e: any, direction: any, value: any) => {
         this.setState({
-            port: parseInt(e.currentTarget.value, 10),
+            port: value,
         });
     }
 
-    setTabsInRoot = (e: React.FormEvent<HTMLElement>) => {
+    setTabsInRoot = (e: boolean) => {        
         this.setState({
-            rootWithTabs: (e.target as HTMLInputElement).checked,
+            rootWithTabs: e
         });
     }
 
 
     render() 
     {
-        return <section>
+        return (
+            <section>
 
-            <div className="rootgroup-wrapper">
                 {
                     this.state.client ?
 
@@ -133,62 +134,60 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                     :
                         ""
                 }
-            </div>
 
+                <div className="bx--label serverid">
+                    {this.state.serverApplicationId !== "" ? `connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
+                </div>
 
-            <div className="serverid" style={{
-                color: Colors.GRAY1, 
-            }}>
-                {this.state.serverApplicationId !== "" ? `connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
-            </div>
-
-            <Alert
-                className={"bp3-dark"}
-                confirmButtonText="Connect"
-                icon="offline"
-                intent={Intent.NONE}
-                isOpen={this.state.isConnected !== true }
-                onConfirm={this.handleAlertConfirm}
-            >
-                <Text><strong>Connect to a RabbitControl server</strong></Text>
-                <br/>
-                <br/>
-                <ControlGroup style={{alignItems: "center"}}>
-                    <Text>Host:&nbsp;</Text>
-                    <InputGroup
+                <Modal
+                    className={"bp3-dark"}
+                    modalLabel="Connect to a RabbitControl server"
+                    open={this.state.isConnected !== true}
+                    primaryButtonText="Connect"
+                    onRequestSubmit={this.handleAlertConfirm}
+                    passiveModal={false}
+                    preventCloseOnClickOutside={true}
+                    size="xs"
+                    shouldSubmitOnEnter={false}
+                    // secondaryButtonText="Cancel"
+                    // onSecondarySubmit={() => { console.log("sec"); }}
+                >
+                    <TextInput
+                        id="host"
+                        labelText="Host"
                         value={this.state.host}
                         type="text"
                         onChange={this.setHost}
                     />
-                </ControlGroup>
-                <br/>
-                <ControlGroup style={{alignItems: "center"}}>
-                    <Text>Port:&nbsp;</Text>                    
-                    <InputGroup
-                        value={this.state.port.toFixed(0)}
+                    <br />
+                    
+                    <NumberInput
+                        id="port"
+                        label="Port"
+                        value={this.state.port}
                         min={1024}
                         max={65535}
-                        type="number"
                         onChange={this.setPort}
                     />
-                </ControlGroup>
-                <br/>
 
-                <Checkbox
-                    checked={this.state.rootWithTabs}
-                    onChange={this.setTabsInRoot}
-                >
-                    Tabs in Root
-                </Checkbox>
+                    <br/>
 
-                <div>
-                    {this.state.error ? this.state.error : undefined}
-                    {this.returnSSLInfo()}
-                </div>
+                    <Checkbox
+                        id="tir"
+                        labelText="Tabs in Root"
+                        checked={this.state.rootWithTabs}
+                        onChange={this.setTabsInRoot}
+                    />
 
-            </Alert>
+                    <div>
+                        {this.state.error ? this.state.error : undefined}
+                        {this.returnSSLInfo()}
+                    </div>
+
+                </Modal>
         
-        </section>;
+            </section>
+        );
     }
 
     private returnSSLInfo() {
@@ -215,6 +214,9 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     private handleAlertConfirm = () => {
+
+        console.log("submit");
+
 
         this.setState({
             error: undefined

@@ -1,8 +1,8 @@
+import { Checkbox } from 'carbon-components-react';
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { INumericInputProps, Position, Checkbox } from '@blueprintjs/core';
 
-interface Props extends INumericInputProps {
+interface Props {
 };
 
 interface State {
@@ -17,10 +17,10 @@ export class ParameterCheckboxC extends React.Component<Props & InjectedProps, S
         };
     }    
 
-    handleChange = (event: React.FormEvent<HTMLElement>) => {
+    handleChange = (checked: boolean, id: string, event: React.ChangeEvent<HTMLInputElement>) => {
 
         if (this.props.handleValue) {
-            this.props.handleValue((event.target as HTMLInputElement).checked);
+            this.props.handleValue(checked);
         }
 
         if (this.props.onSubmitCb) {
@@ -41,14 +41,17 @@ export class ParameterCheckboxC extends React.Component<Props & InjectedProps, S
         const { onSubmitCb, handleValue, ...filteredProps } = this.props;
 
         return (
+
             <Checkbox
+                id={param?.id.toString() || "checkbox"}
                 {...filteredProps}
+                labelText={param?.label || ""}
                 checked={value}
                 onChange={this.handleChange}
                 disabled={readOnly === true}
-                alignIndicator={Position.LEFT}
-                large={true}
-            />      
+                // alignIndicator={Position.LEFT}
+                // large={true}
+            />
         );
     }
 };

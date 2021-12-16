@@ -1,28 +1,26 @@
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Colors, Tabs, Tab, TabId } from '@blueprintjs/core';
 import { Parameter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import ParameterWidget from './ParameterWidget';
+import { Tab, Tabs } from 'carbon-components-react';
 
 interface Props {
     style?: React.CSSProperties;
 };
 
 interface State {
-    navbarTabId: TabId;
+    navbarTabId: number
 };
 
-export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, State> {
-
-    static readonly COMPONENT_DEFAULT_COLOR = Colors.GRAY1;
-
+export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, State>
+{
     constructor(props: Props & InjectedProps) {
         super(props);
 
         this.state = {navbarTabId: 0};
     } 
 
-    handleTabChange = (navbarTabId: TabId) => 
+    handleTabChange = (navbarTabId: number) => 
     {
         this.setState({ navbarTabId });
     }
@@ -126,30 +124,34 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
                 && param.label !== undefined)
             {
                 // set this delayed!
-                this.setState({navbarTabId: (param.label as string)});
+                // TODO
+                // this.setState({navbarTabId: (param.label as string)});
             }
 
-            return <Tab 
+            return (
+                <Tab
                     key={"tab_" + param.id} 
                     id={param.label} 
-                    title={param.label} 
-                    panel={<div>
-                            <div className="inner" style={{
-                                border: "1px solid #454545",
-                                background: "transparent"
-                            }}>
-                                {this.createChildWidgets(g_param)}
-                            </div>
+                    label={param.label}
+                >
+                    <div>
+                        <div className="inner" style={{
+                            border: "1px solid #afafaf",
+                            background: "transparent"
+                        }}>
+                            {this.createChildWidgets(g_param)}
+                        </div>
 
-                            {g_param.children.length > 0 ?
-                                <div>
-                                    <hr style={{borderTop: "1px solid gray"}}/>
-                                    {this.renderChildren()}
-                                </div>
-                            : ""
-                            }                            
-                            </div>}
-                    />;
+                        {g_param.children.length > 0 ?
+                            <div>
+                                <hr style={{borderTop: "1px solid gray"}}/>
+                                {this.renderChildren()}
+                            </div>
+                        : ""
+                        }                            
+                    </div>
+                </Tab>
+            );
         });
     }
     
@@ -162,10 +164,9 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
             <div style={this.props.style}>
 
                 <Tabs 
-                    id="navbar"
-                    renderActiveTabPanelOnly={true}
-                    onChange={this.handleTabChange} 
-                    selectedTabId={this.state.navbarTabId}
+                    id={ param?.id.toString() || "navbar"}
+                    onSelectionChange={this.handleTabChange}
+                    selected={this.state.navbarTabId}
                 >
                     {/* {this.props.labelDisabled !== true ? <Tab title={label} disabled={true}></Tab> : <div></div>} */}
                     {this.createTabWidgets((this.props.parameter as GroupParameter).children)}

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { RangeSlider, IRangeSliderProps, NumberRange } from '@blueprintjs/core';
-import { NumberDefinition, RcpTypes, Range, RangeDefinition, ValueParameter, RangeParameter } from 'rabbitcontrol';
+import { NumberDefinition, RcpTypes, Range, RangeDefinition } from 'rabbitcontrol';
 import Measure from 'react-measure';
+import { Slider, SliderOnChangeArg } from 'carbon-components-react';
 
-interface Props extends IRangeSliderProps {
+interface Props {
     continuous?: boolean;
     rangeValue?: Range;
 };
@@ -29,9 +29,9 @@ export class ParameterRangeSliderC extends React.Component<Props & InjectedProps
         };
     }    
 
-    handleChange = (value: NumberRange) => {
+    handleChange = (value: Range) => {
         if (this.props.handleValue) {
-            this.props.handleValue(new Range(value[0], value[1]));
+            this.props.handleValue(value);
         }
 
         if (this.props.continuous) {
@@ -39,7 +39,7 @@ export class ParameterRangeSliderC extends React.Component<Props & InjectedProps
         }
     }
 
-    handleRelease = (value: NumberRange) => {
+    handleRelease = (value: Range) => {
         if (this.props.onSubmitCb) {
             this.props.onSubmitCb();
         }
@@ -52,7 +52,7 @@ export class ParameterRangeSliderC extends React.Component<Props & InjectedProps
         let isFloat:boolean = false;
         let min:number|undefined = undefined;
         let max:number|undefined = undefined;
-        let default_value:NumberRange;
+        let default_value: Range;
         let readOnly:boolean = false;
 
         const param = this.props.parameter;
@@ -91,34 +91,30 @@ export class ParameterRangeSliderC extends React.Component<Props & InjectedProps
             >
             {({ measureRef }) =>
                 <div ref={measureRef}>
-                    <RangeSlider
-                        {...filteredProps}
-                        value={value ? [value.value1, value.value2] : [0, 1]}
-                        min={min}
-                        max={max}
-                        stepSize={step}
-                        labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max}
-                        onChange={this.handleChange}
-                        onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
-                        disabled={readOnly === true}
-                    />      
+                    <label className="bx--label">{param?.label || ""}</label>
+                        <Slider
+                            id={param?.id.toString() || "slider1"}
+                            labelText={"Value 1"}
+                            min={min || 0}
+                            max={max || 0}
+                            step={step}
+                            value={value.value1}
+                            onChange={(v: SliderOnChangeArg) => { this.handleChange(new Range(v.value, value.value2)); }}
+                            onRelease={(v: SliderOnChangeArg) => { }}
+                        />
+                        <Slider
+                            id={param?.id.toString() || "slider2"}
+                            labelText={"Value 2"}
+                            min={min || 0}
+                            max={max || 0}
+                            step={step}
+                            value={value.value2}
+                            onChange={(v: SliderOnChangeArg) => { this.handleChange(new Range(value.value1, v.value)); }}
+                        />
                 </div>
             }
-            </Measure>      
+            </Measure>
         );
-    }
-
-    private renderLabel = (val: number) => {
-        const param = this.props.parameter
-        const value = val.toFixed(2);
-        let unit;
-        if (param) {
-            unit = (param.typeDefinition as NumberDefinition).unit
-        }
-
-        return <div style={{whiteSpace: "nowrap"}}>{unit ? `${value} ${unit}`: value}</div>
     }
 };
 

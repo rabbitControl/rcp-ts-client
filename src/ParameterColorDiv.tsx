@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Colors } from '@blueprintjs/core';
+import { COMPONENT_DEFAULT_COLOR } from './Globals';
 
 interface Props {
     style?: React.CSSProperties;
@@ -10,10 +10,8 @@ interface Props {
 interface State {
 };
 
-export class ParameterColorDivC extends React.Component<Props & InjectedProps, State> {
-
-    static readonly COMPONENT_DEFAULT_COLOR = Colors.GRAY1;
-
+export class ParameterColorDivC extends React.Component<Props & InjectedProps, State>
+{
     constructor(props: Props & InjectedProps) {
         super(props);
     
@@ -26,7 +24,7 @@ export class ParameterColorDivC extends React.Component<Props & InjectedProps, S
                         (this.props.value as string) : 
                         (this.props.defaultColor ? 
                             this.props.defaultColor : 
-                            ParameterColorDivC.COMPONENT_DEFAULT_COLOR);
+                            COMPONENT_DEFAULT_COLOR);
 
         return (
             <div style={{

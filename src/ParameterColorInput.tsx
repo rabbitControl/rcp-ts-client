@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { INumericInputProps, InputGroup } from '@blueprintjs/core';
 import { ValueParameter, RGBAParameter } from 'rabbitcontrol';
 
-interface Props extends INumericInputProps {
+interface Props {
 };
 
 interface State {
@@ -68,16 +67,20 @@ export class ParameterColorInputC extends React.Component<Props & InjectedProps,
             readOnly = param.readonly;            
         }
 
-        const { onSubmitCb, handleValue, defaultValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
 
-        return (     
-            <InputGroup
-                {...filteredProps}
-                value={value}
-                type="color"
-                onChange={this.handleChange}
-                disabled={readOnly === true}
-            />     
+        return (
+            <div>
+                <label className="bx--label">{param?.label}</label>
+                <br/>
+                <input
+                    {...filteredProps}
+                    value={value}
+                    type="color"
+                    onChange={this.handleChange}
+                    disabled={readOnly === true}
+                />     
+            </div>
         );
     }
     

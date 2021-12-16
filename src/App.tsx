@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import ConnectionDialog from './ConnectionDialog';
-import { Colors } from '@blueprintjs/core';
+import { GRAY1 } from './Globals';
 
 /*
   use with local tcp-ts:
@@ -11,6 +11,16 @@ import { Colors } from '@blueprintjs/core';
   $ npm unlink rabbitcontrol
   $ npm install
 */
+
+/**
+ * problems with carbon:
+ * 
+ * - no RangeSlider
+ * - nested accordion: folding does not work
+ * - no color picker, or inputgroup
+ * - no intents for coloring errors? - how to do this?
+ * - are there some colors defined?
+ */
 
 
 interface Props {
@@ -52,12 +62,31 @@ class App extends React.Component<Props, State> {
   render() {
 
     return (
-      <section className={"bp3-dark"}>
+      <section>
 
         <div className="App" 
           style={{            
             minHeight: this.state.height-40
-        }}>
+          }}>
+{/*           
+          <Accordion>
+            <AccordionItem title="uno">
+              test 1
+
+              <Accordion>
+                <AccordionItem title="inner 1">
+                  inner 1
+                </AccordionItem>
+                <AccordionItem title="inner 2">
+                  inner 3
+                </AccordionItem>
+              </Accordion>
+
+            </AccordionItem>
+            <AccordionItem title="dos">
+              test 2
+            </AccordionItem>
+          </Accordion> */}
 
           <ConnectionDialog />
 
@@ -65,42 +94,24 @@ class App extends React.Component<Props, State> {
             flex: 2
           }}></div>
 
-          <div className="credits" 
-              style={{            
-                color: Colors.GRAY1
-          }}>
-            <a style={{
-              color: Colors.GRAY1,
-              textDecoration: "underline"
-            }}
+          <div className="bx--label credits">
+            <a
+              className="aunderline"
               href="https://github.com/rabbitcontrol/" target="#">
               rcp-ts-client
             </a>
               &nbsp;written by&nbsp;
-            <a style={{
-              color: Colors.GRAY1,
-              textDecoration: "underline"
-            }}
+            <a
+              className="aunderline"
               href="https://ingorandolf.info/" target="#">
               i-n-g-o
             </a>
             &nbsp;&nbsp;|&nbsp;&nbsp;
-            <a style={{
-              color: Colors.GRAY1,
-              textDecoration: "underline"
-            }}
+            <a
+              className="aunderline"
               href="http://rabbitcontrol.cc/" target="#">
               rabbitControl
-            </a>
-            <br/>
-            uses&nbsp;
-            <a style={{
-              color: Colors.GRAY1,
-              textDecoration: "underline"
-            }}
-              href="https://blueprintjs.com/" target="#">
-              blueprintjs
-            </a>
+            </a>            
           </div>
         </div>
 

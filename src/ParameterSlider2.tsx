@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { Slider, ISliderProps } from '@blueprintjs/core';
-import { RcpTypes, Vector3F32Definition, Vector2, Vector2F32Definition } from 'rabbitcontrol';
+import { RcpTypes, Vector2, Vector2F32Definition } from 'rabbitcontrol';
 import Measure from 'react-measure';
+import { Slider, SliderOnChangeArg } from 'carbon-components-react';
 
-interface Props extends ISliderProps {
+interface Props {
     continuous?: boolean;
 };
 
@@ -28,34 +28,34 @@ export class ParameterSlider2C extends React.Component<Props & InjectedProps, St
         };
     }    
 
-    handleChangeX = (value: number) => {
+    handleChangeX = (value: SliderOnChangeArg) => {
 
         const vec = (this.props.value as Vector2).clone();
-        vec.x = value;
+        vec.x = value.value;
 
         if (this.props.handleValue) {
             this.props.handleValue(vec);
         }
 
         if (this.props.continuous) {
-            this.handleRelease(0);
+            this.handleRelease(value);
         }
     }
-    handleChangeY = (value: number) => {
+    handleChangeY = (value: SliderOnChangeArg) => {
 
         const vec = (this.props.value as Vector2).clone();
-        vec.y = value;
+        vec.y = value.value;
 
         if (this.props.handleValue) {
             this.props.handleValue(vec);
         }
 
         if (this.props.continuous) {
-            this.handleRelease(0);
+            this.handleRelease(value);
         }
     }
 
-    handleRelease = (value: number) => {
+    handleRelease = (value: SliderOnChangeArg) => {
         if (this.props.onSubmitCb) {
             this.props.onSubmitCb();
         }
@@ -107,47 +107,33 @@ export class ParameterSlider2C extends React.Component<Props & InjectedProps, St
             >
             {({ measureRef }) =>
                 <div ref={measureRef}>
+                    <label className="bx--label">{param?.label || ""}</label>
                     <Slider
+                        id={param?.id.toString()+"_1" || "slider_1"}
                         {...filteredProps}
                         value={value ? value.x : 0}
-                        min={min ? min.x : undefined}
-                        max={max ? max.x : undefined}
-                        stepSize={step.x}
-                        labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max ? max.x : 0}
+                        min={min ? min.x : 0}
+                        max={max ? max.x : 0}
+                        step={step.x}
                         onChange={this.handleChangeX}
                         onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
                         disabled={readOnly === true}
                     />
                     <Slider
+                        id={param?.id.toString()+"_2" || "slider_2"}
                         {...filteredProps}
                         value={value ? value.y : 0}
-                        min={min ? min.y : undefined}
-                        max={max ? max.y : undefined}
-                        stepSize={step.y}
-                        labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max ? max.y : 0}
+                        min={min ? min.y : 0}
+                        max={max ? max.y : 0}
+                        step={step.y}
                         onChange={this.handleChangeY}
                         onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
                         disabled={readOnly === true}
                     />    
                 </div>
             }
             </Measure>      
         );
-    }
-
-    private renderLabel = (val: number) => {
-        const param = this.props.parameter
-        const value = val.toFixed(2); // fixme for small numbers!
-        let unit;
-        if (param) {
-            unit = (param.typeDefinition as Vector3F32Definition).unit
-        }
-        
-        return <div style={{whiteSpace: "nowrap"}}>{unit ? `${value} ${unit}`: value}</div>
     }
 };
 

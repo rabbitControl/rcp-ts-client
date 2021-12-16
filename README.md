@@ -1,5 +1,5 @@
 # rcp-ts-client
-A RabbitControl Client written in Typescript using React and Blueprint
+A RabbitControl Client written in Typescript using React and Carbon Design System
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

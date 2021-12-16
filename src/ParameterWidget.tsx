@@ -1,6 +1,5 @@
-import { Colors } from '@blueprintjs/core';
-import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, RangeDefinition, RcpTypes, TabsWidget, ListWidget, ListPageWidget, RadiobuttonWidget } from 'rabbitcontrol';
 import * as React from 'react';
+import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, TabsWidget, ListWidget, ListPageWidget, RadiobuttonWidget } from 'rabbitcontrol';
 import { ParameterButtonC } from './ParameterButton';
 import { ParameterCheckboxC } from './ParameterCheckbox';
 import { ParameterColorInputC } from './ParameterColorInput';
@@ -19,6 +18,7 @@ import { ParameterNumericInput4C } from './ParameterNumberInput4';
 import { ParameterRangeSliderC } from './ParameterRangeSlider'
 import { ParameterTabsGroupC } from './ParameterTabsGroup';
 import { ParameterRadioC } from './ParameterRadio';
+import { ParameterImageC } from './ParameterImage';
 
 
 interface Props {
@@ -148,32 +148,29 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     if (numdef.minimum < numdef.maximum) {
 
                         return ( 
-                            <div>
-                                <div className="parameter-label">{parameter.label}</div>
-                                <ParameterSliderC
-                                    {...this.props}
-                                    value={this.state.value}
-                                    handleValue={this.handleValueChange}
-                                    continuous={true}
-                                />
-                            </div>
-                        );
-                    } else {
-                        console.error("ParameterWidget: minimum >= maximum");
-                        return this.defaultWidget();
-                    }
-                } else {
-
-                    // numeric input
-                    return (
-                        <div>
-                            <div className="parameter-label">{parameter.label}</div>
-                            <ParameterNumericInputC
+                            <ParameterSliderC
                                 {...this.props}
                                 value={this.state.value}
                                 handleValue={this.handleValueChange}
+                                continuous={true}
                             />
-                        </div>
+                        );
+                    }
+                    else
+                    {
+                        console.error("ParameterWidget: minimum >= maximum");
+                        return this.defaultWidget();
+                    }
+                }
+                else
+                {
+                    // numeric input
+                    return (
+                        <ParameterNumericInputC
+                            {...this.props}
+                            value={this.state.value}
+                            handleValue={this.handleValueChange}
+                        />
                     );
                 }
             }
@@ -190,16 +187,13 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     if (def.minimum.x < def.maximum.x &&
                         def.minimum.y < def.maximum.y)
                     {
-                        return ( 
-                            <div>
-                                <div className="parameter-label">{parameter.label}</div>
-                                <ParameterSlider2C
-                                    {...this.props}
-                                    value={this.state.value}
-                                    handleValue={this.handleValueChange}
-                                    continuous={true}
-                                />
-                            </div>
+                        return (
+                            <ParameterSlider2C
+                                {...this.props}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}
+                                continuous={true}
+                            />
                         );
                     } else {
                         console.error("ParameterWidget: minimum >= maximum");
@@ -208,14 +202,11 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 } else {
                     // numeric input
                     return (
-                        <div>
-                            <div className="parameter-label">{parameter.label}</div>
-                            <ParameterNumericInput2C
-                                {...this.props}
-                                value={this.state.value}
-                                handleValue={this.handleValueChange}
-                            />
-                        </div>
+                        <ParameterNumericInput2C
+                            {...this.props}
+                            value={this.state.value}
+                            handleValue={this.handleValueChange}
+                        />
                     );
                 }
             }
@@ -234,15 +225,12 @@ export default class ParameterWidget extends React.Component<Props, State> {
                         def.minimum.z < def.maximum.z)
                     {
                         return ( 
-                            <div>
-                                <div className="parameter-label">{parameter.label}</div>
-                                <ParameterSlider3C
-                                    {...this.props}
-                                    value={this.state.value}
-                                    handleValue={this.handleValueChange}
-                                    continuous={true}
-                                />
-                            </div>
+                            <ParameterSlider3C
+                                {...this.props}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}
+                                continuous={true}
+                            />
                         );
                     } else {
                         console.error("ParameterWidget: minimum >= maximum");
@@ -251,14 +239,11 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 } else {
                     // numeric input
                     return (
-                        <div>
-                            <div className="parameter-label">{parameter.label}</div>
-                            <ParameterNumericInput3C
-                                {...this.props}
-                                value={this.state.value}
-                                handleValue={this.handleValueChange}
-                            />
-                        </div>
+                        <ParameterNumericInput3C
+                            {...this.props}
+                            value={this.state.value}
+                            handleValue={this.handleValueChange}
+                        />
                     );
                 }
             }
@@ -278,15 +263,12 @@ export default class ParameterWidget extends React.Component<Props, State> {
                         def.minimum.t < def.maximum.t)
                     {
                         return ( 
-                            <div>
-                                <div className="parameter-label">{parameter.label}</div>
-                                <ParameterSlider4C
-                                    {...this.props}
-                                    value={this.state.value}
-                                    handleValue={this.handleValueChange}
-                                    continuous={true}
-                                />
-                            </div>
+                            <ParameterSlider4C
+                                {...this.props}
+                                value={this.state.value}
+                                handleValue={this.handleValueChange}
+                                continuous={true}
+                            />
                         );
                     } else {
                         console.error("ParameterWidget: minimum >= maximum");
@@ -295,115 +277,87 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 } else {
                     // numeric input
                     return (
-                        <div>
-                            <div className="parameter-label">{parameter.label}</div>
-                            <ParameterNumericInput4C
-                                {...this.props}
-                                value={this.state.value}
-                                handleValue={this.handleValueChange}
-                            />
-                        </div>
+                        <ParameterNumericInput4C
+                            {...this.props}
+                            value={this.state.value}
+                            handleValue={this.handleValueChange}
+                        />
                     );
                 }
             }
             else if (parameter instanceof BooleanParameter) {
                 return (
-                    <div>
-                        <div className="parameter-label">{parameter.label}</div>
-                        <ParameterCheckboxC
-                            {...this.props}
-                            value={this.state.value}
-                            handleValue={this.handleValueChange}
-                        />
-                    </div>
+                    <ParameterCheckboxC
+                        {...this.props}
+                        value={this.state.value}
+                        handleValue={this.handleValueChange}
+                    />
                 );
             } 
             else if (parameter instanceof RGBAParameter ||
                      parameter instanceof RGBParameter)
             {
                 return (
-                    <div>
-                        <div className="parameter-label">{parameter.label}</div>
-                        <ParameterColorInputC
-                            {...this.props}
-                            value={this.state.value}
-                            handleValue={this.handleValueChange}
-                        />
-                    </div>
+                    <ParameterColorInputC
+                        {...this.props}
+                        value={this.state.value}
+                        handleValue={this.handleValueChange}
+                    />
                 );
             } 
             else if (parameter instanceof EnumParameter)
             {
                 if (parameter.widget instanceof RadiobuttonWidget)
                 {
-                    return (
-                        <div>
-                            <div className="parameter-label"
-                                style={{marginBottom: 15}}
-                            >
-                                {parameter.label}
-                            </div>
-                            <ParameterRadioC
-                                {...this.props}
-                                value={this.state.value}
-                                handleValue={this.handleValueChange}
-                            />
-                        </div>
+                    return (    
+                        <ParameterRadioC
+                            {...this.props}
+                            value={this.state.value}
+                            handleValue={this.handleValueChange}
+                        />
                     );
                 }
                 else
                 {
                     return (
-                        <div>
-                            <div className="parameter-label">{parameter.label}</div>
-                            <ParameterHTMLSelectC
-                                {...this.props}
-                                value={this.state.value}
-                                handleValue={this.handleValueChange}
-                            />
-                        </div>
-                    );
-                }
-
-            }
-            else if (parameter instanceof ImageParameter) {
-                
-                const blob = new Blob([parameter.value]);
-                const url = window.URL.createObjectURL(blob);
-
-                return (
-                    <div>
-                        <div className="parameter-label">{parameter.label}</div>
-                        <img src={url} alt="IMAGE" height={200}/>
-                    </div>
-                );
-            }
-            else if (parameter instanceof RangeParameter) {
-                
-                const Range = parameter.value;
-
-                return (
-                    <div>
-                        <div className="parameter-label">{parameter.label}</div>
-                        <ParameterRangeSliderC                        
+                        <ParameterHTMLSelectC
                             {...this.props}
                             value={this.state.value}
                             handleValue={this.handleValueChange}
                         />
-                    </div>
+                    );
+                }
+
+            }
+            else if (parameter instanceof ImageParameter)
+            {
+                return (
+                    <ParameterImageC
+                        {...this.props}
+                        value={parameter.value}
+                        handleValue={this.handleValueChange}
+                    />
+                );
+            }
+            else if (parameter instanceof RangeParameter)
+            {
+                return (
+                    <ParameterRangeSliderC
+                        {...this.props}
+                        value={this.state.value}
+                        handleValue={this.handleValueChange}
+                        continuous={true}
+                    />
                 );
             }
             else {
                 // everything else...
                 return (
-                    <div>
-                        <div className="parameter-label">{parameter.label}</div>
                         <ParameterTextInputC
                             {...this.props}
                             value={this.state.value}
                             handleValue={this.handleValueChange}
                         />
-                    </div>
                 );
             }
 
@@ -476,14 +430,8 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
         // default framing
         return (        
-            <div className="parameter-wrapper">
-                
-                <div className="inner" style={{                    
-                    border: (parameter instanceof GroupParameter) ? "1px solid #454545" : "1px solid #353535",
-                    background: (parameter instanceof GroupParameter) ? "transparent" : Colors.DARK_GRAY3
-                }}>
-                    {this.renderValue(parameter)}
-                </div>
+            <div className="parameter-wrapper">                
+                {this.renderValue(parameter)}
             </div>
         );
     }

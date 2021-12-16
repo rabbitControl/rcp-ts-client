@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Colors } from '@blueprintjs/core';
-import { NumberParameter } from 'rabbitcontrol';
-import { NumberDefinition } from 'rabbitcontrol';
-import { isBuffer } from 'util';
+import { NumberParameter, NumberDefinition } from 'rabbitcontrol';
+import { DARK_GRAY1, GRAY1, LIGHT_GRAY5 } from './Globals';
 
 interface Props {
     style?: React.CSSProperties;
@@ -77,7 +75,7 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
                     <div style={{
                         width: this.props.labelDisabled ? 0 : (this.props.labelWidth ? this.props.labelWidth : undefined),
                         // fontSize: this.props.large ? "large" : "normal",
-                        color: this.props.disabled ? Colors.GRAY1 : Colors.LIGHT_GRAY5,
+                        color: this.props.disabled ? GRAY1 : LIGHT_GRAY5,
                     }}>
                         {this.props.labelDisabled ? "" : label}
                     </div>
@@ -85,7 +83,7 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
 
                     <div style={{
                         marginLeft: this.props.labelDisabled ? 0 : "6px",
-                        background: Colors.DARK_GRAY1,
+                        background: DARK_GRAY1,
                         flex: "content",
                         flexGrow: 1,
                     }}>
@@ -93,7 +91,7 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
                         <div style={{
                             margin: this.props.labelDisabled ? 0 : "0px 0px 0px 6px",
                             // fontSize: this.props.large ? "large" : "normal",
-                            color: this.props.disabled ? Colors.GRAY1 : Colors.LIGHT_GRAY5,
+                            color: this.props.disabled ? GRAY1 : LIGHT_GRAY5,
                             whiteSpace: "nowrap",
                         }}>
                             {value}
