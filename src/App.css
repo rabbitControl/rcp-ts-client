@@ -51,6 +51,41 @@
   text-decoration: "underline";
 }
 
+.flex-h {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* 
+* color
+*/
+.color-field {
+  width: 50%;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+.color-field::-webkit-color-swatch-wrapper {
+  padding: 0; 
+}
+.color-field::-webkit-color-swatch {
+  border: none;
+  border-radius: 0;
+}
+.color-field::-moz-color-swatch {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+.color-label {
+  margin-left: 1em;
+  margin-top: auto;
+  margin-bottom: auto !important;
+}
+
+
+
 /* 
 * carbon design system overrides
 */

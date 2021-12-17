@@ -72,14 +72,16 @@ export class ParameterColorInputC extends React.Component<Props & InjectedProps,
         return (
             <div>
                 <label className="bx--label">{param?.label}</label>
-                <br/>
-                <input
-                    {...filteredProps}
-                    value={value}
-                    type="color"
-                    onChange={this.handleChange}
-                    disabled={readOnly === true}
-                />     
+                <div className="flex-h">
+                    <input className="color-field"
+                        {...filteredProps}
+                        value={value}
+                        type="color"
+                        onChange={this.handleChange}
+                        disabled={readOnly === true}
+                    />
+                    <label className="bx--label color-label">{value}</label>
+                </div>
             </div>
         );
     }
