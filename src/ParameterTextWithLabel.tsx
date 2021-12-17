@@ -63,11 +63,9 @@ export class ParameterTextWithLabelC extends React.Component<Props & InjectedPro
             
             <section style={this.props.style}>
 
-                <div style={{                    
-                    display: "flex",
-                    flexDirection: "row",
+                <div className="flex-h"
+                    style={{
                     justifyContent: "space-between",
-                    alignItems: "center",
                     margin: "1px 0px 2px 0px",
                 }}>
 
