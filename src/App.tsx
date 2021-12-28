@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
 import ConnectionDialog from './ConnectionDialog';
-import { GRAY1 } from './Globals';
+import { VERSION_STR } from './Globals';
 
-/*
+/*      
   use with local tcp-ts:
   $ npm link ../rcp-ts
 
@@ -17,9 +17,7 @@ import { GRAY1 } from './Globals';
  * 
  * - no RangeSlider
  * - nested accordion: folding does not work
- * - no color picker, or inputgroup
- * - no intents for coloring errors? - how to do this?
- * - are there some colors defined?
+ * - use colors from theme
  */
 
 
@@ -41,7 +39,7 @@ class App extends React.Component<Props, State> {
       height: window.innerHeight,
     };
 
-    console.log("rabbitcontrol web client - version: 0.1.4");
+    console.log(`rabbitcontrol web client - version: ${VERSION_STR}`);
   }
 
   componentDidMount() 
@@ -62,60 +60,37 @@ class App extends React.Component<Props, State> {
   render() {
 
     return (
-      <section>
+      <div className="App"
+        style={{
+          minHeight: this.state.height - 40
+        }}>
 
-        <div className="App" 
-          style={{            
-            minHeight: this.state.height-40
-          }}>
-{/*           
-          <Accordion>
-            <AccordionItem title="uno">
-              test 1
+        <ConnectionDialog />
 
-              <Accordion>
-                <AccordionItem title="inner 1">
-                  inner 1
-                </AccordionItem>
-                <AccordionItem title="inner 2">
-                  inner 3
-                </AccordionItem>
-              </Accordion>
+        <div style={{
+          flex: 2
+        }}></div>
 
-            </AccordionItem>
-            <AccordionItem title="dos">
-              test 2
-            </AccordionItem>
-          </Accordion> */}
-
-          <ConnectionDialog />
-
-          <div style={{
-            flex: 2
-          }}></div>
-
-          <div className="bx--label credits">
-            <a
-              className="aunderline"
-              href="https://github.com/rabbitcontrol/" target="#">
-              rcp-ts-client
-            </a>
-              &nbsp;written by&nbsp;
-            <a
-              className="aunderline"
-              href="https://ingorandolf.info/" target="#">
-              i-n-g-o
-            </a>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            <a
-              className="aunderline"
-              href="http://rabbitcontrol.cc/" target="#">
-              rabbitControl
-            </a>            
-          </div>
+        <div className="bx--label credits">
+          <a
+            className="aunderline"
+            href="https://github.com/rabbitcontrol/" target="#">
+            rcp-ts-client
+          </a>
+            &nbsp;written by&nbsp;
+          <a
+            className="aunderline"
+            href="https://ingorandolf.info/" target="#">
+            i-n-g-o
+          </a>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+          <a
+            className="aunderline"
+            href="http://rabbitcontrol.cc/" target="#">
+            rabbitControl
+          </a>            
         </div>
-
-      </section>
+      </div>
     );
   }
 }

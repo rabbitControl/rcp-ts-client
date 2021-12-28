@@ -1,9 +1,28 @@
 import ReactDOM from 'react-dom';
 import 'normalize.css/normalize.css'
+import './themes.scss';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import 'carbon-components/css/carbon-components.css'
+
+const params = new URLSearchParams(window.location.search);
+if (params.has("theme"))
+{
+    const theme_name = params.get("theme");
+    if (theme_name === "g100" ||
+        theme_name === "g90" ||
+        theme_name === "g80" ||
+        theme_name === "g10" ||
+        theme_name === "white" ||
+        theme_name === "v9")
+    {
+        document.body.classList.add(theme_name);
+    }
+    else
+    {
+        console.log("invalid theme: " + theme_name);                    
+    }
+}
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

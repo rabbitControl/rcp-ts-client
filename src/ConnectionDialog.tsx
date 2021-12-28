@@ -1,9 +1,9 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
-import { GRAY1, SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
+import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 import App from './App';
-import { Button, Checkbox, ComposedModal, Modal, ModalBody, ModalFooter, ModalHeader, NumberInput, NumberInputOnChangeDataVariant, TextInput } from 'carbon-components-react';
+import { Checkbox, Modal, NumberInput, TextInput } from 'carbon-components-react';
 
 
 type Props = {
