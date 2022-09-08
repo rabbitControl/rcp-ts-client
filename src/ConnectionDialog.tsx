@@ -101,9 +101,25 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     setPort = (e: any, direction: any, value: any) => {
-        this.setState({
-            port: value,
-        });
+        
+        if (direction !== undefined &&
+            direction.value !== undefined)
+        {        
+            this.setState({
+                port: direction.value,
+            });
+        }
+        else if (value !== undefined &&
+            !isNaN(value))
+        {
+            this.setState({
+                port: value,
+            });
+        }
+        else
+        {
+            console.error("invalid direction from NumberInput");            
+        }
     }
 
     setTabsInRoot = (e: boolean) => {        
@@ -215,9 +231,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
     private handleAlertConfirm = () => {
 
-        console.log("submit");
-
-
         this.setState({
             error: undefined
         });
@@ -266,6 +279,8 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             host !== "" &&
             !isNaN(port))
         {
+            console.log(`trying to connect: ${host}:${port}`);            
+
             // disconnect first
             this.doDisconnect();
 
@@ -294,6 +309,10 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             } catch (e) {
                 console.log(e);
             }
+        }
+        else
+        {
+            console.error(`invalid host (${host}) or port (${port})`);            
         }
     }
 
