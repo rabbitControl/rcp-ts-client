@@ -2,10 +2,13 @@ import React from 'react';
 import './App.css';
 import ConnectionDialog from './ConnectionDialog';
 import { VERSION_STR } from './Globals';
+import { rcpLogVersion } from 'rabbitcontrol';
+
 
 /*      
   use with local tcp-ts:
   $ npm link ../rcp-ts
+  $ npm install path-to-file
 
   unlink with:
   $ npm unlink rabbitcontrol
@@ -49,6 +52,7 @@ class App extends React.Component<Props, State> {
 
   componentWillUnmount() 
   {
+    rcpLogVersion();
     window.removeEventListener('resize', this.onWindowResize);
   }
 
