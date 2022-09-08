@@ -28,7 +28,7 @@
     "carbon-components": "^10.50.0",
     "carbon-components-react": "^7.50.0",
     "carbon-icons": "^7.0.7",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.3",
     "normalize.css": "^8.0.1",
     "rabbitcontrol": "^0.0.41",
     "react": "^16.7.0",
