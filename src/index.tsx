@@ -23,6 +23,10 @@ if (params.has("theme"))
         console.log("invalid theme: " + theme_name);                    
     }
 }
+else
+{
+    document.body.classList.add("g90");
+}
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
