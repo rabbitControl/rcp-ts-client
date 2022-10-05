@@ -139,7 +139,9 @@ export default class ParameterWidget extends React.Component<Props, State> {
         if (parameter.userid === WIDGET_NOWIDGET_STR)
         {
             return (
-                <div style={{
+                <div
+                    className={parameter.userid ? parameter.userid : ""}
+                    style={{
                     display: "flex",
                     flexDirection: this.props.vertical ? "column" : "row",
                     justifyContent: "center",
@@ -437,7 +439,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 // ?
             }
             else if (parameter.widget instanceof CustomWidget
-                    || parameter.userid !== "")
+                    || parameter.userid)
             {
                 var is_tab_switcher = false;
                 var is_group_with_switch = false;
@@ -525,15 +527,16 @@ export default class ParameterWidget extends React.Component<Props, State> {
         if (parameter.widget instanceof TabsWidget)
         {
             return (        
-                <div className={"parameter-wrapper " + this.props.className}>
+                <div className={"parameter-wrapper " + (this.props.className ? this.props.className : (parameter.userid ? parameter.userid : ""))}>
                     {this.renderValue(parameter)}
                 </div>
             );
         }
 
         // default framing
-        return (        
-            <div className={"parameter-wrapper " + this.props.className}>
+
+        return (
+            <div className={"parameter-wrapper " + (this.props.className ? this.props.className : (parameter.userid ? parameter.userid : ""))}>
                 {this.renderValue(parameter)}
             </div>
         );

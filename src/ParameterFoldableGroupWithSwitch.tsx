@@ -108,6 +108,7 @@ export class ParameterFoldableGroupSWC extends React.Component<Props & InjectedP
                     title="ParameterFoldableGroupSWC"
                 >
                     <AccordionItem
+                        className={param?.userid ? param.userid : ""}
                         title={label + "_ParameterFoldableGroupSWC"}
                         open={this.state.isOpen}
                         renderExpando={() =>

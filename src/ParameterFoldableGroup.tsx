@@ -80,8 +80,9 @@ export class ParameterFoldableGroupC extends React.Component<Props & InjectedPro
                 id={param?.id.toString() || "group"}
             >
                 <AccordionItem
+                    className={param?.userid ? param.userid : "foldable_group"}
                     title={label}
-                    open={this.state.isOpen}
+                    open={this.state.isOpen}                    
                 >
                     {this.renderChildren()}
                 </AccordionItem>

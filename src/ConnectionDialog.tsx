@@ -65,7 +65,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
             if (Client.VERBOSE) console.log("autoconnect: " + host + ":" + portAsInt);
             this.doConnect(host, portAsInt);
-        }
+         }
     }
 
     updateClient = () => {
@@ -75,10 +75,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     createParameterWidget(parameter: Parameter)
-    {
-        return <ParameterWidget key={parameter.id}
-                                parameter={parameter} 
-                                onSubmitCb={this.updateClient}/>;
+    {        
+        return <ParameterWidget
+            className={parameter.userid ? parameter.userid : ""}
+            key={parameter.id}
+            parameter={parameter}
+            onSubmitCb={this.updateClient} />;
     }
 
     createWidgets(parameter: Parameter[])
