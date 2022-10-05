@@ -4,6 +4,7 @@ import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidg
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 import App from './App';
 import { Checkbox, Modal, NumberInput, TextInput } from 'carbon-components-react';
+import SMHeader from './SMHeader';
 
 
 type Props = {
@@ -133,6 +134,8 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     {
         return (
             <section>
+
+                <SMHeader></SMHeader>
 
                 {
                     this.state.client ?
