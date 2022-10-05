@@ -5,7 +5,7 @@ import { VERSION_STR } from './Globals';
 import { rcpLogVersion } from 'rabbitcontrol';
 
 
-/*      
+/*
   use with local tcp-ts:
   $ npm link ../rcp-ts
   $ npm install path-to-file
@@ -75,25 +75,6 @@ class App extends React.Component<Props, State> {
           flex: 2
         }}></div>
 
-        <div className="bx--label credits">
-          <a
-            className="aunderline"
-            href="https://github.com/rabbitcontrol/" target="#">
-            rcp-ts-client
-          </a>
-            &nbsp;written by&nbsp;
-          <a
-            className="aunderline"
-            href="https://ingorandolf.info/" target="#">
-            i-n-g-o
-          </a>
-          &nbsp;&nbsp;|&nbsp;&nbsp;
-          <a
-            className="aunderline"
-            href="http://rabbitcontrol.cc/" target="#">
-            rabbitControl
-          </a>            
-        </div>
       </div>
     );
   }

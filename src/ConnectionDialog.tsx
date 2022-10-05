@@ -156,10 +156,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                         ""
                 }
 
-                <div className="bx--label serverid">
-                    {this.state.serverApplicationId !== "" ? `connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
-                </div>
-
                 <Modal
                     className={"bp3-dark"}
                     modalLabel="Connect to a RabbitControl server"

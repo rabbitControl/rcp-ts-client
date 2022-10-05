@@ -458,13 +458,11 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     is_horizontal_layout = parameter.userid === WIDGET_HORIZONTALLAYOUT_STR;
                 }
 
-                console.log("is_tab_switcher: " + is_tab_switcher);
+                // console.log(`${parameter.label} (${parameter.userid}) : is_tab_switcher: ${is_tab_switcher}`);
                 
 
                 if (is_tab_switcher)
                 {
-                    console.log("is_tab_switcher!!");
-                    
                     // custom tab-widget - TabSwitcher
                     return (
                         <ParameterTabsSwitcherC
