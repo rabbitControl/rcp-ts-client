@@ -45,7 +45,7 @@ export class ParameterRadioC extends React.Component<Props & InjectedProps, Stat
             multiSelect = param.enumDefinition.multiselect;
         }
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, tabId, selectedTab, ...filteredProps } = this.props;
 
         return (            
             <RadioButtonGroup

@@ -38,7 +38,7 @@ export class ParameterCheckboxC extends React.Component<Props & InjectedProps, S
             readOnly = param.readonly;        
         }
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, tabId, selectedTab, ...filteredProps } = this.props;
 
         return (
 

@@ -39,7 +39,7 @@ export class ParameterSwitchC extends React.Component<Props & InjectedProps, Sta
             readOnly = param.readonly;        
         }
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, tabId, selectedTab, ...filteredProps } = this.props;
 
         return (
             <Toggle

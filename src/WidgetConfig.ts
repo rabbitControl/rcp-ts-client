@@ -6,3 +6,4 @@ export const WIDGET_HORIZONTALLAYOUT_STR = "widget_horizontallayout";
 export const WIDGET_NOWIDGET_STR = "widget_nowidget";
 export const WIDGET_SWITCH_STR = "widget_switch";
 export const TOGGLE_LABEL = "_onoff";
+export const WIDGET_CONTENT_SCROLLER = "content_scroller";

@@ -81,7 +81,7 @@ export class ParameterRangeSliderC extends React.Component<Props & InjectedProps
             }
         }
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, tabId, selectedTab, ...filteredProps } = this.props;
 
         return (        
             <Measure

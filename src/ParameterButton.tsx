@@ -51,7 +51,7 @@ export class ParameterButtonC extends React.Component<Props & InjectedProps, Sta
             label = this.props.parameter.label;
         }
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, tabId, selectedTab, ...filteredProps } = this.props;
 
         return (
             <section>

@@ -5,6 +5,78 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+/* header */
+.smheader {
+  min-height: 80px;
+  background-color: #161616;
+  color: #F4F4F4;
+  display: flex;
+  flex-direction: column;
+}
+
+.smheader .header-empty {
+  min-height: 32px;
+}
+
+.smheader .header-line {
+  display: flex;
+  flex-direction: row;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.smlogofont {
+  margin: auto;
+
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+
+.grow {
+  flex-grow: 10;
+}
+
+
+/* carbon */
+.bx--tab-content {
+  padding: 0px !important;
+}
+.bx--accordion__content {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}
+.bx--tabs--scrollable__nav-link {
+  width: auto !important;
+}
+
+.bx--tabs--scrollable__nav {
+  flex: 1;
+}
+
+.bx--tabs--scrollable__nav-item {
+  flex: 1;
+  flex-direction: column;
+}
+
+/* hide parameter divider */
+.parameter-divider {
+  display: none;
+}
+
+
+.content_scroller {
+  /* height: 300px; */
+  overflow: auto;
 }
 
 /* gui styles */
@@ -16,19 +88,17 @@
 }
 
 .parameter-wrapper {
-  /* padding-top: 4px; */
-  padding-bottom: 0px;  
-  margin-top: 1em;
+  margin-top: 1px;
 }
 
 
-.rootgroup-wrapper {
+/* .rootgroup-wrapper {
   padding: 5px;
   padding-top: 0px;
   padding-bottom: 4px;
   border-radius: 4px;
   border: 1px solid #454545;
-}
+} */
 
 .serverid {
   font-size: 0.8em;

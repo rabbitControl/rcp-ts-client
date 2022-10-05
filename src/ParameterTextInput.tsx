@@ -51,7 +51,7 @@ export class ParameterTextInputC extends React.Component<Props & InjectedProps, 
             readOnly = param.readonly;            
         }
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, tabId, selectedTab, ...filteredProps } = this.props;
 
         return (     
             <form onSubmit={this.handleSubmit}>

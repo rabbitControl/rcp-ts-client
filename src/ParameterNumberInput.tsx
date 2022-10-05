@@ -67,7 +67,7 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
             }
         }
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, tabId, selectedTab, ...filteredProps } = this.props;
         
         return (        
             <NumberInput

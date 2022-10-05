@@ -26,7 +26,7 @@ export class ParameterImageC extends React.Component<Props & InjectedProps, Stat
         const blob = new Blob([this.props.value]);
         const url = window.URL.createObjectURL(blob);
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, tabId, selectedTab, ...filteredProps } = this.props;
 
         return (
             <div>

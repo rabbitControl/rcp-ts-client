@@ -41,7 +41,7 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
             entries = param.enumDefinition.entries;
         }
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, tabId, selectedTab, ...filteredProps } = this.props;
 
         return (
             <Dropdown

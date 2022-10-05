@@ -77,7 +77,7 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
             }
         }
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, tabId, selectedTab, ...filteredProps } = this.props;
 
         return (        
             <Measure

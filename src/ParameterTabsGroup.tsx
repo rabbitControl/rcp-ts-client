@@ -1,28 +1,45 @@
 import * as React from 'react';
 import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Parameter, GroupParameter, TabsWidget } from 'rabbitcontrol';
+import { Parameter, GroupParameter } from 'rabbitcontrol';
 import ParameterWidget from './ParameterWidget';
+import ContentContainer from './ContentContainer';
 import { Tab, Tabs } from 'carbon-components-react';
 
 interface Props {
     style?: React.CSSProperties;
+    selectedTab: number;
+    tabId: number;
 };
 
 interface State {
-    navbarTabId: number
-};
+    navbarTabId: number;
+    lastSelected: number;
+}
 
 export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, State>
 {
     constructor(props: Props & InjectedProps) {
         super(props);
 
-        this.state = {navbarTabId: 0};
-    } 
+        this.state = {
+            navbarTabId: 0,
+            lastSelected: -1
+        };
+    }
+
+    componentDidMount(): void
+    {
+        // console.log(`PTG MOUNTED: ${this.props.parameter?.label} (${this.props.tabId}) sel: ${this.props.selectedTab}`);
+        
+        if (this.props.selectedTab !== this.props.tabId)
+        {
+            this.setState({ navbarTabId: -1 });
+        }
+    }
 
     handleTabChange = (navbarTabId: number) => 
-    {
-        this.setState({ navbarTabId });
+    {   
+        this.setState({ navbarTabId: navbarTabId });
     }
 
     onSubmit = () =>
@@ -31,52 +48,7 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
         {
             this.props.onSubmitCb();
         }
-    }
-    
-    createChildWidgets(parameter: GroupParameter) 
-    {
-        if (parameter.widget instanceof TabsWidget) 
-        {
-            return (<ParameterWidget 
-                key={"_"+parameter.id}
-                parameter={parameter} 
-                onSubmitCb={this.onSubmit}
-            />);
-        }
-
-
-        return parameter.children
-        .filter(param => 
-        {
-            const is_group = (param instanceof GroupParameter);
-            var is_tabs = false;
-            var parent_tabs = false;
-
-            if (is_group)
-            {
-                is_tabs = param.widget instanceof TabsWidget;
-            }
-
-            if (param.parent !== undefined)
-            {
-                parent_tabs = param.parent.widget instanceof TabsWidget;
-            }
-
-            return !is_group || (!parent_tabs && !is_tabs);
-        })
-        .sort((a: Parameter, b: Parameter): number =>
-        { 
-            return ((a.order || 0) - (b.order || 0)); 
-        })
-        .map((param) =>
-        {
-            return <ParameterWidget 
-                        key={param.id}
-                        parameter={param} 
-                        onSubmitCb={this.onSubmit}
-                    />;
-        });
-    }
+    }    
 
     renderChildren()
     {
@@ -101,77 +73,106 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
         }        
         
         return ("");
-    }
+    }    
 
-    createTabWidgets(parameter: Parameter[])
+    createTabWidgets(parameters: Parameter[])
     {
-        if (parameter === undefined)
+        if (parameters === undefined)
         {
+            console.log("no children");            
             return "";
         }
 
-        // each parameter gets a tab
+        // each group-parameter gets a tab
 
-        return parameter
+        return parameters
         .filter(param => param instanceof GroupParameter)
         .sort((a: Parameter, b: Parameter): number => ((a.order || 0) - (b.order || 0)))
         .map((param, index) => 
         {
-            const g_param = (param as GroupParameter);
+            // console.log(`${this.props.parameter?.label}: create Tab: ${param.label} - props.selected: ${this.props.selected}`);
 
-            if (this.state.navbarTabId === 0
-                && index === 0
-                && param.label !== undefined)
-            {
-                // set this delayed!
-                // TODO
-                // this.setState({navbarTabId: (param.label as string)});
-            }
+            const g_param = (param as GroupParameter);            
+
+            // if (this.state.navbarTabId === 0
+            //     && index === 0
+            //     && param.label !== undefined)
+            // {
+            //     // set this delayed!
+            //     // TODO
+            //     // this.setState({navbarTabId: (param.label as string)});
+            // }
+
 
             return (
+
                 <Tab
                     key={"tab_" + param.id} 
                     id={param.label} 
-                    label={param.label}
+                    label={param.label}                    
                 >
-                    <div>
-                        <div className="inner" style={{
-                            border: "1px solid #afafaf",
-                            background: "transparent"
-                        }}>
-                            {this.createChildWidgets(g_param)}
-                        </div>
+                    <ContentContainer
+                        parameter={g_param}
+                        onSubmitCb={this.props.onSubmitCb}
+                        selectedTab={this.state.navbarTabId}
+                        tabId={index}
+                    ></ContentContainer>
 
-                        {g_param.children.length > 0 ?
-                            <div>
-                                <hr style={{borderTop: "1px solid gray"}}/>
-                                {this.renderChildren()}
-                            </div>
-                        : ""
-                        }                            
-                    </div>
+                    {/* {g_param.children.some(e => !(e instanceof GroupParameter)) ?
+                        <div>
+                            <hr className='parameter-divider' style={{borderTop: "1px solid gray"}}/>
+                            {this.renderChildren()}
+                        </div>
+                    : ""
+                    } */}
                 </Tab>
+
             );
         });
     }
-    
-    render() 
+
+
+    componentDidUpdate(prevProps: Readonly<Props & InjectedProps>, prevState: Readonly<State>, snapshot?: any): void
+    {
+        // console.log(`PTG UPDATE: ${this.props.parameter?.label} (${this.props.id}) sel: ${this.props.selected} - last: ${this.state.lastSelected}`);
+
+        if (this.state.lastSelected !== this.props.selectedTab)
+        {
+            if (this.props.selectedTab === this.props.tabId) {
+
+                if (this.state.navbarTabId < 0)
+                {                    
+                    this.setState({
+                        navbarTabId: 0,
+                    });
+                }
+            }
+            else
+            {
+                this.setState({
+                    navbarTabId: -1
+                });
+            }
+            
+            this.setState({ lastSelected: this.props.selectedTab });
+        }
+    }
+
+    render()
     {
         const param = this.props.parameter;
-        const label = param !== undefined ? (param.label || "") : "";
 
         return (
-            <div style={this.props.style}>
-
-                <Tabs 
-                    id={ param?.id.toString() || "navbar"}
-                    onSelectionChange={this.handleTabChange}
-                    selected={this.state.navbarTabId}
-                >
-                    {/* {this.props.labelDisabled !== true ? <Tab title={label} disabled={true}></Tab> : <div></div>} */}
-                    {this.createTabWidgets((this.props.parameter as GroupParameter).children)}
-                </Tabs>
-            </div>
+            <Tabs
+                type="container"
+                id={param?.id.toString() || "navbar"}
+                onSelectionChange={this.handleTabChange}
+                selected={this.state.navbarTabId}
+                style={this.props.style}
+            >
+                {/* {this.props.labelDisabled !== true ? <Tab title={label} disabled={true}></Tab> : <div></div>} */}
+                {this.createTabWidgets((this.props.parameter as GroupParameter).children)}
+            </Tabs>
         );
     }
 

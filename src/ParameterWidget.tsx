@@ -30,6 +30,8 @@ interface Props {
     onSubmitCb: () => void;
     vertical?: boolean;
     className?: string;
+    selectedTab?: number;
+    tabId?: number;
 };
 
 interface State {
@@ -426,7 +428,9 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     <ParameterTabsGroupC
                         {...filteredProps}
                         value={this.state.value}
-                        handleValue={this.handleValueChange}  
+                        handleValue={this.handleValueChange}
+                        tabId={this.props.tabId || 0}
+                        selectedTab={this.props.selectedTab || 0}
                     />
                 );
             }
@@ -468,7 +472,9 @@ export default class ParameterWidget extends React.Component<Props, State> {
                         <ParameterTabsSwitcherC
                             {...filteredProps}
                             value={this.state.value}
-                            handleValue={this.handleValueChange}  
+                            handleValue={this.handleValueChange}
+                            tabId={this.props.tabId || 0}
+                            selectedTab={this.props.selectedTab || 0}
                         />
                     );
                 }
