@@ -49,12 +49,12 @@ export default class CreateBookmarkDialog extends React.Component<Props, State> 
 
     render(): React.ReactNode {
         return <Alert isOpen={ this.props.show }
-            className={"bp3-dark"}
-            icon="bookmark"
-            confirmButtonText="Save bookmark"
-            cancelButtonText="Cancel"
-            onConfirm={ this.storeBookmark }
-            onCancel={ this.props.onCancel }>
+                      className={"bp3-dark"}
+                      icon="bookmark"
+                      confirmButtonText="Save bookmark"
+                      cancelButtonText="Cancel"
+                      onConfirm={ this.storeBookmark }
+                      onCancel={ this.props.onCancel }>
 
             <h4>Bookmark this connection</h4>
             
