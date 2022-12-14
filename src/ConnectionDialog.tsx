@@ -7,6 +7,7 @@ import App from './App';
 import CreateBookmarkDialog from './CreateBookmarkDialog';
 import { BookmarkProvider } from './BookmarkProvider';
 import BookmarkList from './BookmarkList';
+import ShareConnectionDialog from './ShareConnectionDialog';
 
 type Props = {
 };
@@ -23,6 +24,7 @@ type State = {
     rootWithTabs: boolean;
     showBookmarkDialog: boolean;
     connectionBookmarked: boolean;
+    showShareConnectionDialog: boolean;
 };
 
 export default class ConnectionDialog extends React.Component<Props, State> {
@@ -42,6 +44,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             rootWithTabs: false,
             showBookmarkDialog: false,
             connectionBookmarked: false,
+            showShareConnectionDialog: false,
         };
     }
 
@@ -128,7 +131,11 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                     <Button rightIcon='upload' 
                             text="Share" 
                             small={true} 
-                            onClick={ () => { this.doDisconnect() } } />
+                            onClick={ () => { this.setState({ showShareConnectionDialog: true }) } } />
+                    <ShareConnectionDialog show={ this.state.showShareConnectionDialog } 
+                                           onClose={ () => { this.setState({ showShareConnectionDialog: false }) } }
+                                           host={ this.state.host }
+                                           port={ this.state.port } />
                     <Button rightIcon="bookmark" 
                             text="Bookmark"
                             small={true} 
