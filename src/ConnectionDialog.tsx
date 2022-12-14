@@ -22,6 +22,7 @@ type State = {
     serverApplicationId: string;
     rootWithTabs: boolean;
     showBookmarkDialog: boolean;
+    connectionBookmarked: boolean;
 };
 
 export default class ConnectionDialog extends React.Component<Props, State> {
@@ -40,6 +41,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             serverApplicationId: "",
             rootWithTabs: false,
             showBookmarkDialog: false,
+            connectionBookmarked: false,
         };
     }
 
@@ -130,9 +132,11 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                     <Button rightIcon="bookmark" 
                             text="Bookmark"
                             small={true} 
-                            onClick={ () => { this.setState({ showBookmarkDialog: true }) } } />
+                            onClick={ () => { this.setState({ showBookmarkDialog: true }) } } 
+                            disabled={ this.state.connectionBookmarked } />
                     <CreateBookmarkDialog show={ this.state.showBookmarkDialog } 
                                         onCancel={ () => { this.setState({ showBookmarkDialog: false }) } }
+                                        onSuccess={ () => { this.setState({ showBookmarkDialog: false, connectionBookmarked: true }) } }
                                         host={ this.state.host }
                                         port={ this.state.port } 
                                         serverName={ this.state.serverApplicationId } />
@@ -272,6 +276,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             parameters: [],
             serverVersion: "",
             serverApplicationId: "",
+            connectionBookmarked: false,
         });
     }
 

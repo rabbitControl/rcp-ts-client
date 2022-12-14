@@ -9,6 +9,7 @@ type Props = {
     host: string;
     port: number;
     serverName: string;
+    onSuccess: () => void;
 };
 
 type State = {
@@ -20,7 +21,6 @@ export default class CreateBookmarkDialog extends React.Component<Props, State> 
     state: State = {
         name: ""
     }
-
 
     componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
         if (prevProps.serverName !== this.props.serverName) {
@@ -44,7 +44,7 @@ export default class CreateBookmarkDialog extends React.Component<Props, State> 
         };
 
         BookmarkProvider.storeBookmark(bookmark);
-        this.props.onCancel();
+        this.props.onSuccess();
     }
 
     render(): React.ReactNode {
