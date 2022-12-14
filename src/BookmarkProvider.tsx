@@ -24,23 +24,11 @@ export namespace BookmarkProvider {
         localStorage.setItem('rabbit-bookmarks', JSON.stringify(bookmarkList));
     }
 
-    export function bookmarkExists(bookmark: Bookmark): boolean {
-        return bookmarkList.some(existingBookmark => {
-            return existingBookmark.address === bookmark.address &&
-                existingBookmark.port === bookmark.port &&
-                existingBookmark.name === bookmark.name;
-        })
-    }
-
     export function getBookmarks(): Array<Bookmark> {
         return bookmarkList;
     }
 
     export function storeBookmark(bookmark: Bookmark): void {
-        if (bookmarkExists(bookmark)) {
-            return;
-        }
-
         bookmarkList.push(bookmark);
 
         persistList();

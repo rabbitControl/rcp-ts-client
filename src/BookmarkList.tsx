@@ -1,4 +1,4 @@
-import { Button, Collapse, Icon, Text } from '@blueprintjs/core';
+import { Button, Collapse, Divider, Icon, Text } from '@blueprintjs/core';
 import * as React from 'react';
 import { BookmarkProvider } from './BookmarkProvider';
 
@@ -82,13 +82,18 @@ export default class BookmarkList extends React.Component<Props, State> {
         
         if (this.state.bookmarks.length < 3) {
             return <section>
+                <br />
+                <Divider className='bp3-dark' />
+
                 <h4>Choose from bookmarks</h4>
                 { list }
             </section>
         }
 
         return <section>
-            
+            <br />
+            <Divider className='bp3-dark' />
+
             <h4 onClick={ () => { this.setState({ expandList: !this.state.expandList })} }
                 style={ { cursor: 'pointer' } }>
                 Choose from bookmarks <Icon icon={ !this.state.expandList ? "add" : "remove" } />
