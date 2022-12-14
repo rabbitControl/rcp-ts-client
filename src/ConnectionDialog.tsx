@@ -125,10 +125,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
             { this.state.isConnected ? 
                 <div className="toolbar" >
-                    <Button rightIcon='upload' 
-                            text="Share" 
-                            small={true} 
-                            onClick={ () => { this.doDisconnect() } } />
                     <Button rightIcon="bookmark" 
                             text="Bookmark"
                             small={true} 
