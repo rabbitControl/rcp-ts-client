@@ -1,9 +1,12 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
-import { Alert, Intent, InputGroup, ControlGroup, Text, Colors, Checkbox } from '@blueprintjs/core';
+import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Classes, Divider } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 import App from './App';
+import CreateBookmarkDialog from './CreateBookmarkDialog';
+import { BookmarkProvider } from './BookmarkProvider';
+import BookmarkList from './BookmarkList';
 
 type Props = {
 };
@@ -18,6 +21,8 @@ type State = {
     serverVersion: string;
     serverApplicationId: string;
     rootWithTabs: boolean;
+    showBookmarkDialog: boolean;
+    currentConnectionIsBookmarked: boolean;
 };
 
 export default class ConnectionDialog extends React.Component<Props, State> {
@@ -35,6 +40,8 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             serverVersion: "",
             serverApplicationId: "",
             rootWithTabs: false,
+            showBookmarkDialog: false,
+            currentConnectionIsBookmarked: false
         };
     }
 
@@ -64,6 +71,26 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             if (Client.VERBOSE) console.log("autoconnect: " + host + ":" + portAsInt);
             this.doConnect(host, portAsInt);
         }
+
+        window.addEventListener('rabbit-bookmarks-storage-update', this.checkIfConnectionIsBookmarked)
+    }
+
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
+        const connectionUpdate: boolean = prevState.host !== this.state.host ||
+            prevState.port !== this.state.port ||
+            prevState.serverApplicationId !== this.state.serverApplicationId;
+        if (connectionUpdate) {
+            this.checkIfConnectionIsBookmarked();
+        }
+    }
+
+    checkIfConnectionIsBookmarked = () => {
+        const connectionIsBookmarked = BookmarkProvider.bookmarkExists({
+            address: this.state.host,
+            port: this.state.port,
+            name: this.state.serverApplicationId
+        });
+        this.setState({ currentConnectionIsBookmarked: connectionIsBookmarked });
     }
 
     updateClient = () => {
@@ -116,6 +143,30 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     {
         return <section>
 
+            { this.state.isConnected ? 
+                <div className="toolbar" >
+                    <Button rightIcon='upload' 
+                            text="Share" 
+                            small={true} 
+                            onClick={ () => { this.doDisconnect() } } />
+                    { this.state.currentConnectionIsBookmarked }
+                    <Button rightIcon="bookmark" 
+                            text={ this.state.currentConnectionIsBookmarked ? "Bookmarked" : "Bookmark" }
+                            small={true} 
+                            disabled={ this.state.currentConnectionIsBookmarked }
+                            onClick={ () => { this.setState({ showBookmarkDialog: true }) } } />
+                    <CreateBookmarkDialog show={ this.state.showBookmarkDialog } 
+                                        onCancel={ () => { this.setState({ showBookmarkDialog: false }) } }
+                                        host={ this.state.host }
+                                        port={ this.state.port } 
+                                        serverName={ this.state.serverApplicationId } />
+                    <Button rightIcon='log-out' 
+                            text="Disconnect" 
+                            small={true} 
+                            onClick={ () => { this.doDisconnect() } } />
+                </div>
+            : "" }
+
             <div className="rootgroup-wrapper">
                 {
                     this.state.client ?
@@ -142,51 +193,76 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                 {this.state.serverApplicationId !== "" ? `connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
             </div>
 
-            <Alert
+            {/* <Alert
                 className={"bp3-dark"}
                 confirmButtonText="Connect"
                 icon="offline"
                 intent={Intent.NONE}
                 isOpen={this.state.isConnected !== true }
                 onConfirm={this.handleAlertConfirm}
-            >
-                <Text><strong>Connect to a RabbitControl server</strong></Text>
-                <br/>
-                <br/>
-                <ControlGroup style={{alignItems: "center"}}>
-                    <Text>Host:&nbsp;</Text>
-                    <InputGroup
-                        value={this.state.host}
-                        type="text"
-                        onChange={this.setHost}
-                    />
-                </ControlGroup>
-                <br/>
-                <ControlGroup style={{alignItems: "center"}}>
-                    <Text>Port:&nbsp;</Text>                    
-                    <InputGroup
-                        value={this.state.port.toFixed(0)}
-                        min={1024}
-                        max={65535}
-                        type="number"
-                        onChange={this.setPort}
-                    />
-                </ControlGroup>
-                <br/>
+            > */}
+            {/* <Drawer isOpen={true}
+                    position={ Position.TOP }
+                    isCloseButtonShown={ false }
+                    // canOutsideClickClose={ false }
+                    canEscapeKeyClose={ false }
+                    className={"bp3-dark"}
+                    hasBackdrop={ false }
+                    size="100%"> */}
+            <Dialog isOpen={this.state.isConnected !== true }
+                    className={"bp3-dark"}
+                    icon="offline">
+                
+                {/* <section className="connection_dialog"> */}
+                <section className={ Classes.DIALOG_BODY }>
+                    
+                    <h3>Connect to a RabbitControl server</h3>
+                    
+                    <ControlGroup style={{alignItems: "center"}}>
+                        <Text>Host:&nbsp;</Text>
+                        <InputGroup
+                            value={this.state.host}
+                            type="text"
+                            onChange={this.setHost}
+                        />
+                    </ControlGroup>
+                    <br/>
+                    <ControlGroup style={{alignItems: "center"}}>
+                        <Text>Port:&nbsp;</Text>                    
+                        <InputGroup
+                            value={this.state.port.toFixed(0)}
+                            min={1024}
+                            max={65535}
+                            type="number"
+                            onChange={this.setPort}
+                        />
+                    </ControlGroup>
+                    <br/>
 
-                <Checkbox
-                    checked={this.state.rootWithTabs}
-                    onChange={this.setTabsInRoot}
-                >
-                    Tabs in Root
-                </Checkbox>
+                    <Checkbox
+                        checked={this.state.rootWithTabs}
+                        onChange={this.setTabsInRoot}
+                    >
+                        Tabs in Root
+                    </Checkbox>
 
-                <div>
-                    {this.state.error ? this.state.error : undefined}
-                    {this.returnSSLInfo()}
-                </div>
+                    <div>
+                        {this.state.error ? this.state.error : undefined}
+                        {this.returnSSLInfo()}
+                    </div>
 
-            </Alert>
+                    <section style={ { textAlign: 'right' }}>
+                        <Button text="Connect" onClick={ this.handleAlertConfirm } />
+                    </section>
+
+                    <br />
+                    <Divider className='bp3-dark' />
+
+                    <BookmarkList onConnectFromBookmark={ this.connectFromBookmark } />
+                </section>
+            {/* </Drawer> */}
+            </Dialog>
+            {/* </Alert> */}
         
         </section>;
     }
@@ -215,12 +291,19 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     private handleAlertConfirm = () => {
-
         this.setState({
             error: undefined
         });
 
         this.doConnect(this.state.host, this.state.port);
+    }
+
+    private connectFromBookmark = (bookmark: BookmarkProvider.Bookmark): void => {
+        this.setState({
+            error: undefined
+        });
+
+        this.doConnect(bookmark.address, bookmark.port);
     }
 
     private resetUI()

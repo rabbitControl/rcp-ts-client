@@ -56,6 +56,34 @@
   border-radius: 4px;
 }
 
+.bookmark_list_item {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(16, 22, 26, 0.4);
+}
+.bookmark_list_item:last-child {
+  border: none;
+}
+.bookmark_list_item div:nth-child(2) {
+  flex-grow: 1;
+}
+.bookmark_item_ctas {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px;
+}
+
+.bp3-divider {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .rootgroup-wrapper {
   padding: 5px;
   padding-top: 0px;
