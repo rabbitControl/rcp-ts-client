@@ -56,9 +56,8 @@ export default class CreateBookmarkDialog extends React.Component<Props, State> 
             onConfirm={ this.storeBookmark }
             onCancel={ this.props.onCancel }>
 
-            <Text><strong>Bookmark this connection</strong></Text>
-            <br/>
-            <br/>
+            <h4>Bookmark this connection</h4>
+            
             <ControlGroup style={{alignItems: "center"}}>
                 <Text>Name:&nbsp;</Text>
                 <InputGroup

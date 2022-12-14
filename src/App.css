@@ -56,6 +56,13 @@
   border-radius: 4px;
 }
 
+.bp3-dialog-body h3:first-child {
+  margin-top: 0;
+}
+.bp3-alert-contents h4:first-child {
+  margin-top: 0;
+}
+
 .bookmark_list_item {
   display: flex;
   justify-content: space-between;

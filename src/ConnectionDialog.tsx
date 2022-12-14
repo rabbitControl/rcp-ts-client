@@ -174,8 +174,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             </div>
 
             <Dialog isOpen={this.state.isConnected !== true }
-                    className={"bp3-dark"}
-                    icon="offline">
+                    className={"bp3-dark"}>
                 
                 <section className={ Classes.DIALOG_BODY }>
                     
