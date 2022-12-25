@@ -1,12 +1,14 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
-import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Classes } from '@blueprintjs/core';
+import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Classes, Icon } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 import App from './App';
 import CreateBookmarkDialog from './CreateBookmarkDialog';
 import { BookmarkProvider } from './BookmarkProvider';
 import BookmarkList from './BookmarkList';
+import ConnectionHistoryList from './ConnectionHistoryList';
+import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
 
 type Props = {
 };
@@ -125,7 +127,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
             { this.state.isConnected ? 
                 <div className="toolbar" >
-                    <Button rightIcon="bookmark" 
+                    {/* <Button rightIcon="bookmark" 
                             text="Bookmark"
                             small={true} 
                             onClick={ () => { this.setState({ showBookmarkDialog: true }) } } 
@@ -135,7 +137,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                                         onSuccess={ () => { this.setState({ showBookmarkDialog: false, connectionBookmarked: true }) } }
                                         host={ this.state.host }
                                         port={ this.state.port } 
-                                        serverName={ this.state.serverApplicationId } />
+                                        serverName={ this.state.serverApplicationId } /> */}
                     <Button rightIcon='log-out' 
                             text="Disconnect" 
                             small={true} 
@@ -201,7 +203,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                         checked={this.state.rootWithTabs}
                         onChange={this.setTabsInRoot}
                     >
-                        Tabs in Root
+                        Tabs in Root &nbsp;<Icon icon="segmented-control" color={ Colors.GRAY1 } />
                     </Checkbox>
 
                     <div>
@@ -214,6 +216,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                     </section>
 
                     <BookmarkList onConnectFromBookmark={ this.connectFromBookmark } />
+                    <ConnectionHistoryList onConnectFromBookmark={ this.connectFromBookmark } />
                 </section>
             </Dialog>
         
@@ -342,6 +345,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         });
 
         if (Client.VERBOSE) console.log("ConnectionDialog connected!");
+
+        ConnectionHistoryProvider.recordOrUpdateEntry(
+            this.state.host,
+            this.state.port,
+            this.state.rootWithTabs
+        );
     }
 
     private disconnected = (event: CloseEvent) => 
@@ -377,6 +386,13 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             serverVersion: version,
             serverApplicationId: applicationId
         });
+
+        ConnectionHistoryProvider.setApplicationIdForEntry(
+            this.state.host,
+            this.state.port,
+            this.state.rootWithTabs,
+            applicationId
+        );
     }
 
     private parameterChangeListener = (parameter: Parameter) => 

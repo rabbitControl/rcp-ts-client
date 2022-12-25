@@ -63,9 +63,14 @@
   margin-top: 0;
 }
 
+.connection_history h4 {
+  margin-bottom: 0.66em;
+}
+
 .bookmark_list_item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 2px 0;
   border-bottom: 1px solid rgba(16, 22, 26, 0.4);
 }
@@ -78,6 +83,7 @@
 .bookmark_item_ctas {
   display: flex;
   align-items: center;
+  margin: 2px 0;
 }
 
 .toolbar {
