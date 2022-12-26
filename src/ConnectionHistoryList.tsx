@@ -40,7 +40,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
             });
     }
 
-    componentDidMount = () => {
+    componentDidMount = (): void => {
         window.addEventListener('rabbit-connection-history-storage-update', this.updateItemsList);
     }
 
@@ -48,7 +48,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         window.removeEventListener('rabbit-connection-history-storage-update', this.updateItemsList);
     }
 
-    updateItemsList = () => {
+    updateItemsList = (): void => {
         this.setState({ listEntries: this.getSortedList() });
     }
 
@@ -68,7 +68,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         ConnectionHistoryProvider.toggleIsFavourite(this.state.listEntries[index]);
     }
 
-    onSetNameForFavourite = (name: string) => {
+    onSetNameForFavourite = (name: string): void => {
         if (this.state.entryForSetNameOfFavouriteDialog === undefined) {
             return;
         }
@@ -85,7 +85,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         })
     }
 
-    render() {
+    render(): React.ReactNode {
         if (this.state.listEntries.length === 0) {
             return null;
         }
