@@ -71,26 +71,26 @@
   margin-bottom: 0.66em;
 }
 
-.bookmark_list_item {
+.history_list_item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 2px 0;
   border-bottom: 1px solid rgba(16, 22, 26, 0.4);
 }
-.bookmark_list_item div:first-child .bp3-icon {
+.history_list_item div:first-child .bp3-icon {
   margin-top: 1px;
   margin-right: 1px;
 }
-.bookmark_list_item:last-child {
+.history_list_item:last-child {
   border: none;
 }
-.bookmark_list_item div:first-child {
+.history_list_item div:first-child {
   flex-grow: 1;
   display: flex;
   flex-direction: row;
 }
-.bookmark_item_ctas {
+.history_item_ctas {
   display: flex;
   align-items: center;
   margin: 2px 0;

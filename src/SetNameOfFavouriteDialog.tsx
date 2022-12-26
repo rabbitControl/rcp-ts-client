@@ -7,7 +7,7 @@ type Props = {
     show: boolean;
     onCancel: () => void;
     onSuccess: (name: string) => void;
-    entry: ConnectionHistoryProvider.Bookmark | undefined;
+    entry: ConnectionHistoryProvider.HistoryItem | undefined;
 };
 
 type State = {

@@ -1,16 +1,15 @@
 import { Button, Colors, Divider, Icon, Intent, Text } from '@blueprintjs/core';
 import * as React from 'react';
-import { BookmarkProvider } from './BookmarkProvider';
 import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
 import SetNameOfFavouriteDialog from './SetNameOfFavouriteDialog';
 
 type Props = {
-    onConnectFromBookmark: (bookmark: BookmarkProvider.Bookmark) => void;
+    onConnectFromHistoryItem: (item: ConnectionHistoryProvider.HistoryItem) => void;
 };
 
 type State = {
-    listEntries: Array<ConnectionHistoryProvider.Bookmark>;
-    entryForSetNameOfFavouriteDialog: ConnectionHistoryProvider.Bookmark | undefined;
+    listEntries: Array<ConnectionHistoryProvider.HistoryItem>;
+    entryForSetNameOfFavouriteDialog: ConnectionHistoryProvider.HistoryItem | undefined;
 };
 
 export default class ConnectionHistoryList extends React.Component<Props, State> {
@@ -24,7 +23,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         };
     }
 
-    private getSortedList(): Array<ConnectionHistoryProvider.Bookmark> {
+    private getSortedList(): Array<ConnectionHistoryProvider.HistoryItem> {
         return ConnectionHistoryProvider
             .getList()
             .sort((a, b): number => {
@@ -42,14 +41,14 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
     }
 
     componentDidMount = () => {
-        window.addEventListener('rabbit-connection-history-storage-update', this.updateBookmarksList);
+        window.addEventListener('rabbit-connection-history-storage-update', this.updateItemsList);
     }
 
     componentWillUnmount(): void {
-        window.removeEventListener('rabbit-connection-history-storage-update', this.updateBookmarksList);
+        window.removeEventListener('rabbit-connection-history-storage-update', this.updateItemsList);
     }
 
-    updateBookmarksList = () => {
+    updateItemsList = () => {
         this.setState({ listEntries: this.getSortedList() });
     }
 
@@ -93,7 +92,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         }
 
         const list = this.state.listEntries.map((entry, index) => {
-            return <section key={ index } className={ 'bookmark_list_item' + (index % 2 === 0 ? ' even' : '') }>
+            return <section key={ index } className={ 'history_list_item' + (index % 2 === 0 ? ' even' : '') }>
                 <div>
                     <Icon icon="caret-right" color={ Colors.GRAY1 } />
                     <div>
@@ -105,7 +104,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
                         </em></Text>
                     </div>
                 </div>
-                <div className="bookmark_item_ctas">
+                <div className="history_item_ctas">
                     <Button text="" 
                             small={ true } 
                             icon="trash" 
@@ -119,7 +118,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
                     &nbsp;
                     <Button text="Connect" 
                             small={ true } 
-                            onClick={ () => { this.props.onConnectFromBookmark(this.state.listEntries[index]) } }/>
+                            onClick={ () => { this.props.onConnectFromHistoryItem(this.state.listEntries[index]) } }/>
                 </div>
             </section>
         })

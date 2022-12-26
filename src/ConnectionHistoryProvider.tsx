@@ -1,7 +1,7 @@
 
 export namespace ConnectionHistoryProvider {
 
-    export type Bookmark = {
+    export type HistoryItem = {
         address: string;
         port: number;
         name: string;
@@ -11,16 +11,16 @@ export namespace ConnectionHistoryProvider {
         applicationId: string;
     }
 
-    var connectionList: Array<Bookmark> = loadList();
+    var connectionList: Array<HistoryItem> = loadList();
 
-    function loadList(): Array<Bookmark> {
+    function loadList(): Array<HistoryItem> {
         const storedData = localStorage.getItem('rabbit-connection-history');
 
         if (storedData === null) {
             return [];
         }
 
-        const parsedData = JSON.parse(storedData).map((entry: Bookmark) => {
+        const parsedData = JSON.parse(storedData).map((entry: HistoryItem) => {
             entry.lastConnected = new Date(entry.lastConnected);
             return entry;
         });
@@ -33,11 +33,11 @@ export namespace ConnectionHistoryProvider {
         localStorage.setItem('rabbit-connection-history', JSON.stringify(connectionList));
     }
 
-    export function getList(): Array<Bookmark> {
+    export function getList(): Array<HistoryItem> {
         return connectionList;
     }
 
-    export function storeEntry(entry: Bookmark): void {
+    export function storeEntry(entry: HistoryItem): void {
         connectionList.push(entry);
 
         persistList();
@@ -55,7 +55,7 @@ export namespace ConnectionHistoryProvider {
             return;
         }
 
-        const newEntry: Bookmark = {
+        const newEntry: HistoryItem = {
             address: address,
             port: port,
             tabsInRoot: tabsInRoot,
@@ -88,7 +88,7 @@ export namespace ConnectionHistoryProvider {
         persistList();
     }
 
-    export function deleteEntry(entry: Bookmark): void {
+    export function deleteEntry(entry: HistoryItem): void {
         const entryPosition = connectionList.indexOf(entry);
         
         if (entryPosition === -1) {
@@ -101,7 +101,7 @@ export namespace ConnectionHistoryProvider {
         persistList();
     }
 
-    export function toggleIsFavourite(entry: Bookmark): void {
+    export function toggleIsFavourite(entry: HistoryItem): void {
         const entryPosition = connectionList.indexOf(entry);
         
         if (entryPosition === -1) {
@@ -113,7 +113,7 @@ export namespace ConnectionHistoryProvider {
         persistList();
     }
 
-    export function setName(entry: Bookmark, name: string): void {
+    export function setName(entry: HistoryItem, name: string): void {
         const entryPosition = connectionList.indexOf(entry);
         
         if (entryPosition === -1) {

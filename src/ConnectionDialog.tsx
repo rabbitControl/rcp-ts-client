@@ -4,9 +4,6 @@ import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Class
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 import App from './App';
-import CreateBookmarkDialog from './CreateBookmarkDialog';
-import { BookmarkProvider } from './BookmarkProvider';
-import BookmarkList from './BookmarkList';
 import ConnectionHistoryList from './ConnectionHistoryList';
 import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
 
@@ -23,8 +20,6 @@ type State = {
     serverVersion: string;
     serverApplicationId: string;
     rootWithTabs: boolean;
-    showBookmarkDialog: boolean;
-    connectionBookmarked: boolean;
 };
 
 export default class ConnectionDialog extends React.Component<Props, State> {
@@ -42,8 +37,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             serverVersion: "",
             serverApplicationId: "",
             rootWithTabs: false,
-            showBookmarkDialog: false,
-            connectionBookmarked: false,
         };
     }
 
@@ -127,17 +120,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
             { this.state.isConnected ? 
                 <div className="toolbar" >
-                    {/* <Button rightIcon="bookmark" 
-                            text="Bookmark"
-                            small={true} 
-                            onClick={ () => { this.setState({ showBookmarkDialog: true }) } } 
-                            disabled={ this.state.connectionBookmarked } />
-                    <CreateBookmarkDialog show={ this.state.showBookmarkDialog } 
-                                        onCancel={ () => { this.setState({ showBookmarkDialog: false }) } }
-                                        onSuccess={ () => { this.setState({ showBookmarkDialog: false, connectionBookmarked: true }) } }
-                                        host={ this.state.host }
-                                        port={ this.state.port } 
-                                        serverName={ this.state.serverApplicationId } /> */}
                     <Button rightIcon='log-out' 
                             text="Disconnect" 
                             small={true} 
@@ -215,8 +197,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                         <Button text="Connect" onClick={ this.handleAlertConfirm } />
                     </section>
 
-                    <BookmarkList onConnectFromBookmark={ this.connectFromBookmark } />
-                    <ConnectionHistoryList onConnectFromBookmark={ this.connectFromBookmark } />
+                    <ConnectionHistoryList onConnectFromHistoryItem={ this.connectFromHistoryItem } />
                 </section>
             </Dialog>
         
@@ -254,12 +235,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         this.doConnect(this.state.host, this.state.port);
     }
 
-    private connectFromBookmark = (bookmark: BookmarkProvider.Bookmark): void => {
+    private connectFromHistoryItem = (item: ConnectionHistoryProvider.HistoryItem): void => {
         this.setState({
             error: undefined
         });
 
-        this.doConnect(bookmark.address, bookmark.port);
+        this.doConnect(item.address, item.port);
     }
 
     private resetUI()
@@ -274,7 +255,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             parameters: [],
             serverVersion: "",
             serverApplicationId: "",
-            connectionBookmarked: false,
         });
     }
 
