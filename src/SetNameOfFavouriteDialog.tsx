@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Alert, InputGroup, ControlGroup, Text } from '@blueprintjs/core';
+import { Alert, InputGroup, ControlGroup, Text, IRefObject } from '@blueprintjs/core';
 import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
 
 type Props = {
@@ -20,10 +20,22 @@ export default class SetNameOfFavouriteDialog extends React.Component<Props, Sta
         name: ""
     }
 
+    inputRef: IRefObject<HTMLInputElement>
+
+    constructor(props: Props) {
+        super(props);
+        this.inputRef = React.createRef();
+    }
+
     componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
         if (prevProps.entry?.applicationId !== this.props.entry?.applicationId) {
             this.setState({
                 name: this.props.entry?.applicationId ?? ""
+            })
+        }
+        if (!prevProps.show && this.props.show) {
+            requestAnimationFrame(() => {
+                this.inputRef.current?.focus();
             })
         }
     }
@@ -40,6 +52,8 @@ export default class SetNameOfFavouriteDialog extends React.Component<Props, Sta
                       icon="star"
                       confirmButtonText="Save name"
                       cancelButtonText="Cancel"
+                      canOutsideClickCancel={ true }
+                      canEscapeKeyCancel={ true }
                       onConfirm={ () => { this.props.onSuccess(this.state.name) } }
                       onCancel={ this.props.onCancel }>
 
@@ -49,6 +63,7 @@ export default class SetNameOfFavouriteDialog extends React.Component<Props, Sta
                 <Text>Name:&nbsp;</Text>
                 <InputGroup value={ this.state.name }
                             type="text"
+                            inputRef={ this.inputRef }
                             onChange={ this.setName } />
             </ControlGroup>
         </Alert>

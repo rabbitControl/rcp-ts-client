@@ -95,14 +95,15 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         const list = this.state.listEntries.map((entry, index) => {
             return <section key={ index } className={ 'bookmark_list_item' + (index % 2 === 0 ? ' even' : '') }>
                 <div>
-                    <Icon icon="caret-right" />
-                </div>
-                <div>
-                    <Text><strong>{ entry.name }</strong></Text>
-                    <Text><em>
-                        { entry.applicationId }, { entry.address }, { entry.port }
-                        &nbsp;&nbsp;{ entry.tabsInRoot ? <Icon icon="segmented-control" color={ Colors.GRAY1 } /> : null }
-                    </em></Text>
+                    <Icon icon="caret-right" color={ Colors.GRAY1 } />
+                    <div>
+                        { entry.name != '' && <Text><strong>{ entry.name }</strong></Text> }
+                        <Text><em>
+                            { entry.applicationId != '' && entry.applicationId + ', ' }
+                            { entry.address }:{ entry.port }
+                            &nbsp;&nbsp;{ entry.tabsInRoot ? <Icon icon="segmented-control" color={ Colors.GRAY1 } /> : null }
+                        </em></Text>
+                    </div>
                 </div>
                 <div className="bookmark_item_ctas">
                     <Button text="" 

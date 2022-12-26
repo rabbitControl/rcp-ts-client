@@ -56,6 +56,10 @@
   border-radius: 4px;
 }
 
+.bp3-dialog-body {
+  max-height: 80vh;
+  overflow: scroll;
+}
 .bp3-dialog-body h3:first-child {
   margin-top: 0;
 }
@@ -74,11 +78,17 @@
   padding: 2px 0;
   border-bottom: 1px solid rgba(16, 22, 26, 0.4);
 }
+.bookmark_list_item div:first-child .bp3-icon {
+  margin-top: 1px;
+  margin-right: 1px;
+}
 .bookmark_list_item:last-child {
   border: none;
 }
-.bookmark_list_item div:nth-child(2) {
+.bookmark_list_item div:first-child {
   flex-grow: 1;
+  display: flex;
+  flex-direction: row;
 }
 .bookmark_item_ctas {
   display: flex;
