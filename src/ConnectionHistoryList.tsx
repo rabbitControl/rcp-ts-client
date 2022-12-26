@@ -23,7 +23,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         };
     }
 
-    private getSortedList(): Array<ConnectionHistoryProvider.HistoryItem> {
+    private getSortedList = (): Array<ConnectionHistoryProvider.HistoryItem> => {
         return ConnectionHistoryProvider
             .getList()
             .sort((a, b): number => {
@@ -44,7 +44,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         window.addEventListener('rabbit-connection-history-storage-update', this.updateItemsList);
     }
 
-    componentWillUnmount(): void {
+    componentWillUnmount = (): void => {
         window.removeEventListener('rabbit-connection-history-storage-update', this.updateItemsList);
     }
 
@@ -85,50 +85,47 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         })
     }
 
-    render() 
-    {
+    render() {
         if (this.state.listEntries.length === 0) {
             return null;
         }
-
-        const list = this.state.listEntries.map((entry, index) => {
-            return <section key={ index } className={ 'history_list_item' + (index % 2 === 0 ? ' even' : '') }>
-                <div>
-                    <Icon icon="caret-right" color={ Colors.GRAY1 } />
-                    <div>
-                        { entry.name != '' && <Text><strong>{ entry.name }</strong></Text> }
-                        <Text><em>
-                            { entry.applicationId != '' && entry.applicationId + ', ' }
-                            { entry.address }:{ entry.port }
-                            &nbsp;&nbsp;{ entry.tabsInRoot ? <Icon icon="segmented-control" color={ Colors.GRAY1 } /> : null }
-                        </em></Text>
-                    </div>
-                </div>
-                <div className="history_item_ctas">
-                    <Button text="" 
-                            small={ true } 
-                            icon="trash" 
-                            onClick={ () => { this.deleteItemAtIndex(index) } } />
-                    &nbsp;
-                    <Button text="" 
-                            small={ true } 
-                            icon="star" 
-                            intent={ entry.isFavourite ? Intent.WARNING : undefined }
-                            onClick={ () => { this.toggleIsFavouriteOnHistoryItem(index) } } />
-                    &nbsp;
-                    <Button text="Connect" 
-                            small={ true } 
-                            onClick={ () => { this.props.onConnectFromHistoryItem(this.state.listEntries[index]) } }/>
-                </div>
-            </section>
-        })
         
         return <section className="connection_history">
             <br />
             <Divider className='bp3-dark' />
 
             <h4>Connection history:</h4>
-            { list }
+            { this.state.listEntries.map((entry, index) => {
+                return <section key={ index } className={ 'history_list_item' + (index % 2 === 0 ? ' even' : '') }>
+                    <div>
+                        <Icon icon="caret-right" color={ Colors.GRAY1 } />
+                        <div>
+                            { entry.name != '' && <Text><strong>{ entry.name }</strong></Text> }
+                            <Text><em>
+                                { entry.applicationId != '' && entry.applicationId + ', ' }
+                                { entry.address }:{ entry.port }
+                                &nbsp;&nbsp;{ entry.tabsInRoot ? <Icon icon="segmented-control" color={ Colors.GRAY1 } /> : null }
+                            </em></Text>
+                        </div>
+                    </div>
+                    <div className="history_item_ctas">
+                        <Button text="" 
+                                small={ true } 
+                                icon="trash" 
+                                onClick={ () => { this.deleteItemAtIndex(index) } } />
+                        &nbsp;
+                        <Button text="" 
+                                small={ true } 
+                                icon="star" 
+                                intent={ entry.isFavourite ? Intent.WARNING : undefined }
+                                onClick={ () => { this.toggleIsFavouriteOnHistoryItem(index) } } />
+                        &nbsp;
+                        <Button text="Connect" 
+                                small={ true } 
+                                onClick={ () => { this.props.onConnectFromHistoryItem(this.state.listEntries[index]) } }/>
+                    </div>
+                </section>
+            }) }
 
             <SetNameOfFavouriteDialog show={ this.state.entryForSetNameOfFavouriteDialog !== undefined }
                                       entry={ this.state.entryForSetNameOfFavouriteDialog }

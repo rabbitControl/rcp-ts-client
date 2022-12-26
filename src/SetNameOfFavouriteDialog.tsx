@@ -27,7 +27,7 @@ export default class SetNameOfFavouriteDialog extends React.Component<Props, Sta
         this.inputRef = React.createRef();
     }
 
-    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
+    componentDidUpdate = (prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void => {
         if (prevProps.entry?.applicationId !== this.props.entry?.applicationId) {
             this.setState({
                 name: this.props.entry?.applicationId ?? ""
@@ -46,15 +46,25 @@ export default class SetNameOfFavouriteDialog extends React.Component<Props, Sta
         });
     }
 
+    confirm = (): void => {
+        this.props.onSuccess(this.state.name);
+    }
+
+    handleEnterKey = (event: any): void => {
+        if (event.key === 'Enter') {
+            this.confirm();
+        }
+    }
+
     render(): React.ReactNode {
         return <Alert isOpen={ this.props.show }
                       className={"bp3-dark"}
                       icon="star"
-                      confirmButtonText="Save name"
-                      cancelButtonText="Cancel"
+                      confirmButtonText="Save"
+                      cancelButtonText="Don't set name"
                       canOutsideClickCancel={ true }
                       canEscapeKeyCancel={ true }
-                      onConfirm={ () => { this.props.onSuccess(this.state.name) } }
+                      onConfirm={ this.confirm }
                       onCancel={ this.props.onCancel }>
 
             <h4>Set name for favourite</h4>
@@ -64,7 +74,8 @@ export default class SetNameOfFavouriteDialog extends React.Component<Props, Sta
                 <InputGroup value={ this.state.name }
                             type="text"
                             inputRef={ this.inputRef }
-                            onChange={ this.setName } />
+                            onChange={ this.setName } 
+                            onKeyDown={ this.handleEnterKey } />
             </ControlGroup>
         </Alert>
     }
