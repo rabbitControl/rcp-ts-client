@@ -1,7 +1,7 @@
 import { Button, Colors, Divider, Icon, Intent, Text } from '@blueprintjs/core';
 import * as React from 'react';
 import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
-import SetNameOfFavouriteDialog from './SetNameOfFavouriteDialog';
+import SetNameOfPinnedItemDialog from './SetNameOfPinnedItemDialog';
 
 type Props = {
     onConnectFromHistoryItem: (item: ConnectionHistoryProvider.HistoryItem) => void;
@@ -95,39 +95,39 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
             <Divider className='bp3-dark' />
 
             <h4>Connection history:</h4>
-            { this.state.listEntries.map((entry, index) => {
-                return <section key={ index } className={ 'history_list_item' + (index % 2 === 0 ? ' even' : '') }>
-                    <div>
-                        <Icon icon="caret-right" color={ Colors.GRAY1 } />
-                        <div>
-                            { entry.name != '' && <Text><strong>{ entry.name }</strong></Text> }
-                            <Text><em>
-                                { entry.applicationId != '' && entry.applicationId + ', ' }
-                                { entry.address }:{ entry.port }
-                                &nbsp;&nbsp;{ entry.tabsInRoot ? <Icon icon="segmented-control" color={ Colors.GRAY1 } /> : null }
-                            </em></Text>
-                        </div>
-                    </div>
-                    <div className="history_item_ctas">
-                        <Button text="" 
-                                small={ true } 
-                                icon="trash" 
-                                onClick={ () => { this.deleteItemAtIndex(index) } } />
-                        &nbsp;
-                        <Button text="" 
-                                small={ true } 
-                                icon="star" 
-                                intent={ entry.isFavourite ? Intent.WARNING : undefined }
-                                onClick={ () => { this.toggleIsFavouriteOnHistoryItem(index) } } />
-                        &nbsp;
-                        <Button text="Connect" 
-                                small={ true } 
-                                onClick={ () => { this.props.onConnectFromHistoryItem(this.state.listEntries[index]) } }/>
-                    </div>
-                </section>
-            }) }
 
-            <SetNameOfFavouriteDialog show={ this.state.entryForSetNameOfFavouriteDialog !== undefined }
+            <div className="connection_history_list">
+                { this.state.listEntries.map((entry, index) => {
+                    return <section key={ index } className={ 'history_list_item' + (index % 2 === 0 ? ' even' : '') }>
+                        <div>
+                            <div>
+                                { entry.name != '' && <Text><strong>{ entry.name }</strong></Text> }
+                                <Text><em>
+                                    { entry.applicationId != '' && entry.applicationId + ', ' }
+                                    { entry.address }:{ entry.port }
+                                    &nbsp;&nbsp;{ entry.tabsInRoot ? <Icon icon="segmented-control" color={ Colors.GRAY1 } /> : null }
+                                </em></Text>
+                            </div>
+                        </div>
+                        <div className="history_item_ctas">
+                            <Button text="" 
+                                    small={ true } 
+                                    icon="trash" 
+                                    onClick={ () => { this.deleteItemAtIndex(index) } } />
+                            <Button text="" 
+                                    small={ true } 
+                                    icon={ entry.isFavourite ? 'unpin' : 'pin' } 
+                                    intent={ entry.isFavourite ? Intent.WARNING : undefined }
+                                    onClick={ () => { this.toggleIsFavouriteOnHistoryItem(index) } } />
+                            <Button text="Connect" 
+                                    small={ true } 
+                                    onClick={ () => { this.props.onConnectFromHistoryItem(this.state.listEntries[index]) } }/>
+                        </div>
+                    </section>
+                }) }
+            </div>
+
+            <SetNameOfPinnedItemDialog show={ this.state.entryForSetNameOfFavouriteDialog !== undefined }
                                       entry={ this.state.entryForSetNameOfFavouriteDialog }
                                       onSuccess={ this.onSetNameForFavourite } 
                                       onCancel={ this.onCancelSetNameForFavourite } />

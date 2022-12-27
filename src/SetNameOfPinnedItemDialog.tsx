@@ -14,7 +14,7 @@ type State = {
     name: string;
 };
 
-export default class SetNameOfFavouriteDialog extends React.Component<Props, State> {
+export default class SetNameOfPinnedItemDialog extends React.Component<Props, State> {
 
     state: State = {
         name: ""
@@ -59,15 +59,15 @@ export default class SetNameOfFavouriteDialog extends React.Component<Props, Sta
     render(): React.ReactNode {
         return <Alert isOpen={ this.props.show }
                       className={"bp3-dark"}
-                      icon="star"
+                      icon="pin"
                       confirmButtonText="Save"
-                      cancelButtonText="Don't set name"
+                      cancelButtonText="Pin without name"
                       canOutsideClickCancel={ true }
                       canEscapeKeyCancel={ true }
                       onConfirm={ this.confirm }
                       onCancel={ this.props.onCancel }>
 
-            <h4>Set name for favourite</h4>
+            <h4>Set name for pinned item</h4>
             
             <ControlGroup style={{alignItems: "center"}}>
                 <Text>Name:&nbsp;</Text>

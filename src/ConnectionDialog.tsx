@@ -118,15 +118,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     {
         return <section>
 
-            { this.state.isConnected ? 
-                <div className="toolbar" >
-                    <Button rightIcon='log-out' 
-                            text="Disconnect" 
-                            small={true} 
-                            onClick={ () => { this.doDisconnect() } } />
-                </div>
-            : "" }
-
             <div className="rootgroup-wrapper">
                 {
                     this.state.client ?
