@@ -56,6 +56,45 @@
   border-radius: 4px;
 }
 
+.bp3-dialog-body h3:first-child {
+  margin-top: 0;
+}
+.bp3-alert-contents h4:first-child {
+  margin-top: 0;
+}
+
+.connection_history h4 {
+  margin-bottom: 0.66em;
+}
+
+.connection_history_list {
+  max-height: calc(80vh - 17em);
+  overflow-y: scroll;
+}
+
+.history_list_item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(16, 22, 26, 0.4);
+}
+.history_list_item:last-child {
+  border: none;
+}
+.history_item_ctas {
+  display: flex;
+  align-items: center;
+  margin: 2px 0;
+}
+.history_item_ctas button {
+  margin: 0 2px 0 3px;
+}
+.bp3-divider {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .rootgroup-wrapper {
   padding: 5px;
   padding-top: 0px;

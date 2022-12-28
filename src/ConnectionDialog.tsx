@@ -1,9 +1,11 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
-import { Alert, Intent, InputGroup, ControlGroup, Text, Colors, Checkbox } from '@blueprintjs/core';
+import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Classes, Icon } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 import App from './App';
+import ConnectionHistoryList from './ConnectionHistoryList';
+import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
 
 type Props = {
 };
@@ -142,51 +144,53 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                 {this.state.serverApplicationId !== "" ? `connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
             </div>
 
-            <Alert
-                className={"bp3-dark"}
-                confirmButtonText="Connect"
-                icon="offline"
-                intent={Intent.NONE}
-                isOpen={this.state.isConnected !== true }
-                onConfirm={this.handleAlertConfirm}
-            >
-                <Text><strong>Connect to a RabbitControl server</strong></Text>
-                <br/>
-                <br/>
-                <ControlGroup style={{alignItems: "center"}}>
-                    <Text>Host:&nbsp;</Text>
-                    <InputGroup
-                        value={this.state.host}
-                        type="text"
-                        onChange={this.setHost}
-                    />
-                </ControlGroup>
-                <br/>
-                <ControlGroup style={{alignItems: "center"}}>
-                    <Text>Port:&nbsp;</Text>                    
-                    <InputGroup
-                        value={this.state.port.toFixed(0)}
-                        min={1024}
-                        max={65535}
-                        type="number"
-                        onChange={this.setPort}
-                    />
-                </ControlGroup>
-                <br/>
+            <Dialog isOpen={this.state.isConnected !== true }
+                    className={"bp3-dark"}>
+                
+                <section className={ Classes.DIALOG_BODY }>
+                    
+                    <h3>Connect to a RabbitControl server</h3>
+                    
+                    <ControlGroup style={{alignItems: "center"}}>
+                        <Text>Host:&nbsp;</Text>
+                        <InputGroup
+                            value={this.state.host}
+                            type="text"
+                            onChange={this.setHost}
+                        />
+                    </ControlGroup>
+                    <br/>
+                    <ControlGroup style={{alignItems: "center"}}>
+                        <Text>Port:&nbsp;</Text>                    
+                        <InputGroup
+                            value={this.state.port.toFixed(0)}
+                            min={1024}
+                            max={65535}
+                            type="number"
+                            onChange={this.setPort}
+                        />
+                    </ControlGroup>
+                    <br/>
 
-                <Checkbox
-                    checked={this.state.rootWithTabs}
-                    onChange={this.setTabsInRoot}
-                >
-                    Tabs in Root
-                </Checkbox>
+                    <Checkbox
+                        checked={this.state.rootWithTabs}
+                        onChange={this.setTabsInRoot}
+                    >
+                        Tabs in Root &nbsp;<Icon icon="segmented-control" color={ Colors.GRAY1 } />
+                    </Checkbox>
 
-                <div>
-                    {this.state.error ? this.state.error : undefined}
-                    {this.returnSSLInfo()}
-                </div>
+                    <div>
+                        {this.state.error ? this.state.error : undefined}
+                        {this.returnSSLInfo()}
+                    </div>
 
-            </Alert>
+                    <section style={ { textAlign: 'right' }}>
+                        <Button text="Connect" onClick={ this.handleAlertConfirm } />
+                    </section>
+
+                    <ConnectionHistoryList onConnectFromHistoryItem={ this.connectFromHistoryItem } />
+                </section>
+            </Dialog>
         
         </section>;
     }
@@ -215,12 +219,19 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     }
 
     private handleAlertConfirm = () => {
-
         this.setState({
             error: undefined
         });
 
         this.doConnect(this.state.host, this.state.port);
+    }
+
+    private connectFromHistoryItem = (item: ConnectionHistoryProvider.HistoryItem): void => {
+        this.setState({
+            error: undefined
+        });
+
+        this.doConnect(item.address, item.port);
     }
 
     private resetUI()
@@ -305,6 +316,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         });
 
         if (Client.VERBOSE) console.log("ConnectionDialog connected!");
+
+        ConnectionHistoryProvider.recordOrUpdateEntry(
+            this.state.host,
+            this.state.port,
+            this.state.rootWithTabs
+        );
     }
 
     private disconnected = (event: CloseEvent) => 
@@ -340,6 +357,13 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             serverVersion: version,
             serverApplicationId: applicationId
         });
+
+        ConnectionHistoryProvider.setApplicationIdForEntry(
+            this.state.host,
+            this.state.port,
+            this.state.rootWithTabs,
+            applicationId
+        );
     }
 
     private parameterChangeListener = (parameter: Parameter) => 
