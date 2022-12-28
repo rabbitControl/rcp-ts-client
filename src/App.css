@@ -70,6 +70,13 @@
 .connection_history_list {
   max-height: calc(80vh - 17em);
   overflow-y: scroll;
+  scrollbar-width: none;
+}
+.connection_history_list::-webkit-scrollbar {
+  display: none;
+}
+.connection_history_list::-webkit-scrollbar {
+  display: none;
 }
 
 .history_list_item {
