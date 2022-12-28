@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
-import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Classes, Icon } from '@blueprintjs/core';
+import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Classes, Icon, NumericInput } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 import App from './App';
@@ -101,9 +101,9 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         });
     }
 
-    setPort = (e: any) => {
+    setPort = (valueAsNumber: number, valueAsString: string, inputElement: HTMLInputElement | null) => {
         this.setState({
-            port: parseInt(e.currentTarget.value, 10),
+            port: valueAsNumber,
         });
     }
 
@@ -159,16 +159,22 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                             onChange={this.setHost}
                         />
                     </ControlGroup>
+
                     <br/>
-                    <ControlGroup style={{alignItems: "center"}}>
-                        <Text>Port:&nbsp;</Text>                    
-                        <InputGroup
+                    
+                    <ControlGroup style={{ alignItems: "center" }}>
+                        <Text>Port:&nbsp;</Text>
+                        <NumericInput
                             value={this.state.port.toFixed(0)}
+                            allowNumericCharactersOnly={true}
+                            selectAllOnFocus={true}
+                            asyncControl={true}
+                            onValueChange={this.setPort}
                             min={1024}
                             max={65535}
-                            type="number"
-                            onChange={this.setPort}
-                        />
+                            minorStepSize={1}
+                        >
+                        </NumericInput>                        
                     </ControlGroup>
                     <br/>
 
