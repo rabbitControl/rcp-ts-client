@@ -40,12 +40,12 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
             });
     }
 
-    componentDidMount = (): void => {
-        window.addEventListener('rabbit-connection-history-storage-update', this.updateItemsList);
+    componentDidMount = (): void => {        
+        window.addEventListener(ConnectionHistoryProvider.RCP_HISTORY_UPDATE_KEY, this.updateItemsList);
     }
 
     componentWillUnmount = (): void => {
-        window.removeEventListener('rabbit-connection-history-storage-update', this.updateItemsList);
+        window.removeEventListener(ConnectionHistoryProvider.RCP_HISTORY_UPDATE_KEY, this.updateItemsList);
     }
 
     updateItemsList = (): void => {
@@ -100,14 +100,12 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
                 { this.state.listEntries.map((entry, index) => {
                     return <section key={ index } className={ 'history_list_item' + (index % 2 === 0 ? ' even' : '') }>
                         <div>
-                            <div>
-                                { entry.name != '' && <Text><strong>{ entry.name }</strong></Text> }
-                                <Text><em>
-                                    { entry.applicationId != '' && entry.applicationId + ', ' }
-                                    { entry.address }:{ entry.port }
-                                    &nbsp;&nbsp;{ entry.tabsInRoot ? <Icon icon="segmented-control" color={ Colors.GRAY1 } /> : null }
-                                </em></Text>
-                            </div>
+                            { entry.name != '' && <Text><strong>{ entry.name }</strong></Text> }
+                            <Text><em>
+                                { entry.applicationId != '' && entry.applicationId + ', ' }
+                                { entry.address }:{ entry.port }
+                                &nbsp;&nbsp;{ entry.tabsInRoot ? <Icon icon="segmented-control" color={ Colors.GRAY1 } /> : null }
+                            </em></Text>
                         </div>
                         <div className="history_item_ctas">
                             <Button text="" 

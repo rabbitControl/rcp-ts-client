@@ -11,10 +11,13 @@ export namespace ConnectionHistoryProvider {
         applicationId: string;
     }
 
+    export const RCP_HISTORY_UPDATE_KEY = 'rabbit-connection-history-storage-update';
+    const RCP_HISTORY_KEY = 'rabbit-connection-history';
+    
     var connectionList: Array<HistoryItem> = loadList();
 
     function loadList(): Array<HistoryItem> {
-        const storedData = localStorage.getItem('rabbit-connection-history');
+        const storedData = localStorage.getItem(RCP_HISTORY_KEY);
 
         if (storedData === null) {
             return [];
@@ -29,8 +32,8 @@ export namespace ConnectionHistoryProvider {
     }
 
     function persistList(): void {
-        window.dispatchEvent(new Event('rabbit-connection-history-storage-update'));
-        localStorage.setItem('rabbit-connection-history', JSON.stringify(connectionList));
+        window.dispatchEvent(new Event(RCP_HISTORY_UPDATE_KEY));
+        localStorage.setItem(RCP_HISTORY_KEY, JSON.stringify(connectionList));
     }
 
     export function getList(): Array<HistoryItem> {
