@@ -37,7 +37,7 @@
   ],
   "devDependencies": {
     "@types/node": "^16.4.0",
-    "bestzip": "^2.1.7",
-    "ftp-deploy": "^2.3.8"
+    "bestzip": "^2.2.1",
+    "ftp-deploy": "^2.4.3"
   }
 }
