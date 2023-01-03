@@ -10,29 +10,36 @@ type Props = {
 };
 
 type State = {
+    didCopy: boolean;
 };
 
 export default class ShareConnectionDialog extends React.Component<Props, State> {
 
     state: State = {
+        didCopy: false
     }
     
     private generateLink(): string {
-        return 'http://client.rabbitcontrol.cc/#' + this.props.host + ':' + this.props.port
+        return window.location.protocol + '//' + window.location.host + '/#' + this.props.host + ':' + this.props.port
     }
 
     private copyLink = (): void => {
         navigator.clipboard.writeText(this.generateLink()).then(() => {
-            console.log('did copy...');
+            this.setState({ didCopy: true });
         })
+    }
+
+    private onClose = (): void => {
+        this.setState({ didCopy: false });
+        this.props.onClose();
     }
 
     render(): React.ReactNode {
         return <Alert isOpen={ this.props.show }
-            className={"bp3-dark"}
+            className={"bp3-dark share-connection-dialog"}
             icon="upload"
             confirmButtonText="Done"
-            onClose={ this.props.onClose }
+            onClose={ this.onClose }
             canOutsideClickCancel={ true }
             canEscapeKeyCancel={ true }>
 
@@ -42,7 +49,6 @@ export default class ShareConnectionDialog extends React.Component<Props, State>
                 You can share this connection by passing the link below on to other people. When they 
                 open this link, the connection will establish immediatly.
             </Text>
-            <br/>
 
             <ControlGroup style={{alignItems: "center"}}>
                 <Text>Link:</Text>&nbsp;
@@ -51,7 +57,7 @@ export default class ShareConnectionDialog extends React.Component<Props, State>
                     readOnly={ true }
                     value={ this.generateLink() }
                 />
-                <Button icon="clipboard" 
+                <Button icon={ this.state.didCopy ? "tick-circle" : "clipboard" }
                         onClick={ this.copyLink }/>
             </ControlGroup>
         </Alert>

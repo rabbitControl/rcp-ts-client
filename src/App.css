@@ -63,29 +63,68 @@
   margin-top: 0;
 }
 
-.bookmark_list_item {
-  display: flex;
-  justify-content: space-between;
-  padding: 2px 0;
-  border-bottom: 1px solid rgba(16, 22, 26, 0.4);
-}
-.bookmark_list_item:last-child {
-  border: none;
-}
-.bookmark_list_item div:nth-child(2) {
-  flex-grow: 1;
-}
-.bookmark_item_ctas {
-  display: flex;
-  align-items: center;
-}
-
 .toolbar {
   display: flex;
   justify-content: flex-end;
   padding: 5px;
 }
 
+.connection-dialog, .share-connection-dialog {
+  margin: 2em;
+}
+
+.share-connection-dialog .bp3-control-group {
+  margin: 1em 0 0.5em;
+}
+
+.share-connection-dialog .bp3-control-group div:first-child {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.share-connection-dialog .bp3-input-group {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.share-connection-dialog .confirmation-message {
+  margin-top: 1em;
+}
+
+.connection_history h4 {
+  margin-bottom: 0.66em;
+}
+
+.connection_history_list {
+  max-height: calc(80vh - 17em);
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+.connection_history_list::-webkit-scrollbar {
+  display: none;
+}
+.connection_history_list::-webkit-scrollbar {
+  display: none;
+}
+
+.history_list_item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(16, 22, 26, 0.4);
+}
+.history_list_item:last-child {
+  border: none;
+}
+.history_item_ctas {
+  display: flex;
+  align-items: center;
+  margin: 2px 0;
+}
+.history_item_ctas button {
+  margin: 0 2px 0 3px;
+}
 .bp3-divider {
   margin-left: 0;
   margin-right: 0;

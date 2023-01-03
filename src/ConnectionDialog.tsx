@@ -1,13 +1,12 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
-import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Classes } from '@blueprintjs/core';
+import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Classes, Icon, NumericInput } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 import App from './App';
-import CreateBookmarkDialog from './CreateBookmarkDialog';
-import { BookmarkProvider } from './BookmarkProvider';
-import BookmarkList from './BookmarkList';
 import ShareConnectionDialog from './ShareConnectionDialog';
+import ConnectionHistoryList from './ConnectionHistoryList';
+import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
 
 type Props = {
 };
@@ -22,8 +21,6 @@ type State = {
     serverVersion: string;
     serverApplicationId: string;
     rootWithTabs: boolean;
-    showBookmarkDialog: boolean;
-    connectionBookmarked: boolean;
     showShareConnectionDialog: boolean;
 };
 
@@ -42,8 +39,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             serverVersion: "",
             serverApplicationId: "",
             rootWithTabs: false,
-            showBookmarkDialog: false,
-            connectionBookmarked: false,
             showShareConnectionDialog: false,
         };
     }
@@ -109,9 +104,9 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         });
     }
 
-    setPort = (e: any) => {
+    setPort = (valueAsNumber: number, valueAsString: string, inputElement: HTMLInputElement | null) => {
         this.setState({
-            port: parseInt(e.currentTarget.value, 10),
+            port: valueAsNumber,
         });
     }
 
@@ -136,21 +131,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                                            onClose={ () => { this.setState({ showShareConnectionDialog: false }) } }
                                            host={ this.state.host }
                                            port={ this.state.port } />
-                    <Button rightIcon="bookmark" 
-                            text="Bookmark"
-                            small={true} 
-                            onClick={ () => { this.setState({ showBookmarkDialog: true }) } } 
-                            disabled={ this.state.connectionBookmarked } />
-                    <CreateBookmarkDialog show={ this.state.showBookmarkDialog } 
-                                        onCancel={ () => { this.setState({ showBookmarkDialog: false }) } }
-                                        onSuccess={ () => { this.setState({ showBookmarkDialog: false, connectionBookmarked: true }) } }
-                                        host={ this.state.host }
-                                        port={ this.state.port } 
-                                        serverName={ this.state.serverApplicationId } />
-                    <Button rightIcon='log-out' 
-                            text="Disconnect" 
-                            small={true} 
-                            onClick={ () => { this.doDisconnect() } } />
                 </div>
             : "" }
 
@@ -181,7 +161,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             </div>
 
             <Dialog isOpen={this.state.isConnected !== true }
-                    className={"bp3-dark"}>
+                    className="bp3-dark connection-dialog">
                 
                 <section className={ Classes.DIALOG_BODY }>
                     
@@ -195,16 +175,22 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                             onChange={this.setHost}
                         />
                     </ControlGroup>
+
                     <br/>
-                    <ControlGroup style={{alignItems: "center"}}>
-                        <Text>Port:&nbsp;</Text>                    
-                        <InputGroup
+                    
+                    <ControlGroup style={{ alignItems: "center" }}>
+                        <Text>Port:&nbsp;</Text>
+                        <NumericInput
                             value={this.state.port.toFixed(0)}
+                            allowNumericCharactersOnly={true}
+                            selectAllOnFocus={true}
+                            asyncControl={true}
+                            onValueChange={this.setPort}
                             min={1024}
                             max={65535}
-                            type="number"
-                            onChange={this.setPort}
-                        />
+                            minorStepSize={1}
+                        >
+                        </NumericInput>                        
                     </ControlGroup>
                     <br/>
 
@@ -212,7 +198,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                         checked={this.state.rootWithTabs}
                         onChange={this.setTabsInRoot}
                     >
-                        Tabs in Root
+                        Tabs in Root &nbsp;<Icon icon="segmented-control" color={ Colors.GRAY1 } />
                     </Checkbox>
 
                     <div>
@@ -224,7 +210,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                         <Button text="Connect" onClick={ this.handleAlertConfirm } />
                     </section>
 
-                    <BookmarkList onConnectFromBookmark={ this.connectFromBookmark } />
+                    <ConnectionHistoryList onConnectFromHistoryItem={ this.connectFromHistoryItem } />
                 </section>
             </Dialog>
         
@@ -262,12 +248,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         this.doConnect(this.state.host, this.state.port);
     }
 
-    private connectFromBookmark = (bookmark: BookmarkProvider.Bookmark): void => {
+    private connectFromHistoryItem = (item: ConnectionHistoryProvider.HistoryItem): void => {
         this.setState({
             error: undefined
         });
 
-        this.doConnect(bookmark.address, bookmark.port);
+        this.doConnect(item.address, item.port);
     }
 
     private resetUI()
@@ -282,7 +268,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             parameters: [],
             serverVersion: "",
             serverApplicationId: "",
-            connectionBookmarked: false,
         });
     }
 
@@ -353,6 +338,12 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         });
 
         if (Client.VERBOSE) console.log("ConnectionDialog connected!");
+
+        ConnectionHistoryProvider.recordOrUpdateEntry(
+            this.state.host,
+            this.state.port,
+            this.state.rootWithTabs
+        );
     }
 
     private disconnected = (event: CloseEvent) => 
@@ -388,6 +379,13 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             serverVersion: version,
             serverApplicationId: applicationId
         });
+
+        ConnectionHistoryProvider.setApplicationIdForEntry(
+            this.state.host,
+            this.state.port,
+            this.state.rootWithTabs,
+            applicationId
+        );
     }
 
     private parameterChangeListener = (parameter: Parameter) => 

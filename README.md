@@ -8,7 +8,7 @@ Please fine the official client hosted here:
 
 Enter Host and Port of your rcp server application and click “Connect”.
 
-![client_login](public/webclient-login.png)
+![client_login](doc/webclient-login.png)
 
 You can also connect to a rcp server directly by providing ip:port in the URL:  
 [http://client.rabbitcontrol.cc/#192.168.0.23:10000](http://client.rabbitcontrol.cc/#192.168.0.23:10000)

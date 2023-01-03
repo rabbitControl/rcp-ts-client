@@ -16,15 +16,22 @@ if (conf !== undefined)
 {
     if (conf.includeClient === true)
     {
-        // include client.zip - move it into build/
-        fs.renameSync("client.zip", "build/client.zip", function (err)
+        if (fs.existsSync("client.zip"))
         {
-            if (err)
+            // include client.zip - move it into build/
+            fs.renameSync("client.zip", "build/client.zip", function (err)
             {
-                console.error("could not move client.zip into build folder");
-                throw err;
-            }
-        });
+                if (err)
+                {
+                    console.error("could not move client.zip into build folder");
+                    throw err;
+                }
+            });
+        }
+        else if (!fs.existsSync("build/client.zip"))
+        {
+            console.log("could not find client.zip");
+        }
     }
     else
     {
