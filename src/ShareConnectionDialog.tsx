@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Alert, InputGroup, ControlGroup, Text, Button } from '@blueprintjs/core';
+import { Alert, InputGroup, ControlGroup, Text, Button, IRefObject } from '@blueprintjs/core';
 
 type Props = {
     show: boolean;
@@ -18,15 +18,32 @@ export default class ShareConnectionDialog extends React.Component<Props, State>
     state: State = {
         didCopy: false
     }
+
+    inputRef: IRefObject<HTMLInputElement>
+
+    constructor(props: Props) {
+        super(props);
+        this.inputRef = React.createRef();
+    }
+
+    componentDidUpdate = (prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void => {
+        if (!prevProps.show) {
+            this.inputRef.current?.select()
+        }
+    }
     
     private generateLink(): string {
         return window.location.protocol + '//' + window.location.host + '/#' + this.props.host + ':' + this.props.port
     }
 
     private copyLink = (): void => {
-        navigator.clipboard.writeText(this.generateLink()).then(() => {
-            this.setState({ didCopy: true });
-        })
+        try {
+            navigator.clipboard.writeText(this.generateLink()).then(() => {
+                this.setState({ didCopy: true });
+            })
+        } catch (e) {
+            this.inputRef.current?.select();
+        }
     }
 
     private onClose = (): void => {
@@ -52,11 +69,10 @@ export default class ShareConnectionDialog extends React.Component<Props, State>
 
             <ControlGroup style={{alignItems: "center"}}>
                 <Text>Link:</Text>&nbsp;
-                <InputGroup
-                    type="text"
-                    readOnly={ true }
-                    value={ this.generateLink() }
-                />
+                <InputGroup type="text"
+                            readOnly={ true }
+                            value={ this.generateLink() }
+                            inputRef={ this.inputRef } />
                 <Button icon={ this.state.didCopy ? "tick-circle" : "clipboard" }
                         onClick={ this.copyLink }/>
             </ControlGroup>
