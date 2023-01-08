@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { Alert, InputGroup, ControlGroup, Text, Button, IRefObject } from '@blueprintjs/core';
+import { Alert, InputGroup, ControlGroup, Text, Button, IRefObject, Colors } from '@blueprintjs/core';
+import { QRCodeSVG } from 'qrcode.react';
 
 type Props = {
     show: boolean;
@@ -16,7 +17,7 @@ type State = {
 export default class ShareConnectionDialog extends React.Component<Props, State> {
 
     state: State = {
-        didCopy: false
+        didCopy: false,
     }
 
     inputRef: IRefObject<HTMLInputElement>
@@ -47,7 +48,9 @@ export default class ShareConnectionDialog extends React.Component<Props, State>
     }
 
     private onClose = (): void => {
-        this.setState({ didCopy: false });
+        this.setState({ 
+            didCopy: false,
+        });
         this.props.onClose();
     }
 
@@ -76,6 +79,15 @@ export default class ShareConnectionDialog extends React.Component<Props, State>
                 <Button icon={ this.state.didCopy ? "tick-circle" : "clipboard" }
                         onClick={ this.copyLink }/>
             </ControlGroup>
+
+            <div className="qr-grid">
+                <div className='qr-container'>
+                    <QRCodeSVG value={ this.generateLink() } 
+                            size={ 256 }
+                            bgColor={ Colors.BLACK } 
+                            fgColor={ Colors.LIGHT_GRAY5 }/>
+                </div>
+            </div>
         </Alert>
     }
 }

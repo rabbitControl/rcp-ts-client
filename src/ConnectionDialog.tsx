@@ -120,20 +120,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     render() 
     {
         return <section>
-
-            { this.state.isConnected ? 
-                <div className="toolbar" >
-                    <Button rightIcon='upload' 
-                            text="Share" 
-                            small={true} 
-                            onClick={ () => { this.setState({ showShareConnectionDialog: true }) } } />
-                    <ShareConnectionDialog show={ this.state.showShareConnectionDialog } 
-                                           onClose={ () => { this.setState({ showShareConnectionDialog: false }) } }
-                                           host={ this.state.host }
-                                           port={ this.state.port } />
-                </div>
-            : "" }
-
             <div className="rootgroup-wrapper">
                 {
                     this.state.client ?
@@ -154,11 +140,21 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             </div>
 
 
-            <div className="serverid" style={{
-                color: Colors.GRAY1, 
-            }}>
-                {this.state.serverApplicationId !== "" ? `connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
-            </div>
+            { this.state.isConnected ? 
+                <div className="serverid" style={{ color: Colors.GRAY1 }}>
+                    {this.state.serverApplicationId !== "" ? `connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
+                    &nbsp;
+                    <Button rightIcon='upload' 
+                            text="Share" 
+                            small={ true } 
+                            className="share-connection-cta"
+                            onClick={ () => { this.setState({ showShareConnectionDialog: true }) } } />
+                </div>
+            : null }
+            <ShareConnectionDialog show={ this.state.showShareConnectionDialog } 
+                                    onClose={ () => { this.setState({ showShareConnectionDialog: false }) } }
+                                    host={ this.state.host }
+                                    port={ this.state.port } />
 
             <Dialog isOpen={this.state.isConnected !== true }
                     className="bp3-dark connection-dialog">
