@@ -152,9 +152,9 @@ export default class ConnectionDialog extends React.Component<Props, State> {
                 </div>
             : null }
             <ShareConnectionDialog show={ this.state.showShareConnectionDialog } 
-                                    onClose={ () => { this.setState({ showShareConnectionDialog: false }) } }
-                                    host={ this.state.host }
-                                    port={ this.state.port } />
+                                   onClose={ () => { this.setState({ showShareConnectionDialog: false }) } }
+                                   host={ this.state.host }
+                                   port={ this.state.port } />
 
             <Dialog isOpen={this.state.isConnected !== true }
                     className="bp3-dark connection-dialog">
