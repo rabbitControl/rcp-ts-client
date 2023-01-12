@@ -63,8 +63,53 @@
   margin-top: 0;
 }
 
-.connection-dialog {
+.connection-dialog, .share-connection-dialog {
   margin: 2em;
+}
+
+.share-connection-cta {
+  margin-top: -2px;
+  margin-left: 4px;
+}
+.share-connection-cta .bp3-button-text {
+  font-size: 0.8em;
+}
+
+.share-connection-dialog .bp3-control-group {
+  margin: 1em 0 0.5em;
+}
+
+.share-connection-dialog .bp3-control-group div:first-child {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.share-connection-dialog .bp3-input-group {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.share-connection-dialog .confirmation-message {
+  margin-top: 1em;
+}
+
+.share-connection-dialog .qr-grid {
+  display: flex;
+  align-items: flex-start;
+}
+
+.share-connection-dialog .qr-container {
+  padding: 0.5em;
+  background-color: #10161A;
+  border-radius: 3px;
+  display: flex;
+  max-width: 250px;
+  margin: 10px 0;
+}
+
+.share-connection-dialog .qr-container svg {
+  width: 100%;
+  height: 100%;
 }
 
 .connection_history h4 {
@@ -116,7 +161,7 @@
 
 .serverid {
   font-size: 0.8em;
-  margin-top: 5px;
+  margin-top: 8px;
   margin-left: 2px;
 }
 

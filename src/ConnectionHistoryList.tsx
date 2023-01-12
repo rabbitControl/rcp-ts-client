@@ -2,6 +2,12 @@ import { Button, Colors, Divider, Icon, Intent, Text } from '@blueprintjs/core';
 import * as React from 'react';
 import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
 import SetNameOfPinnedItemDialog from './SetNameOfPinnedItemDialog';
+import ShareConnectionDialog from './ShareConnectionDialog';
+
+type ShareConnectionDialogIntent = {
+    host: string;
+    port: number;
+}
 
 type Props = {
     onConnectFromHistoryItem: (item: ConnectionHistoryProvider.HistoryItem) => void;
@@ -10,6 +16,7 @@ type Props = {
 type State = {
     listEntries: Array<ConnectionHistoryProvider.HistoryItem>;
     entryForSetNameOfFavouriteDialog: ConnectionHistoryProvider.HistoryItem | undefined;
+    shareConnectionDialogIntent: ShareConnectionDialogIntent | undefined;
 };
 
 export default class ConnectionHistoryList extends React.Component<Props, State> {
@@ -20,6 +27,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         this.state = {
             listEntries: this.getSortedList(),
             entryForSetNameOfFavouriteDialog: undefined,
+            shareConnectionDialogIntent: undefined,
         };
     }
 
@@ -85,6 +93,15 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         })
     }
 
+    showShareConnectionDialog = (host: string, port: number): void => {
+        this.setState({
+            shareConnectionDialogIntent: {
+                host: host,
+                port: port
+            }
+        })
+    }
+
     render(): React.ReactNode {
         if (this.state.listEntries.length === 0) {
             return null;
@@ -108,15 +125,16 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
                             </em></Text>
                         </div>
                         <div className="history_item_ctas">
-                            <Button text="" 
-                                    small={ true } 
+                            <Button small={ true } 
                                     icon="trash" 
                                     onClick={ () => { this.deleteItemAtIndex(index) } } />
-                            <Button text="" 
-                                    small={ true } 
+                            <Button small={ true } 
                                     icon={ entry.isFavourite ? 'unpin' : 'pin' } 
                                     intent={ entry.isFavourite ? Intent.WARNING : undefined }
                                     onClick={ () => { this.toggleIsFavouriteOnHistoryItem(index) } } />
+                            <Button small={ true } 
+                                    icon="share" 
+                                    onClick={ () => { this.showShareConnectionDialog(entry.address, entry.port) } } />
                             <Button text="Connect" 
                                     small={ true } 
                                     onClick={ () => { this.props.onConnectFromHistoryItem(this.state.listEntries[index]) } }/>
@@ -126,9 +144,13 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
             </div>
 
             <SetNameOfPinnedItemDialog show={ this.state.entryForSetNameOfFavouriteDialog !== undefined }
-                                      entry={ this.state.entryForSetNameOfFavouriteDialog }
-                                      onSuccess={ this.onSetNameForFavourite } 
-                                      onCancel={ this.onCancelSetNameForFavourite } />
+                                       entry={ this.state.entryForSetNameOfFavouriteDialog }
+                                       onSuccess={ this.onSetNameForFavourite } 
+                                       onCancel={ this.onCancelSetNameForFavourite } />
+            <ShareConnectionDialog show={ this.state.shareConnectionDialogIntent !== undefined }
+                                   onClose={ () => { this.setState({ shareConnectionDialogIntent: undefined })}}
+                                   host={ this.state.shareConnectionDialogIntent?.host ?? '' }
+                                   port={ this.state.shareConnectionDialogIntent?.port ?? 0 } />
         </section>
     }
 } 

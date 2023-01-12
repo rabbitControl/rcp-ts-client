@@ -4,6 +4,7 @@ import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Class
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
 import App from './App';
+import ShareConnectionDialog from './ShareConnectionDialog';
 import ConnectionHistoryList from './ConnectionHistoryList';
 import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
 
@@ -20,6 +21,7 @@ type State = {
     serverVersion: string;
     serverApplicationId: string;
     rootWithTabs: boolean;
+    showShareConnectionDialog: boolean;
 };
 
 export default class ConnectionDialog extends React.Component<Props, State> {
@@ -37,6 +39,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             serverVersion: "",
             serverApplicationId: "",
             rootWithTabs: false,
+            showShareConnectionDialog: false,
         };
     }
 
@@ -117,7 +120,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
     render() 
     {
         return <section>
-
             <div className="rootgroup-wrapper">
                 {
                     this.state.client ?
@@ -138,11 +140,21 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             </div>
 
 
-            <div className="serverid" style={{
-                color: Colors.GRAY1, 
-            }}>
-                {this.state.serverApplicationId !== "" ? `connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
-            </div>
+            { this.state.isConnected ? 
+                <div className="serverid" style={{ color: Colors.GRAY1 }}>
+                    {this.state.serverApplicationId !== "" ? `connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
+                    &nbsp;
+                    <Button rightIcon='upload' 
+                            text="Share" 
+                            small={ true } 
+                            className="share-connection-cta"
+                            onClick={ () => { this.setState({ showShareConnectionDialog: true }) } } />
+                </div>
+            : null }
+            <ShareConnectionDialog show={ this.state.showShareConnectionDialog } 
+                                   onClose={ () => { this.setState({ showShareConnectionDialog: false }) } }
+                                   host={ this.state.host }
+                                   port={ this.state.port } />
 
             <Dialog isOpen={this.state.isConnected !== true }
                     className="bp3-dark connection-dialog">
