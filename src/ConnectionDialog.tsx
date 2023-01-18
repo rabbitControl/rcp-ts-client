@@ -58,6 +58,9 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             if (params.has("d")) {
                 Client.VERBOSE = (parseInt(params.get("d") || "0") || 0) > 0 || false;
                 App.VERBOSE_LOG = Client.VERBOSE;
+                if (Client.VERBOSE) {
+                    console.log("debug log on");                    
+                }
             }
         }
 
