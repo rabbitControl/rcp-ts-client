@@ -2,7 +2,7 @@ import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
 import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Classes, Icon, NumericInput } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
-import { SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX } from './Globals';
+import { DEFAULT_RCP_PORT, HTTP_PORT, SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX, SSL_PORT } from './Globals';
 import App from './App';
 import ShareConnectionDialog from './ShareConnectionDialog';
 import ConnectionHistoryList from './ConnectionHistoryList';
@@ -24,8 +24,9 @@ type State = {
     showShareConnectionDialog: boolean;
 };
 
-export default class ConnectionDialog extends React.Component<Props, State> {
-    
+export default class ConnectionDialog extends React.Component<Props, State>
+{
+    //
     private addTimer?: number;
 
     constructor(props: Props) {
@@ -67,10 +68,10 @@ export default class ConnectionDialog extends React.Component<Props, State> {
          // autoconnect
          if (window.location.hash !== '') {
             const [host, port] = window.location.hash.replace('#', '').split(':');
-            const portAsInt = parseInt(port, 10);
+            const portAsInt = parseInt(port, 10) || DEFAULT_RCP_PORT;
 
             if (Client.VERBOSE) console.log("autoconnect: " + host + ":" + portAsInt);
-            this.doConnect(host, portAsInt);
+            this.doConnect(decodeURIComponent(host), portAsInt);
         }
     }
 
@@ -316,6 +317,38 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             host !== "" &&
             !isNaN(port))
         {
+            //------------------------------
+            // transform rabbithole url
+            
+            if (host.startsWith("wss") ||
+                host.startsWith("https"))
+            {
+                port = SSL_PORT;
+            }
+            else if (host.startsWith("ws") ||
+                host.startsWith("http"))
+            {
+                port = HTTP_PORT;
+            }
+
+            if (host.startsWith("https://rabbithole.rabbitcontrol.cc") &&
+                host.includes("client/index.html"))
+            {
+                if (host.includes("mode=private#"))
+                {
+                    host = host.replace("client/index.html?mode=private#", "rcpclient/connect?key=");
+                }
+                else
+                {
+                    host = host.replace("client/index.html#", "public/rcpclient/connect?key=");
+                }
+            }
+
+            //------------------------------
+            // try to connect
+
+            console.log(`trying to connect: ${host}:${port}`);
+
             // disconnect first
             this.doDisconnect();
 
