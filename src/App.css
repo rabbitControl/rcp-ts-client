@@ -173,3 +173,7 @@
   text-align: center;
   font-size: 0.8em;
 }
+
+.break-anywhere {
+  line-break: anywhere;
+}
