@@ -34,19 +34,30 @@ interface State {
     dimensions: {
         width: -1,
         height: -1
-    };  
+    };
+    image?: HTMLImageElement;
 };
 
 export default class ParameterWidget extends React.Component<Props, State> {
 
-    constructor(props: Props) {
+    constructor(props: Props)
+    {
         super(props);
 
         let value;
-        if (this.props.parameter instanceof ValueParameter && 
+        let image;
+
+        if (this.props.parameter instanceof ValueParameter &&
             this.props.parameter.value != null)
         {
-            value = this.props.parameter.valueConstrained();
+            if (this.props.parameter instanceof ImageParameter)
+            {                
+                image = this.loadImageData(this.props.parameter);                
+            }
+            else
+            {
+                value = this.props.parameter.valueConstrained();
+            }
         }
 
         this.state = {
@@ -57,8 +68,25 @@ export default class ParameterWidget extends React.Component<Props, State> {
             dimensions: {
                 width: -1,
                 height: -1
-            }
+            },
+            image: image
         };
+    }
+
+    loadImageData = (p: ImageParameter) : HTMLImageElement =>
+    {
+        // create blob
+        const blob = new Blob([p.value], { type: 'application/octet-binary' });
+        // return url string
+        const url = window.URL.createObjectURL(blob);
+
+        let image = new Image;
+        image.onload = () => {        
+            URL.revokeObjectURL(url);
+        }
+        image.src = url;
+
+        return image;
     }
 
     componentDidMount() {
@@ -66,33 +94,74 @@ export default class ParameterWidget extends React.Component<Props, State> {
         // setup callbacks
         const param = this.props.parameter;
 
-        if (param instanceof ValueParameter) {
-
-            param.addValueChangeListener((p) => 
-            {
-                if (p instanceof ValueParameter)
-                {
-                    this.setState({
-                        value: p.valueConstrained()
-                    });
-                }
-            });
+        if (param instanceof ValueParameter)
+        {
+            param.addValueChangeListener(this.parameterValueChanged);
         }
 
-        param.addChangeListener((p) => {
-            this.setState({
-                label: p.label,
-                description: p.description,
-            })
+        param.addChangeListener(this.parameterChanged);
+    }
+
+    componentWillUnmount(): void {
+
+        const param = this.props.parameter;
+        
+        if (param instanceof ValueParameter)
+        {
+            param.removeValueChangedListener(this.parameterValueChanged);
+        }
+
+        param.removeChangedListener(this.parameterChanged);
+
+        // remove resources
+        window.URL.revokeObjectURL(this.state.image?.src || "");
+
+        this.setState({
+            label: undefined,
+            description: undefined,
+            value: undefined,
+            image: undefined
         });
     }
 
-    getWidth = () => {
+    // parameter callbacks
+    parameterValueChanged = (p: Parameter) =>
+    {
+        if (p instanceof ValueParameter)
+        {
+            let value;
+            let image;
+
+            if (p instanceof ImageParameter)
+            {
+                image = this.loadImageData(p);
+            }
+            else
+            {
+                value = p.valueConstrained();
+            }
+
+            this.setState({
+                value: value,
+                image: image
+            });
+        }
+    }
+    parameterChanged = (p: Parameter) =>
+    {
+        this.setState({
+            label: p.label,
+            description: p.description,
+        })
+    }
+
+    getWidth = () =>
+    {
         return 1;
     }
 
-    handleValueChange = (value: any) => {
-
+    handleValueChange = (value: any) =>
+    {
         // set parameter value
         if (this.props.parameter instanceof ValueParameter) {
             this.props.parameter.value = value;
@@ -366,17 +435,30 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 }
 
             }
-            else if (parameter instanceof ImageParameter) {
-                
-                const blob = new Blob([parameter.value]);
-                const url = window.URL.createObjectURL(blob);
+            else if (parameter instanceof ImageParameter)
+            {                    
+                if (this.state.image)
+                {            
+                    return (
+                        <div>
+                            <div className="parameter-label">{parameter.label}</div>
+                            {React.createElement("img", {
+                                src: this.state.image.src,
+                                alt: parameter.description,
+                                height: 200
+                            }, null)}
+                            {/* <img src={this.state.imageDataUrl} alt={parameter.description} height={200} onLoad={() =>
+                            {
+                                window.URL.revokeObjectURL(this.state.imageDataUrl || "");
+                            }} /> */}
+                        </div>
+                    );
+                }
+                else
+                {
+                    return "no image";
+                }
 
-                return (
-                    <div>
-                        <div className="parameter-label">{parameter.label}</div>
-                        <img src={url} alt="IMAGE" height={200}/>
-                    </div>
-                );
             }
             else if (parameter instanceof RangeParameter) {
                 

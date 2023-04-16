@@ -28,6 +28,7 @@ export default class ConnectionDialog extends React.Component<Props, State>
 {
     //
     private addTimer?: number;
+    private removeTimer?: number;
 
     constructor(props: Props) {
         super(props);
@@ -472,50 +473,69 @@ export default class ConnectionDialog extends React.Component<Props, State>
      */
     private parameterAdded = (parameter: Parameter) => 
     {
-        parameter.addChangeListener(this.parameterChangeListener);
+        this.stopAddTimer();
 
+        parameter.addChangeListener(this.parameterChangeListener);
+        
         // delay setting parameter
         // more paramater might arrive in quick succession
-        if (this.addTimer !== undefined) {
-            window.clearTimeout(this.addTimer);
-            this.addTimer = undefined;
-        }
+        this.addTimer = this.setParameterDelayed(100);
+    }
 
-        this.addTimer = window.setTimeout(() => {
+    private parameterRemoved = (parameter: Parameter) =>
+    {
+        this.stopRemoveTimer();
+
+        // this.rootParam.removeChild(parameter);
+        parameter.removeFromParent();
+
+        parameter.removeChangedListener(this.parameterChangeListener);        
+
+        // delay removing parameter
+        // more paramater might arrive in quick succession
+        this.removeTimer = this.setParameterDelayed(10);
+    }
+
+    /**
+     * 
+     */
+    private setParameterDelayed(time: number) : number
+    {
+        return window.setTimeout(() => {
             if (this.state.client)
             {
                 this.setState({
                     parameters: this.state.client.getRootGroup().children,
                 });
             }
-        }, 100);
+            else
+            {
+                this.setState({
+                    parameters: []
+                });
+            }
+        }, time);
     }
 
-    private parameterRemoved = (parameter: Parameter) =>
-    {        
-        // this.rootParam.removeChild(parameter);
-        parameter.removeFromParent();
-
-        parameter.removeChangedListener(this.parameterChangeListener);        
-
-        if (this.state.client)
-        {
-            this.setState({
-                parameters: this.state.client.getRootGroup().children,
-            });
-        }
-    }
-
-    /**
-     * 
-     */
-    private stopTimers() {
-
+    private stopAddTimer()
+    {
         if (this.addTimer !== undefined) {
             window.clearTimeout(this.addTimer);
             this.addTimer = undefined;
         }
+    }
 
+    private stopRemoveTimer()
+    {
+        if (this.removeTimer !== undefined) {
+            window.clearTimeout(this.removeTimer);
+            this.removeTimer = undefined;
+        }
+    }
+
+    private stopTimers() {
+        this.stopAddTimer();
+        this.stopRemoveTimer();
     }
 
 } 
