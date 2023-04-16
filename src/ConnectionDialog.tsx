@@ -64,6 +64,22 @@ export default class ConnectionDialog extends React.Component<Props, State>
                     console.log("debug log on");                    
                 }
             }
+
+            // ds: debug send
+            if (params.has("ds")) {
+                Client.VERBOSE_SEND = (parseInt(params.get("ds") || "0") || 0) > 0 || false;
+                if (Client.VERBOSE_SEND) {
+                    console.log("send-debug log on");                    
+                }
+            }
+
+            // dr: debug receive
+            if (params.has("dr")) {
+                Client.VERBOSE_RECV = (parseInt(params.get("dr") || "0") || 0) > 0 || false;
+                if (Client.VERBOSE_RECV) {
+                    console.log("receive-debug log on");                    
+                }
+            }
         }
 
          // autoconnect
