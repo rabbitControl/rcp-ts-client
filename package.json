@@ -1,6 +1,6 @@
 {
   "name": "rcp-ts-client",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "homepage": "./",
   "private": true,
   "scripts": {
