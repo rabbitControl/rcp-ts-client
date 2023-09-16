@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { INumericInputProps, Position, Checkbox } from '@blueprintjs/core';
+import { NumericInputProps, Position, Checkbox } from '@blueprintjs/core';
 
-interface Props extends INumericInputProps {
+interface Props extends NumericInputProps {
 };
 
 interface State {

@@ -198,9 +198,9 @@ export default class ParameterWidget extends React.Component<Props, State> {
         const widget = parameter.widget;        
         
         if (widget instanceof SliderWidget) {
-            console.log("SLIDER WIDGET");
+            // SLIDER WIDGET
         } else if (widget instanceof NumberboxWidget) {
-            console.log("NUMBERBOX WIDGET");
+            // NUMBERBOX WIDGET
         }
 
         
@@ -214,8 +214,8 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     numdef.minimum !== undefined && 
                     numdef.maximum !== undefined)
                 { 
-                    if (numdef.minimum < numdef.maximum) {
-
+                    if (numdef.minimum < numdef.maximum)
+                    {
                         return ( 
                             <div>
                                 <div className="parameter-label">{parameter.label}</div>

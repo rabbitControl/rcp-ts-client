@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { NumericInput, INumericInputProps, Position, Intent } from '@blueprintjs/core';
-import { RcpTypes, Vector3, Vector3F32Definition, Vector2 } from 'rabbitcontrol';
+import { NumericInput, NumericInputProps, Position, Intent } from '@blueprintjs/core';
+import { RcpTypes, Vector2F32Definition, Vector2 } from 'rabbitcontrol';
 
-interface Props extends INumericInputProps {
+interface Props extends NumericInputProps {
 };
 
 interface State {
@@ -63,7 +63,7 @@ export class ParameterNumericInput2C extends React.Component<Props & InjectedPro
                         param.typeDefinition.datatype === RcpTypes.Datatype.VECTOR3F32 ||
                         param.typeDefinition.datatype === RcpTypes.Datatype.VECTOR4F32;
 
-            const numdef = param.typeDefinition as Vector3F32Definition;
+            const numdef = param.typeDefinition as Vector2F32Definition;
 
             if (numdef !== undefined) {
 

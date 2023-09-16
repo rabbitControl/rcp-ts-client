@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { INumericInputProps, HTMLSelect } from '@blueprintjs/core';
+import { NumericInputProps, HTMLSelect } from '@blueprintjs/core';
 import { EnumParameter } from 'rabbitcontrol';
 
-interface Props extends INumericInputProps {
+interface Props extends NumericInputProps {
 };
 
 interface State {
