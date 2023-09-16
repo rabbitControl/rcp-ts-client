@@ -1,18 +1,36 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { NumericInput, INumericInputProps, Position, Intent } from '@blueprintjs/core';
-import { NumberDefinition, RcpTypes } from 'rabbitcontrol';
+import { NumericInput, NumericInputProps, Position, Intent } from '@blueprintjs/core';
+import { NumberDefinition, NumberboxWidget, RcpTypes } from 'rabbitcontrol';
+import { DEFAULT_PRECISION } from './Globals';
 
-interface Props extends INumericInputProps {
+interface Props extends NumericInputProps {
 };
 
 interface State {
 };
 
-export class ParameterNumericInputC extends React.Component<Props & InjectedProps, State> {
+export class ParameterNumericInputC extends React.Component<Props & InjectedProps, State>
+{
+    private precision: number = DEFAULT_PRECISION;
 
     constructor(props: Props & InjectedProps) {
         super(props);
+
+        if (props.parameter?.typeDefinition.datatype !== RcpTypes.Datatype.FLOAT32 &&
+            props.parameter?.typeDefinition.datatype !== RcpTypes.Datatype.FLOAT64)
+        {
+            // int-type
+            this.precision = 0;
+        }
+        else
+        {
+            const widget = props.parameter?.widget;
+            if (widget instanceof NumberboxWidget)
+            {
+                this.precision = widget.precision !== undefined ? widget.precision : DEFAULT_PRECISION;
+            }
+        }
     
         this.state = {        
         };
@@ -29,7 +47,7 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
     }
 
     render() {
-        const value = this.props.value as number || 0;
+        const value = this.props.value as number || 0;
         let step = 1;
         let isFloat:boolean = false;        
         let readOnly:boolean = false;
@@ -69,16 +87,22 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
             }
         }
 
+        if (this.precision === 0)
+        {
+            step = 1;
+        }
+
         const { onSubmitCb, handleValue, ...filteredProps } = this.props;
         
         return (        
             <NumericInput
                 {...filteredProps}
-                value={value}
+                value={value.toFixed(this.precision)}
                 min={min}
                 max={max}
                 stepSize={step}
-                minorStepSize={isFloat ? 0.1 : 1}
+                minorStepSize={isFloat ? (this.precision > 0 ? 0.01 : 1) : 1}
+                majorStepSize={isFloat ? 1 : 10}
                 onValueChange={this.handleChange}
                 disabled={readOnly === true}
                 selectAllOnFocus={true}

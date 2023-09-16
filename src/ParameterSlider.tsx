@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { Slider, ISliderProps } from '@blueprintjs/core';
+import { Slider, SliderProps } from '@blueprintjs/core';
 import { NumberDefinition, RcpTypes } from 'rabbitcontrol';
 import Measure from 'react-measure';
+import { DEFAULT_PRECISION } from './Globals';
 
-interface Props extends ISliderProps {
+interface Props extends SliderProps {
     continuous?: boolean;
 };
 
@@ -12,13 +13,22 @@ interface State {
     dimensions: {
         width: -1,
         height: -1
-    }; 
+    };
 };
 
-export class ParameterSliderC extends React.Component<Props & InjectedProps, State> {
+export class ParameterSliderC extends React.Component<Props & InjectedProps, State>
+{
+    private precision: number = DEFAULT_PRECISION;
 
     constructor(props: Props & InjectedProps) {
         super(props);
+
+        if (props.parameter?.typeDefinition.datatype !== RcpTypes.Datatype.FLOAT32 &&
+            props.parameter?.typeDefinition.datatype !== RcpTypes.Datatype.FLOAT64)
+        {
+            // int-type
+            this.precision = 0;
+        }
     
         this.state = {
             dimensions: {
@@ -77,6 +87,11 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
             }
         }
 
+        if (this.precision === 0)
+        {
+            step = 1;
+        }
+
         const { onSubmitCb, handleValue, ...filteredProps } = this.props;
 
         return (        
@@ -93,7 +108,7 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
                         min={min}
                         max={max}
                         stepSize={step}
-                        labelPrecision={isFloat ? 2 : 0}
+                        labelPrecision={isFloat ? this.precision : 0}
                         labelStepSize={max}
                         onChange={this.handleChange}
                         onRelease={this.handleRelease}
@@ -108,7 +123,7 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
 
     private renderLabel = (val: number) => {
         const param = this.props.parameter
-        const value = val.toFixed(2);
+        const value = val.toFixed(this.precision);
         let unit;
         if (param) {
             unit = (param.typeDefinition as NumberDefinition).unit

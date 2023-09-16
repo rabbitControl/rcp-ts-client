@@ -6,3 +6,5 @@ export const SSL_INFO_TEXT_FIREFOX = "To allow this please set: 'network.websock
 export const DEFAULT_RCP_PORT = 10000;
 export const SSL_PORT = 443;
 export const HTTP_PORT = 80;
+
+export const DEFAULT_PRECISION = 2;
