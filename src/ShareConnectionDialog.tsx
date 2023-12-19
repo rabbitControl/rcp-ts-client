@@ -41,15 +41,15 @@ export default class ShareConnectionDialog extends React.Component<Props, State>
 
     componentDidUpdate = (prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void =>
     {
-        if (this.props.port != prevProps.port ||
-            this.props.host != prevProps.host)
+        if (this.props.port !== prevProps.port ||
+            this.props.host !== prevProps.host)
         {
             this.setState({
                 link: this.generateLink()
             })
         }
 
-        if (this.state.link != prevState.link ||
+        if (this.state.link !== prevState.link ||
             (this.props.show && !prevProps.show))
         {
             // NOTE: delay for a bit so it gets selected for sure
