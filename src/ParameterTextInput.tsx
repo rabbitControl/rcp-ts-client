@@ -37,7 +37,7 @@ export class ParameterTextInputC extends React.Component<Props & InjectedProps, 
                     this.props.onSubmitCb();
                 }
             } else {
-                console.error("could not set stringvalue...");
+                console.error(`could not set stringvalue for parameter: ${this.props.parameter.label} [${this.props.parameter.id}]`);
             }
         }
     }
