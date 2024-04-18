@@ -49,23 +49,22 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
                 onChange={this.handleChange}
                 disabled={readOnly === true}
                 className="test"
+                value={value}
             >
-                {this.renderOptions(value, entries)}            
+                {this.renderOptions(param?.id ?? 0, value, entries)}
             </HTMLSelect>      
         );
     }
 
-    private renderOptions(sel: string, entries?: string[]) {
+    private renderOptions(id: number, sel: string, entries?: string[]) {
         if (entries)
         {
-            return entries.map( e => 
-            {               
-                return <option 
-                        {...e === sel ? "selected" : null} 
-                        key={e}
-                        value={e}>
-                            {e}
-                        </option>
+            return entries.map((e, i) => {
+                return <option
+                    key={id + "_" + i}
+                    value={e}>
+                    {e}
+                </option>
             });
         }
 
