@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import ConnectionDialog from './ConnectionDialog';
 import { Colors } from '@blueprintjs/core';
-import { rcpLogVersion } from 'rabbitcontrol';
+import { RCP_LIBRARY_VERSION, rcpLogVersion } from 'rabbitcontrol';
 
 /*
   use with local tcp-ts:
@@ -34,6 +34,7 @@ class App extends React.Component<Props, State> {
     };
     
     console.log("rabbitcontrol web client - version: 0.1.8");
+    console.log(`rcp library version: ${RCP_LIBRARY_VERSION}`);
   }
 
   componentDidMount() 
