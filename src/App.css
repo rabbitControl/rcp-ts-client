@@ -8,6 +8,10 @@
 }
 
 /* bluepring style overwrites*/
+.bp3-slider-handle:focus {
+  outline: 0;
+}
+
 .bp3-slider-label{
   -webkit-transform:translate(0%, 20px);
           transform:translate(0%, 20px);
@@ -36,6 +40,10 @@
 
 .bp3-overlay {
   pointer-events: none;
+}
+
+.bp3-input:disabled {
+  color: unset !important;
 }
 
 /* gui styles */
