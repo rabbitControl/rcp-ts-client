@@ -33,7 +33,7 @@ class App extends React.Component<Props, State> {
       height: window.innerHeight,
     };
     
-    console.log("rabbitcontrol web client - version: 0.1.9");
+    console.log("rabbitcontrol web client - version: 0.1.10");
     console.log(`rcp library version: ${RCP_LIBRARY_VERSION}`);
   }
 
