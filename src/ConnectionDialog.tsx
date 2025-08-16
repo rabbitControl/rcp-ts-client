@@ -165,11 +165,11 @@ export default class ConnectionDialog extends React.Component<Props, State>
                 <div className="serverid" style={{ color: Colors.GRAY1 }}>
                     {this.state.serverApplicationId !== "" ? `Connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                    <a style={{
+                    <button style={{
                         color: Colors.GRAY1
-                    }} onClick={() => this.state.client?.disconnect()}>Disconnect</a>
+                    }} onClick={() => this.state.client?.disconnect()}>Disconnect</button>
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                    <a
+                    <button
                         style={{
                             color: Colors.GRAY1,
                             fontSize: "1.15em"
@@ -182,7 +182,7 @@ export default class ConnectionDialog extends React.Component<Props, State>
                         }}
                             icon='share'
                         ></Icon>
-                    </a>
+                    </button>
                 </div>
 
                 :
@@ -256,7 +256,7 @@ export default class ConnectionDialog extends React.Component<Props, State>
 
     private returnSSLInfo() {
         const isSSL = window.location ? window.location.toString().startsWith("https") : false;
-        const isFirefox = navigator.userAgent.indexOf("Firefox") != -1;
+        const isFirefox = navigator.userAgent.indexOf("Firefox") !== -1;
 
         if (isSSL && isFirefox) {
             return (
