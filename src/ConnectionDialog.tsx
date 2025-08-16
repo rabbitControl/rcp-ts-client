@@ -59,15 +59,39 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         // paarse parameters
         const params = new URLSearchParams(window.location.search);
 
-        // t: tabs in roots
-        if (params.has("t")) {
-            this.setState({ rootWithTabs: (parseInt(params.get("t") || "0") || 0) > 0 });
-        }
+        // paarse parameters
+        if (window.location.search !== "") {
+            const params = new URLSearchParams(window.location.search);
 
-        // d: debug
-        if (params.has("d")) {
-            Client.VERBOSE = (parseInt(params.get("d") || "0") || 0) > 0 || false;
-            App.VERBOSE_LOG = Client.VERBOSE;
+            // t: tabs in roots
+            if (params.has("t")) {
+                this.setState({rootWithTabs: (parseInt(params.get("t") || "0") || 0) > 0});
+            }
+
+            // d: debug
+            if (params.has("d")) {
+                Client.VERBOSE = (parseInt(params.get("d") || "0") || 0) > 0 || false;
+                App.VERBOSE_LOG = Client.VERBOSE;
+                if (Client.VERBOSE) {
+                    console.log("debug log on");                    
+                }
+            }
+
+            // ds: debug send
+            if (params.has("ds")) {
+                Client.VERBOSE_SEND = (parseInt(params.get("ds") || "0") || 0) > 0 || false;
+                if (Client.VERBOSE_SEND) {
+                    console.log("send-debug log on");                    
+                }
+            }
+
+            // dr: debug receive
+            if (params.has("dr")) {
+                Client.VERBOSE_RECV = (parseInt(params.get("dr") || "0") || 0) > 0 || false;
+                if (Client.VERBOSE_RECV) {
+                    console.log("receive-debug log on");                    
+                }
+            }
         }
 
 
@@ -78,11 +102,11 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             // set host
             if (this.props.public === true)
             {
-                this.host = window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.publicClientEnd;
+                this.host = window.location.protocol + "//" + window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.publicClientEnd;
             }
             else
             {
-                this.host = window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.clientEnd;
+                this.host = window.location.protocol + "//" + window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.clientEnd;
             }
 
             this.host += `?key=${this.rcpKey}`;
@@ -93,7 +117,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
 
         if (params.get("mode") === "private")
         {
-            this.host = window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.clientEnd;
+            this.host = window.location.protocol + "//" + window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.clientEnd;
                 
             this.setState({
                 public: false
@@ -103,7 +127,7 @@ export default class ConnectionDialog extends React.Component<Props, State> {
         }
         else
         {
-            this.host = window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.publicClientEnd;
+            this.host = window.location.protocol + "//" + window.location.hostname + (window.location.port !== "" ? (":" + window.location.port) : "") + this.publicClientEnd;
         }
 
         // If a hash is provided, try to connect right away
@@ -341,7 +365,6 @@ export default class ConnectionDialog extends React.Component<Props, State> {
             console.log("using rcp-key/tunnel-name: " + this.rcpKey);
 
             const transporter = new WebSocketClientTransporter();
-            transporter.doSSL = window.location ? window.location.protocol.startsWith("https") : false;
             const client = new Client(transporter);
 
             // NOTE: needed??
