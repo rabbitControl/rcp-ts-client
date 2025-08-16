@@ -117,9 +117,9 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
                 { this.state.listEntries.map((entry, index) => {
                     return <section key={ index } className={ 'history_list_item' + (index % 2 === 0 ? ' even' : '') }>
                         <div>
-                            { entry.name != '' && <Text><strong>{ entry.name }</strong></Text> }
+                            { entry.name !== '' && <Text><strong>{ entry.name }</strong></Text> }
                             <Text><em className='break-anywhere'>
-                                { entry.applicationId != '' && entry.applicationId + ', ' }
+                                { entry.applicationId !== '' && entry.applicationId + ', ' }
                                 { entry.address }:{ entry.port }
                                 &nbsp;&nbsp;{ entry.tabsInRoot ? <Icon icon="segmented-control" color={ Colors.GRAY1 } /> : null }
                             </em></Text>

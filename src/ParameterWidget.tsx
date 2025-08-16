@@ -80,7 +80,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
         // return url string
         const url = window.URL.createObjectURL(blob);
 
-        let image = new Image;
+        let image = new Image();
         image.onload = () => {        
             URL.revokeObjectURL(url);
         }
