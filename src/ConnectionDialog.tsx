@@ -165,11 +165,11 @@ export default class ConnectionDialog extends React.Component<Props, State>
                 <div className="serverid" style={{ color: Colors.GRAY1 }}>
                     {this.state.serverApplicationId !== "" ? `Connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                    <button style={{
+                    <a style={{
                         color: Colors.GRAY1
-                    }} onClick={() => this.state.client?.disconnect()}>Disconnect</button>
+                    }} onClick={() => this.state.client?.disconnect()}>Disconnect</a>
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                    <button
+                    <a
                         style={{
                             color: Colors.GRAY1,
                             fontSize: "1.15em"
@@ -182,7 +182,7 @@ export default class ConnectionDialog extends React.Component<Props, State>
                         }}
                             icon='share'
                         ></Icon>
-                    </button>
+                    </a>
                 </div>
 
                 :
