@@ -109,7 +109,8 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
                         max={max}
                         stepSize={step}
                         labelPrecision={isFloat ? this.precision : 0}
-                        labelStepSize={max}
+                        labelValues={min != undefined && max != undefined ? [min, max] : []}
+                        showTrackFill={value != 0}
                         onChange={this.handleChange}
                         onRelease={this.handleRelease}
                         labelRenderer={this.renderLabel}
