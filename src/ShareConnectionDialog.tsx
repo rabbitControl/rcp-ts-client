@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Alert, InputGroup, ControlGroup, Text, Button, IRefObject, Colors } from '@blueprintjs/core';
+import { Alert, InputGroup, ControlGroup, Text, Button, Colors } from '@blueprintjs/core';
 import { QRCodeSVG } from 'qrcode.react';
 
 type Props = {
@@ -17,7 +17,7 @@ type State = {
 
 export default class ShareConnectionDialog extends React.Component<Props, State>
 {
-    inputRef: IRefObject<HTMLInputElement>
+    inputRef: React.RefObject<HTMLInputElement>
 
     constructor(props: Props) {
         super(props);
@@ -39,7 +39,7 @@ export default class ShareConnectionDialog extends React.Component<Props, State>
         this.inputRef.current?.select()
     }
 
-    componentDidUpdate = (prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void =>
+    componentDidUpdate = (prevProps: Readonly<Props>, prevState: Readonly<State>, _snapshot?: any): void =>
     {
         if (this.props.port !== prevProps.port ||
             this.props.host !== prevProps.host)
@@ -79,7 +79,7 @@ export default class ShareConnectionDialog extends React.Component<Props, State>
 
     render(): React.ReactNode {
         return <Alert isOpen={ this.props.show }
-            className={"bp3-dark share-connection-dialog"}
+            className={"bp6-dark share-connection-dialog"}
             icon="upload"
             confirmButtonText="Done"
             onClose={ this.onClose }
@@ -88,7 +88,7 @@ export default class ShareConnectionDialog extends React.Component<Props, State>
 
             <h4>Share this connection</h4>
             
-            <Text className='bp3-text-small bp3-text-muted'>
+            <Text className='bp6-text-small bp6-text-muted'>
                 You can share this connection by passing the link below on to other people. When they 
                 open this link, the connection will establish immediatly.
             </Text>

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { NumericInputProps, InputGroup } from '@blueprintjs/core';
+import { parameterWrapped, type InjectedProps } from './ElementWrapper';
+import { type InputGroupProps, InputGroup } from '@blueprintjs/core';
 import { ValueParameter, RGBAParameter } from 'rabbitcontrol';
 
-interface Props extends NumericInputProps {
+interface Props extends InputGroupProps {
 };
 
 interface State {

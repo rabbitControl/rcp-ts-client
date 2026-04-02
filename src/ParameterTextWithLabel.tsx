@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { InjectedProps, parameterWrapped } from './ElementWrapper';
+import { type InjectedProps, parameterWrapped } from './ElementWrapper';
 import { Colors } from '@blueprintjs/core';
 import { NumberParameter } from 'rabbitcontrol';
 import { NumberDefinition } from 'rabbitcontrol';
-import { isBuffer } from 'util';
 
 interface Props {
     style?: React.CSSProperties;

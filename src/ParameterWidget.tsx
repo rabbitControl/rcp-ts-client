@@ -1,5 +1,5 @@
 import { Colors } from '@blueprintjs/core';
-import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, Range, RangeParameter, RangeDefinition, RcpTypes, TabsWidget, ListWidget, ListPageWidget, RadiobuttonWidget } from 'rabbitcontrol';
+import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, RangeParameter, TabsWidget, ListWidget, ListPageWidget, RadiobuttonWidget } from 'rabbitcontrol';
 import * as React from 'react';
 import { ParameterButtonC } from './ParameterButton';
 import { ParameterCheckboxC } from './ParameterCheckbox';
@@ -76,7 +76,8 @@ export default class ParameterWidget extends React.Component<Props, State> {
     loadImageData = (p: ImageParameter) : HTMLImageElement =>
     {
         // create blob
-        const blob = new Blob([p.value], { type: 'application/octet-binary' });
+        Blob
+        const blob = new Blob([new Uint8Array(p.value)], { type: 'application/octet-binary' });
         // return url string
         const url = window.URL.createObjectURL(blob);
 
@@ -462,7 +463,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
             }
             else if (parameter instanceof RangeParameter) {
                 
-                const Range = parameter.value;
+                // const Range = parameter.value;
 
                 return (
                     <div>

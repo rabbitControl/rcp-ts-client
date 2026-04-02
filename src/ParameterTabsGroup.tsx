@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Colors, Tabs, Tab, TabId } from '@blueprintjs/core';
+import { type InjectedProps, parameterWrapped } from './ElementWrapper';
+import { Colors, Tabs, Tab, type TabId } from '@blueprintjs/core';
 import { Parameter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import ParameterWidget from './ParameterWidget';
 
@@ -155,8 +155,8 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
     
     render() 
     {
-        const param = this.props.parameter;
-        const label = param?.label ?? "";
+        // const param = this.props.parameter;
+        // const label = param?.label ?? "";
 
         return (
             <div style={this.props.style}>

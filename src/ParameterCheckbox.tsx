@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { NumericInputProps, Position, Checkbox } from '@blueprintjs/core';
+import { parameterWrapped, type InjectedProps } from './ElementWrapper';
+import { type CheckboxProps, Position, Checkbox } from '@blueprintjs/core';
 
-interface Props extends NumericInputProps {
+interface Props extends CheckboxProps {
 };
 
 interface State {
@@ -47,7 +47,7 @@ export class ParameterCheckboxC extends React.Component<Props & InjectedProps, S
                 onChange={this.handleChange}
                 disabled={readOnly === true}
                 alignIndicator={Position.LEFT}
-                large={true}
+                size='large'
             />      
         );
     }

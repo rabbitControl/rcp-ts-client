@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { NumericInput, NumericInputProps, Position, Intent } from '@blueprintjs/core';
+import { parameterWrapped, type InjectedProps } from './ElementWrapper';
+import { NumericInput, type NumericInputProps, Position, Intent } from '@blueprintjs/core';
 import { RcpTypes, Vector2F32Definition, Vector2 } from 'rabbitcontrol';
 
 interface Props extends NumericInputProps {
@@ -18,7 +18,7 @@ export class ParameterNumericInput2C extends React.Component<Props & InjectedPro
         };
     }    
 
-    handleChangeX = (value: number, valueAsString: string) => {
+    handleChangeX = (value: number) => {
 
         const vec = (this.props.value as Vector2).clone();
         vec.x = value;
@@ -31,7 +31,7 @@ export class ParameterNumericInput2C extends React.Component<Props & InjectedPro
             this.props.onSubmitCb();
         }
     }
-    handleChangeY = (value: number, valueAsString: string) => {
+    handleChangeY = (value: number) => {
 
         const vec = (this.props.value as Vector2).clone();
         vec.y = value;

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Button, Intent, Alert, IButtonProps } from '@blueprintjs/core';
+import { type InjectedProps, parameterWrapped } from './ElementWrapper';
+import { Button, Intent, Alert, type ButtonProps } from '@blueprintjs/core';
 
-interface Props extends IButtonProps {
+interface Props extends ButtonProps {
     className?: string;
     label?: string;
     labelDisabled?: boolean;
@@ -23,7 +23,7 @@ export class ParameterButtonC extends React.Component<Props & InjectedProps, Sta
         };
     }
     
-    handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    handleClick = (_event: React.MouseEvent<HTMLElement>) => {
 
         const parameter = this.props.parameter;
         let confirmation = false;
@@ -61,7 +61,7 @@ export class ParameterButtonC extends React.Component<Props & InjectedProps, Sta
                 />
 
                 <Alert
-                    className={`bp3-dark ${this.props.className}`}
+                    className={`bp6-dark ${this.props.className}`}
                     canEscapeKeyCancel={true}
                     cancelButtonText="Cancel"
                     confirmButtonText="Send"

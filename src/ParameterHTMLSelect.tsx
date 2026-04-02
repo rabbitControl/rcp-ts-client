@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { NumericInputProps, HTMLSelect } from '@blueprintjs/core';
+import { parameterWrapped, type InjectedProps } from './ElementWrapper';
+import { HTMLSelect } from '@blueprintjs/core';
 import { EnumParameter } from 'rabbitcontrol';
 
-interface Props extends NumericInputProps {
+interface Props {
 };
 
 interface State {
@@ -30,7 +30,7 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
         const value = this.props.value as string || "";
         let readOnly:boolean|undefined;
         let entries:string[]|undefined;
-        let multiSelect:boolean|undefined;
+        // let multiSelect:boolean|undefined;
 
         const param = this.props.parameter;
         if (param) {
@@ -56,7 +56,7 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
         );
     }
 
-    private renderOptions(id: number, sel: string, entries?: string[]) {
+    private renderOptions(id: number, _sel: string, entries?: string[]) {
         if (entries)
         {
             return entries.map((e, i) => {

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { Slider, ISliderProps } from '@blueprintjs/core';
+import { parameterWrapped, type InjectedProps } from './ElementWrapper';
+import { Slider, type SliderProps } from '@blueprintjs/core';
 import { RcpTypes, Vector3F32Definition, Vector2, Vector2F32Definition } from 'rabbitcontrol';
 import Measure from 'react-measure';
 
-interface Props extends ISliderProps {
+interface Props extends SliderProps {
     continuous?: boolean;
 };
 
@@ -55,7 +55,7 @@ export class ParameterSlider2C extends React.Component<Props & InjectedProps, St
         }
     }
 
-    handleRelease = (value: number) => {
+    handleRelease = (_value: number) => {
         if (this.props.onSubmitCb) {
             this.props.onSubmitCb();
         }

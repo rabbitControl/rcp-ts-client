@@ -1,44 +1,41 @@
 {
   "name": "rcp-ts-client",
+  "private": true,
   "version": "0.1.12",
   "homepage": "./",
-  "private": true,
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
     "zip": "bestzip client.zip build/*",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build && npm run zip",
-    "deploy": "node deploy"
+    "predeploy": "npm run build && npm run zip"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "dependencies": {
-    "@blueprintjs/core": "^3.54.0",
-    "@blueprintjs/select": "^3.19.1",
-    "@types/jest": "^23.3.10",
-    "@types/react": "^16.9.53",
-    "@types/react-dom": "^16.9.8",
-    "@types/react-measure": "^2.0.6",
-    "qrcode.react": "^3.1.0",
+  "dependencies": {    
+    "qrcode.react": "^4.2.0",
     "rabbitcontrol": "^0.0.49",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "react-measure": "^2.1.3",
-    "react-scripts": "^5.0.1",
-    "typescript": "^4.2.3"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-measure": "^2.1.3"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "devDependencies": {
-    "@types/node": "^16.4.0",
-    "bestzip": "^2.2.1",
-    "ftp-deploy": "^2.4.3"
+    "@blueprintjs/core": "^6.11.3",
+    "@blueprintjs/select": "^6.1.8",
+    "@eslint/js": "^9.39.4",
+    "@types/jest": "^23.3.10",
+    "@types/node": "^24.12.0",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@types/react-measure": "^2.0.6",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.57.0",
+    "vite": "^8.0.1",
+    "bestzip": "^2.2.3"
   }
 }

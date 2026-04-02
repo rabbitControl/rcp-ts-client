@@ -109,7 +109,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
         
         return <section className="connection_history">
             <br />
-            <Divider className='bp3-dark' />
+            <Divider className='bp6-dark' />
 
             <h4>Connection history:</h4>
 

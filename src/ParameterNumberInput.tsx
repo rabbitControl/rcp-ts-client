@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { NumericInput, NumericInputProps, Position, Intent } from '@blueprintjs/core';
+import { parameterWrapped, type InjectedProps } from './ElementWrapper';
+import { NumericInput, type NumericInputProps, Position, Intent } from '@blueprintjs/core';
 import { NumberDefinition, NumberboxWidget, RcpTypes } from 'rabbitcontrol';
 import { DEFAULT_PRECISION } from './Globals';
 
@@ -36,7 +36,7 @@ export class ParameterNumericInputC extends React.Component<Props & InjectedProp
         };
     }    
 
-    handleChange = (value: number, valueAsString: string) => {
+    handleChange = (value: number) => {
         if (this.props.handleValue) {
             this.props.handleValue(value);
         }

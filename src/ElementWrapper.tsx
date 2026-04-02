@@ -42,7 +42,7 @@ interface Config {
 export const parameterWrapped = (config?: Config) =>
     <TOriginalProps extends {}>(
         Component: (React.ComponentClass<TOriginalProps & InjectedProps>
-                  | React.StatelessComponent<TOriginalProps & InjectedProps>)
+                  | React.FunctionComponent<TOriginalProps & InjectedProps>)
     ) => {
 
         type ResultProps = TOriginalProps & ExternalProps;

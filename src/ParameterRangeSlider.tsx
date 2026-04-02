@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { RangeSlider, IRangeSliderProps, NumberRange } from '@blueprintjs/core';
-import { NumberDefinition, RcpTypes, Range, RangeDefinition, ValueParameter, RangeParameter } from 'rabbitcontrol';
+import { parameterWrapped, type InjectedProps } from './ElementWrapper';
+import { RangeSlider, type RangeSliderProps, type NumberRange } from '@blueprintjs/core';
+import { NumberDefinition, RcpTypes, Range, RangeDefinition } from 'rabbitcontrol';
 import Measure from 'react-measure';
 
-interface Props extends IRangeSliderProps {
+interface Props extends RangeSliderProps {
     continuous?: boolean;
     rangeValue?: Range;
 };
@@ -39,7 +39,7 @@ export class ParameterRangeSliderC extends React.Component<Props & InjectedProps
         }
     }
 
-    handleRelease = (value: NumberRange) => {
+    handleRelease = (_value: NumberRange) => {
         if (this.props.onSubmitCb) {
             this.props.onSubmitCb();
         }
@@ -52,7 +52,7 @@ export class ParameterRangeSliderC extends React.Component<Props & InjectedProps
         let isFloat:boolean = false;
         let min:number|undefined = undefined;
         let max:number|undefined = undefined;
-        let default_value:NumberRange;
+        // let default_value:NumberRange;
         let readOnly:boolean = false;
 
         const param = this.props.parameter;

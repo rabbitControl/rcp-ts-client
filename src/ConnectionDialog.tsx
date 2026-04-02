@@ -125,7 +125,7 @@ export default class ConnectionDialog extends React.Component<Props, State>
         });
     }
 
-    setPort = (valueAsNumber: number, valueAsString: string, inputElement: HTMLInputElement | null) => {
+    setPort = (valueAsNumber: number, _valueAsString: string, _inputElement: HTMLInputElement | null) => {
         this.setState({
             port: valueAsNumber,
         });
@@ -198,7 +198,7 @@ export default class ConnectionDialog extends React.Component<Props, State>
             />
 
             <Dialog isOpen={this.state.isConnected !== true }
-                    className="bp3-dark connection-dialog">
+                    className="bp6-dark connection-dialog">
                 
                 <section className={ Classes.DIALOG_BODY }>
                     

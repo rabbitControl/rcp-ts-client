@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { parameterWrapped, InjectedProps } from './ElementWrapper';
+import { parameterWrapped, type InjectedProps } from './ElementWrapper';
 import { RadioGroup, Radio } from '@blueprintjs/core';
 import { EnumParameter } from 'rabbitcontrol';
 
@@ -31,7 +31,7 @@ export class ParameterRadioC extends React.Component<Props & InjectedProps, Stat
         const value = this.props.value as string || "";
         let readOnly:boolean|undefined;
         let entries:string[]|undefined;
-        let multiSelect:boolean|undefined;
+        // let multiSelect:boolean|undefined;
 
         const param = this.props.parameter;
         if (param) {
@@ -42,7 +42,7 @@ export class ParameterRadioC extends React.Component<Props & InjectedProps, Stat
             entries = param.enumDefinition.entries;
 
             // TODO: use a multiselectable RadioGroup
-            multiSelect = param.enumDefinition.multiselect;
+            // multiSelect = param.enumDefinition.multiselect;
         }
 
         const { onSubmitCb, handleValue, ...filteredProps } = this.props;
@@ -59,7 +59,7 @@ export class ParameterRadioC extends React.Component<Props & InjectedProps, Stat
         );
     }
 
-    private renderOptions(sel: string, entries?: string[]) {
+    private renderOptions(_sel: string, entries?: string[]) {
         if (entries) {            
             return entries.map( e => 
                 {

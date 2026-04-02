@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { parameterWrapped, InjectedProps } from './ElementWrapper';
-import { Slider, SliderProps } from '@blueprintjs/core';
+import { parameterWrapped, type InjectedProps } from './ElementWrapper';
+import { Slider, type SliderProps } from '@blueprintjs/core';
 import { NumberDefinition, RcpTypes } from 'rabbitcontrol';
 import Measure from 'react-measure';
 import { DEFAULT_PRECISION } from './Globals';
@@ -48,7 +48,7 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
         }
     }
 
-    handleRelease = (value: number) => {
+    handleRelease = (_value: number) => {
         if (this.props.onSubmitCb) {
             this.props.onSubmitCb();
         }

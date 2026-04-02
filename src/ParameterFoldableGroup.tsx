@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { InjectedProps, parameterWrapped } from './ElementWrapper';
+import { type InjectedProps, parameterWrapped } from './ElementWrapper';
 import { Colors, Text, Collapse, ControlGroup, Icon } from '@blueprintjs/core';
 import { GroupParameter, Parameter } from 'rabbitcontrol';
 import ParameterWidget from './ParameterWidget';

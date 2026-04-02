@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import ConnectionDialog from './ConnectionDialog';
 import { Colors } from '@blueprintjs/core';
@@ -56,7 +56,7 @@ class App extends React.Component<Props, State> {
   render() {
 
     return (
-      <section className={"bp3-dark"}>
+      <section className={"bp6-dark"}>
 
         <div className="App" 
           style={{            

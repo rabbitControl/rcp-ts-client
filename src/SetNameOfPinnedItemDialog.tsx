@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Alert, InputGroup, ControlGroup, Text, IRefObject } from '@blueprintjs/core';
+import { Alert, InputGroup, ControlGroup, Text } from '@blueprintjs/core';
 import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
 
 type Props = {
@@ -20,14 +20,14 @@ export default class SetNameOfPinnedItemDialog extends React.Component<Props, St
         name: ""
     }
 
-    inputRef: IRefObject<HTMLInputElement>
+    inputRef: React.RefObject<HTMLInputElement>
 
     constructor(props: Props) {
         super(props);
         this.inputRef = React.createRef();
     }
 
-    componentDidUpdate = (prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void => {
+    componentDidUpdate = (prevProps: Readonly<Props>, _prevState: Readonly<State>, _snapshot?: any): void => {
         if (prevProps.entry?.applicationId !== this.props.entry?.applicationId) {
             this.setState({
                 name: this.props.entry?.applicationId ?? ""
@@ -58,7 +58,7 @@ export default class SetNameOfPinnedItemDialog extends React.Component<Props, St
 
     render(): React.ReactNode {
         return <Alert isOpen={ this.props.show }
-                      className={"bp3-dark"}
+                      className={"bp6-dark"}
                       icon="pin"
                       confirmButtonText="Save"
                       cancelButtonText="Pin without name"
