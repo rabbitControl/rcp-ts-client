@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { parameterWrapped, type InjectedProps } from './ElementWrapper';
-import { RadioGroup, Radio } from '@blueprintjs/core';
 import { EnumParameter } from 'rabbitcontrol';
+import Radio from '@mui/joy/Radio';
+import RadioGroup from '@mui/joy/RadioGroup';
+
 
 interface Props {
 };
@@ -51,8 +53,8 @@ export class ParameterRadioC extends React.Component<Props & InjectedProps, Stat
             <RadioGroup
                 {...filteredProps}
                 onChange={this.handleChange}
-                disabled={readOnly === true}
-                selectedValue={value}
+                // disabled={readOnly === true}
+                // selectedValue={value}
             >
                 {this.renderOptions(value, entries)}            
             </RadioGroup>      

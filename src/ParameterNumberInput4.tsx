@@ -1,18 +1,34 @@
 import * as React from 'react';
 import { parameterWrapped, type InjectedProps } from './ElementWrapper';
-import { NumericInput, type NumericInputProps, Position, Intent } from '@blueprintjs/core';
-import { RcpTypes, Vector4, Vector4F32Definition } from 'rabbitcontrol';
+import { NumberboxWidget, RcpTypes, Vector4, Vector4F32Definition } from 'rabbitcontrol';
+import { NumericInput } from './NumbericInput';
+import { DEFAULT_PRECISION } from './Globals';
 
-interface Props extends NumericInputProps {
+interface Props {
 };
 
 interface State {
 };
 
-export class ParameterNumericInput4C extends React.Component<Props & InjectedProps, State> {
+export class ParameterNumericInput4C extends React.Component<Props & InjectedProps, State>
+{
+    private precision: number = DEFAULT_PRECISION;
 
     constructor(props: Props & InjectedProps) {
         super(props);
+
+        if (this.props.parameter?.typeDefinition.datatype === RcpTypes.Datatype.VECTOR4I32)
+        {
+            this.precision = 0;
+        }
+        else
+        {
+            const widget = props.parameter?.widget;
+            if (widget instanceof NumberboxWidget)
+            {
+                this.precision = widget.precision !== undefined ? widget.precision : DEFAULT_PRECISION;
+            }
+        }
     
         this.state = {        
         };
@@ -78,7 +94,7 @@ export class ParameterNumericInput4C extends React.Component<Props & InjectedPro
         let min:Vector4|undefined = undefined;
         let max:Vector4|undefined = undefined; 
         let readOnly:boolean = false;
-        let intent:Intent = Intent.NONE;
+        // let intent:Intent = Intent.NONE;
 
         const param = this.props.parameter;
         if (param) {
@@ -107,7 +123,7 @@ export class ParameterNumericInput4C extends React.Component<Props & InjectedPro
                     } else {
                         // error on min/max
                         console.error("NumberInput: minimum >= maximum");                
-                        intent = Intent.DANGER;
+                        // intent = Intent.DANGER;
                     }
                 }
 
@@ -128,59 +144,59 @@ export class ParameterNumericInput4C extends React.Component<Props & InjectedPro
             <div>
                 <NumericInput
                     {...filteredProps}
-                    value={value ? value.x : 0}
+                    value={(value ? value.x : 0).toFixed(this.precision)}
                     min={min ? min.x : undefined}
                     max={max ? max.x : undefined}
-                    stepSize={step.x}
-                    minorStepSize={isFloat ? 0.1 : 1}
+                    step={step.x}
+                    // minorStepSize={isFloat ? 0.1 : 1}
                     onValueChange={this.handleChangeX}
                     disabled={readOnly === true}
-                    selectAllOnFocus={true}
-                    buttonPosition={Position.RIGHT}
+                    // selectAllOnFocus={true}
+                    // buttonPosition={Position.RIGHT}
                     placeholder={"-"}
-                    intent={intent}
+                    // intent={intent}
                 />
                 <NumericInput
                     {...filteredProps}
-                    value={value ? value.y : 0}
+                    value={(value ? value.y : 0).toFixed(this.precision)}
                     min={min ? min.y : undefined}
                     max={max ? max.y : undefined}
-                    stepSize={step.y}
-                    minorStepSize={isFloat ? 0.1 : 1}
+                    step={step.y}
+                    // minorStepSize={isFloat ? 0.1 : 1}
                     onValueChange={this.handleChangeY}
                     disabled={readOnly === true}
-                    selectAllOnFocus={true}
-                    buttonPosition={Position.RIGHT}
+                    // selectAllOnFocus={true}
+                    // buttonPosition={Position.RIGHT}
                     placeholder={"-"}
-                    intent={intent}
+                    // intent={intent}
                 />
                 <NumericInput
                     {...filteredProps}
-                    value={value ? value.z : 0}
+                    value={(value ? value.z : 0).toFixed(this.precision)}
                     min={min ? min.z : undefined}
                     max={max ? max.z : undefined}
-                    stepSize={step.z}
-                    minorStepSize={isFloat ? 0.1 : 1}
+                    step={step.z}
+                    // minorStepSize={isFloat ? 0.1 : 1}
                     onValueChange={this.handleChangeZ}
                     disabled={readOnly === true}
-                    selectAllOnFocus={true}
-                    buttonPosition={Position.RIGHT}
+                    // selectAllOnFocus={true}
+                    // buttonPosition={Position.RIGHT}
                     placeholder={"-"}
-                    intent={intent}
+                    // intent={intent}
                 />
                 <NumericInput
                     {...filteredProps}
-                    value={value ? value.t : 0}
+                    value={(value ? value.t : 0).toFixed(this.precision)}
                     min={min ? min.t : undefined}
                     max={max ? max.t : undefined}
-                    stepSize={step.t}
-                    minorStepSize={isFloat ? 0.1 : 1}
+                    step={step.t}
+                    // minorStepSize={isFloat ? 0.1 : 1}
                     onValueChange={this.handleChangeT}
                     disabled={readOnly === true}
-                    selectAllOnFocus={true}
-                    buttonPosition={Position.RIGHT}
+                    // selectAllOnFocus={true}
+                    // buttonPosition={Position.RIGHT}
                     placeholder={"-"}
-                    intent={intent}
+                    // intent={intent}
                 />
             </div>
         );

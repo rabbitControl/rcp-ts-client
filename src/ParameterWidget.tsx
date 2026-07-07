@@ -1,4 +1,3 @@
-import { Colors } from '@blueprintjs/core';
 import { BangParameter, BooleanParameter, EnumParameter, GroupParameter, ImageParameter, NumberDefinition, NumberParameter, Parameter, RGBAParameter, RGBParameter, SliderWidget, ValueParameter, Vector3F32Parameter, NumberboxWidget, Vector3F32Definition, Vector3I32Parameter, Vector2I32Parameter, Vector2F32Parameter, Vector2F32Definition, Vector4F32Parameter, Vector4I32Parameter, Vector4F32Definition, RangeParameter, TabsWidget, ListWidget, ListPageWidget, RadiobuttonWidget } from 'rabbitcontrol';
 import * as React from 'react';
 import { ParameterButtonC } from './ParameterButton';
@@ -19,6 +18,7 @@ import { ParameterNumericInput4C } from './ParameterNumberInput4';
 import { ParameterRangeSliderC } from './ParameterRangeSlider'
 import { ParameterTabsGroupC } from './ParameterTabsGroup';
 import { ParameterRadioC } from './ParameterRadio';
+import { Box, Typography } from '@mui/joy';
 
 
 interface Props {
@@ -98,6 +98,13 @@ export default class ParameterWidget extends React.Component<Props, State> {
         if (param instanceof ValueParameter)
         {
             param.addValueChangeListener(this.parameterValueChanged);
+        }
+        
+        if (param instanceof ImageParameter)
+        {
+            this.setState({
+                image: this.loadImageData(param)
+            });
         }
 
         param.addChangeListener(this.parameterChanged);
@@ -219,10 +226,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {
                         return ( 
                             <div>
-                                <div className="parameter-label">{parameter.label}</div>
+                                <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                                 <ParameterSliderC
                                     {...this.props}
-                                    value={this.state.value}
+                                    value={parameter.valueConstrained()}
                                     handleValue={this.handleValueChange}
                                     continuous={true}
                                 />
@@ -237,10 +244,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <div>
-                            <div className="parameter-label">{parameter.label}</div>
+                            <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                             <ParameterNumericInputC
                                 {...this.props}
-                                value={this.state.value}
+                                value={parameter.valueConstrained()}
                                 handleValue={this.handleValueChange}
                             />
                         </div>
@@ -262,10 +269,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {
                         return ( 
                             <div>
-                                <div className="parameter-label">{parameter.label}</div>
+                                <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                                 <ParameterSlider2C
                                     {...this.props}
-                                    value={this.state.value}
+                                    value={parameter.valueConstrained()}
                                     handleValue={this.handleValueChange}
                                     continuous={true}
                                 />
@@ -279,10 +286,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <div>
-                            <div className="parameter-label">{parameter.label}</div>
+                            <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                             <ParameterNumericInput2C
                                 {...this.props}
-                                value={this.state.value}
+                                value={parameter.valueConstrained()}
                                 handleValue={this.handleValueChange}
                             />
                         </div>
@@ -305,10 +312,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {
                         return ( 
                             <div>
-                                <div className="parameter-label">{parameter.label}</div>
+                                <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                                 <ParameterSlider3C
                                     {...this.props}
-                                    value={this.state.value}
+                                    value={parameter.valueConstrained()}
                                     handleValue={this.handleValueChange}
                                     continuous={true}
                                 />
@@ -322,10 +329,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <div>
-                            <div className="parameter-label">{parameter.label}</div>
+                            <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                             <ParameterNumericInput3C
                                 {...this.props}
-                                value={this.state.value}
+                                value={parameter.valueConstrained()}
                                 handleValue={this.handleValueChange}
                             />
                         </div>
@@ -349,10 +356,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     {
                         return ( 
                             <div>
-                                <div className="parameter-label">{parameter.label}</div>
+                                <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                                 <ParameterSlider4C
                                     {...this.props}
-                                    value={this.state.value}
+                                    value={parameter.valueConstrained()}
                                     handleValue={this.handleValueChange}
                                     continuous={true}
                                 />
@@ -366,10 +373,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
                     // numeric input
                     return (
                         <div>
-                            <div className="parameter-label">{parameter.label}</div>
+                            <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                             <ParameterNumericInput4C
                                 {...this.props}
-                                value={this.state.value}
+                                value={parameter.valueConstrained()}
                                 handleValue={this.handleValueChange}
                             />
                         </div>
@@ -379,10 +386,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
             else if (parameter instanceof BooleanParameter) {
                 return (
                     <div>
-                        <div className="parameter-label">{parameter.label}</div>
+                        {/* <Typography color='neutral' className="parameter-label">{parameter.label}</Typography> */}
                         <ParameterCheckboxC
                             {...this.props}
-                            value={this.state.value}
+                            value={parameter.valueConstrained()}
                             handleValue={this.handleValueChange}
                         />
                     </div>
@@ -393,10 +400,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
             {
                 return (
                     <div>
-                        <div className="parameter-label">{parameter.label}</div>
+                        <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                         <ParameterColorInputC
                             {...this.props}
-                            value={this.state.value}
+                            value={parameter.valueConstrained()}
                             handleValue={this.handleValueChange}
                         />
                     </div>
@@ -415,7 +422,7 @@ export default class ParameterWidget extends React.Component<Props, State> {
                             </div>
                             <ParameterRadioC
                                 {...this.props}
-                                value={this.state.value}
+                                value={parameter.value}
                                 handleValue={this.handleValueChange}
                             />
                         </div>
@@ -425,10 +432,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
                 {
                     return (
                         <div>
-                            <div className="parameter-label">{parameter.label}</div>
+                            <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                             <ParameterHTMLSelectC
                                 {...this.props}
-                                value={this.state.value}
+                                value={parameter.value}
                                 handleValue={this.handleValueChange}
                             />
                         </div>
@@ -439,10 +446,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
             else if (parameter instanceof ImageParameter)
             {                    
                 if (this.state.image)
-                {            
+                {
                     return (
                         <div>
-                            <div className="parameter-label">{parameter.label}</div>
+                            <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                             {React.createElement("img", {
                                 src: this.state.image.src,
                                 alt: parameter.description,
@@ -467,10 +474,10 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
                 return (
                     <div>
-                        <div className="parameter-label">{parameter.label}</div>
+                        <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                         <ParameterRangeSliderC                        
                             {...this.props}
-                            value={this.state.value}
+                            value={parameter.valueConstrained()}
                             handleValue={this.handleValueChange}
                         />
                     </div>
@@ -479,14 +486,14 @@ export default class ParameterWidget extends React.Component<Props, State> {
             else {
                 // everything else...
                 return (
-                    <div>
-                        <div className="parameter-label">{parameter.label}</div>
+                    <Box>
+                        <Typography color='neutral' className="parameter-label">{parameter.label}</Typography>
                         <ParameterTextInputC
                             {...this.props}
-                            value={this.state.value}
+                            value={parameter.valueConstrained()}
                             handleValue={this.handleValueChange}
                         />
-                    </div>
+                    </Box>
                 );
             }
 
@@ -559,12 +566,17 @@ export default class ParameterWidget extends React.Component<Props, State> {
 
         // default framing
         return (        
-            <div className="parameter-wrapper">
+            <div
+                className="parameter-wrapper"
+            >
                 
-                <div className="inner" style={{                    
-                    border: (parameter instanceof GroupParameter) ? "1px solid #454545" : "1px solid #353535",
-                    background: (parameter instanceof GroupParameter) ? "transparent" : Colors.DARK_GRAY3
-                }}>
+                <div
+                    className="inner"
+                    style={{
+                        border: (parameter instanceof GroupParameter) ? "1px solid #9e9e9e" : "1px solid #8b8b8b",
+                    // background: (parameter instanceof GroupParameter) ? "transparent" : Colors.DARK_GRAY3
+                    }}
+                >
                     {this.renderValue(parameter)}
                 </div>
             </div>

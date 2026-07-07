@@ -1,12 +1,14 @@
 import * as React from 'react';
 import ParameterWidget from './ParameterWidget'
-import { InputGroup, ControlGroup, Text, Colors, Checkbox, Button, Dialog, Classes, Icon, NumericInput } from '@blueprintjs/core';
 import { Parameter, Client, WebSocketClientTransporter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import { DEFAULT_RCP_PORT, HTTP_PORT, SSL_INFO_TEXT, SSL_INFO_TEXT_FIREFOX, SSL_PORT } from './Globals';
 import App from './App';
 import ShareConnectionDialog from './ShareConnectionDialog';
 import ConnectionHistoryList from './ConnectionHistoryList';
 import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
+import { Checkbox, Input, Stack, Button, DialogTitle, Card, Box, Link, Typography } from '@mui/joy';
+import { IosShare } from '@mui/icons-material';
+import ThemeSwitcher from './ThemeSwitcher';
 
 type Props = {
 };
@@ -47,7 +49,7 @@ export default class ConnectionDialog extends React.Component<Props, State>
 
     componentDidMount = () => {
         
-        // paarse parameters
+        // parse parameters
         if (window.location.search !== "") {
             const params = new URLSearchParams(window.location.search);
 
@@ -119,15 +121,15 @@ export default class ConnectionDialog extends React.Component<Props, State>
         });
     }
 
-    setHost = (e: any) => {
+    setHost = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            host: e.currentTarget.value as string,
+            host: event.target.value as string,
         });
     }
 
-    setPort = (valueAsNumber: number, _valueAsString: string, _inputElement: HTMLInputElement | null) => {
+    setPort = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            port: valueAsNumber,
+            port: parseInt(event.target.value),
         });
     }
 
@@ -140,8 +142,15 @@ export default class ConnectionDialog extends React.Component<Props, State>
 
     render() 
     {
-        return <section>
-            <div className="rootgroup-wrapper">
+        return (
+        <Stack
+            direction="column"
+        >
+
+            <Box
+                className="rootgroup-wrapper"
+                minWidth="100vh"
+            >
                 {
                     this.state.client ?
 
@@ -158,32 +167,34 @@ export default class ConnectionDialog extends React.Component<Props, State>
                     :
                         ""
                 }
-            </div>
+            </Box>
 
 
             { this.state.isConnected ? 
-                <div className="serverid" style={{ color: Colors.GRAY1 }}>
-                    {this.state.serverApplicationId !== "" ? `Connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
-                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                    <a style={{
-                        color: Colors.GRAY1
-                    }} onClick={() => this.state.client?.disconnect()}>Disconnect</a>
-                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                    <a
-                        style={{
-                            color: Colors.GRAY1,
-                            fontSize: "1.15em"
-                        }} 
-                        onClick={() => { this.setState({ showShareConnectionDialog: true }) }}
-                    >
-                        Share&nbsp;&nbsp;
-                        <Icon style={{
-                            verticalAlign: "center"
-                        }}
-                            icon='share'
-                        ></Icon>
-                    </a>
-                </div>
+                <Box color="neutral" sx={{
+                    m:1
+                }}>
+                    <Typography fontSize="small" noWrap>
+                        {this.state.serverApplicationId !== "" ? `Connected to: ${this.state.serverApplicationId} - ` : ""}{this.state.serverVersion !== "" ? `rcp: ${this.state.serverVersion}` : ""}
+                        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+
+                        <Link
+                            underline='always'
+                            color='neutral'
+                            onClick={() => this.state.client?.disconnect()}>Disconnect
+                        </Link>
+                        
+                        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                        
+                        <Link
+                            underline='always'
+                            color='neutral'
+                            onClick={() => { this.setState({ showShareConnectionDialog: true }) }}
+                        >
+                            Share&nbsp;<IosShare fontSize='small'/>
+                        </Link>
+                    </Typography>
+                </Box>
 
                 :
                 
@@ -197,61 +208,94 @@ export default class ConnectionDialog extends React.Component<Props, State>
                 port={this.state.port}
             />
 
-            <Dialog isOpen={this.state.isConnected !== true }
-                    className="bp6-dark connection-dialog">
-                
-                <section className={ Classes.DIALOG_BODY }>
-                    
-                    <h3>Connect to a RabbitControl server</h3>
-                    
-                    <ControlGroup style={{alignItems: "center"}}>
-                        <Text>Host:&nbsp;</Text>
-                        <InputGroup
-                            value={this.state.host}
-                            type="text"
-                            onChange={this.setHost}
-                        />
-                    </ControlGroup>
+{/* open={this.state.isConnected !== true}  */}
+            <Box
+                display={this.state.isConnected === true ? "none" : "flex"}
+                justifyContent="center"
+                alignItems="center"
+                alignContent="center"
+                minHeight="90vh"            
+            >
 
-                    <br/>
-                    
-                    <ControlGroup style={{ alignItems: "center" }}>
-                        <Text>Port:&nbsp;</Text>
-                        <NumericInput
-                            value={this.state.port.toFixed(0)}
-                            allowNumericCharactersOnly={true}
-                            selectAllOnFocus={true}
-                            asyncControl={true}
-                            onValueChange={this.setPort}
-                            min={1024}
-                            max={65535}
-                            minorStepSize={1}
-                        >
-                        </NumericInput>                        
-                    </ControlGroup>
-                    <br/>
 
-                    <Checkbox
-                        checked={this.state.rootWithTabs}
-                        onChange={this.setTabsInRoot}
-                    >
-                        Tabs in Root &nbsp;<Icon icon="segmented-control" color={ Colors.GRAY1 } />
-                    </Checkbox>
+            <Card
+                sx={{
+                    p: 3,
+                }}
+            >
+                <DialogTitle
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        mb: 5
+                    }}
+                >
+                    Connect to a RabbitControl server
+                    <ThemeSwitcher/>
+                </DialogTitle>
 
-                    <div>
-                        {this.state.error ? this.state.error : undefined}
-                        {this.returnSSLInfo()}
-                    </div>
+                <Stack
+                    direction="row"
+                    sx={{
+                        justifyContent: "left",
+                        alignItems: "center",
+                    }}
+                >
+                    <Typography>Host:&nbsp;</Typography>
+                    <Input
+                        value={this.state.host}
+                        type="text"
+                        onChange={this.setHost}
+                    />
+                </Stack>
 
-                    <section style={ { textAlign: 'right' }}>
-                        <Button text="Connect" onClick={ this.handleAlertConfirm } />
-                    </section>
+                <Stack
+                    direction="row"
+                    sx={{
+                        justifyContent: "left",
+                        alignItems: "center",
+                    }}>
+                    <Typography>Port:&nbsp;</Typography>
+                    <Input
+                        type="number"
+                        slotProps={{
+                            input: {
+                                min: 1024,
+                                max: 65535,
+                                step: 1,
+                            },
+                        }}
+                        value={this.state.port.toFixed(0)}
+                        onChange={this.setPort}
+                    />
+                </Stack>
 
-                    <ConnectionHistoryList onConnectFromHistoryItem={ this.connectFromHistoryItem } />
+                <Checkbox
+                    checked={this.state.rootWithTabs}
+                    onChange={this.setTabsInRoot}
+                    label="Tabs in Root"
+                    sx={{
+                        mt: 2
+                    }}
+                >
+                </Checkbox>
+
+                <div>
+                    {this.state.error ? this.state.error : undefined}
+                    {this.returnSSLInfo()}
+                </div>
+
+                <section style={ { textAlign: 'right' }}>
+                    <Button onClick={ this.handleAlertConfirm }>
+                        Connect
+                    </Button>
                 </section>
-            </Dialog>
+
+                <ConnectionHistoryList onConnectFromHistoryItem={ this.connectFromHistoryItem } />
+            </Card>
+        </Box>
         
-        </section>;
+        </Stack>);
     }
 
     private returnSSLInfo() {

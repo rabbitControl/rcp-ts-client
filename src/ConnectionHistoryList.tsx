@@ -1,8 +1,10 @@
-import { Button, Colors, Divider, Icon, Intent, Text } from '@blueprintjs/core';
 import * as React from 'react';
 import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
 import SetNameOfPinnedItemDialog from './SetNameOfPinnedItemDialog';
 import ShareConnectionDialog from './ShareConnectionDialog';
+import Button from '@mui/joy/Button';
+import { Delete, IosShare, PushPin, Tab } from '@mui/icons-material';
+import { Box, IconButton, Stack, Typography } from '@mui/joy';
 
 type ShareConnectionDialogIntent = {
     host: string;
@@ -107,41 +109,82 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
             return null;
         }
         
-        return <section className="connection_history">
-            <br />
-            <Divider className='bp6-dark' />
+        return <Box>
 
-            <h4>Connection history:</h4>
+            <Typography level="title-md">Connection history:</Typography>
 
-            <div className="connection_history_list">
+            <Box
+                className="connection_history_list"
+            >
+                
                 { this.state.listEntries.map((entry, index) => {
-                    return <section key={ index } className={ 'history_list_item' + (index % 2 === 0 ? ' even' : '') }>
-                        <div>
-                            { entry.name !== '' && <Text><strong>{ entry.name }</strong></Text> }
-                            <Text><em className='break-anywhere'>
+                    return (
+                    <Stack 
+                        direction="row"
+                        key={ index }
+                        sx={{
+                            display: 'flex',
+                            border: '1px'
+                        }}
+                        className={ 'history_list_item' + (index % 2 === 0 ? ' even' : '')}
+                    >
+                        <Box
+                            sx={{
+                                flexGrow: 10,
+                            }}
+                        >
+                            { entry.name !== '' && <Typography><strong>{ entry.name }</strong></Typography> }
+                            <Typography
+                                className='break-anywhere'
+                            >
                                 { entry.applicationId !== '' && entry.applicationId + ', ' }
                                 { entry.address }:{ entry.port }
-                                &nbsp;&nbsp;{ entry.tabsInRoot ? <Icon icon="segmented-control" color={ Colors.GRAY1 } /> : null }
-                            </em></Text>
-                        </div>
-                        <div className="history_item_ctas">
-                            <Button small={ true } 
-                                    icon="trash" 
-                                    onClick={ () => { this.deleteItemAtIndex(index) } } />
-                            <Button small={ true } 
-                                    icon={ entry.isFavourite ? 'unpin' : 'pin' } 
-                                    intent={ entry.isFavourite ? Intent.WARNING : undefined }
-                                    onClick={ () => { this.toggleIsFavouriteOnHistoryItem(index) } } />
-                            <Button small={ true } 
-                                    icon="share" 
-                                    onClick={ () => { this.showShareConnectionDialog(entry.address, entry.port) } } />
-                            <Button text="Connect" 
-                                    small={ true } 
-                                    onClick={ () => { this.props.onConnectFromHistoryItem(this.state.listEntries[index]) } }/>
-                        </div>
-                    </section>
+                                &nbsp;
+                                { entry.tabsInRoot ? <Tab fontSize='small'/> : null }
+                                &nbsp;&nbsp;
+                            </Typography>
+                        </Box>
+
+                        <Stack
+                            direction='row'
+                            spacing={0.2}
+                            sx={{
+                                display: 'flex',
+                                flexGrow: 0,
+                            }}
+                        >
+                            <IconButton
+                                    variant="solid"
+                                    size="sm"
+                                    onClick={ () => { this.deleteItemAtIndex(index) } }>
+                                <Delete fontSize='small'/>
+                            </IconButton>
+
+                            <IconButton 
+                                    variant="solid"
+                                    size="sm"
+                                    color={ entry.isFavourite ? "warning" : undefined }
+                                    onClick={ () => { this.toggleIsFavouriteOnHistoryItem(index) } } >
+                                <PushPin fontSize='small'/>
+                            </IconButton>
+
+                            <IconButton
+                                    variant="solid"
+                                    size="sm"
+                                    onClick={ () => { this.showShareConnectionDialog(entry.address, entry.port) } } >
+                                <IosShare fontSize='small'/>
+                            </IconButton>
+
+                            <Button 
+                                    variant="soft"
+                                    size="sm"
+                                    onClick={ () => { this.props.onConnectFromHistoryItem(this.state.listEntries[index]) } }>
+                                Connect
+                            </Button>
+                        </Stack>
+                    </Stack>);
                 }) }
-            </div>
+            </Box>
 
             <SetNameOfPinnedItemDialog show={ this.state.entryForSetNameOfFavouriteDialog !== undefined }
                                        entry={ this.state.entryForSetNameOfFavouriteDialog }
@@ -151,6 +194,7 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
                                    onClose={ () => { this.setState({ shareConnectionDialogIntent: undefined })}}
                                    host={ this.state.shareConnectionDialogIntent?.host ?? '' }
                                    port={ this.state.shareConnectionDialogIntent?.port ?? 0 } />
-        </section>
+      
+        </Box>
     }
 } 

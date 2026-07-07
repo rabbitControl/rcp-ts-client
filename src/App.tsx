@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
 import ConnectionDialog from './ConnectionDialog';
-import { Colors } from '@blueprintjs/core';
 import { RCP_LIBRARY_VERSION, rcpLogVersion } from 'rabbitcontrol';
+import { Box, Link, Stack, Typography } from '@mui/joy';
 
 /*
   use with local tcp-ts:
@@ -53,62 +53,65 @@ class App extends React.Component<Props, State> {
     this.setState({ height: window.innerHeight });
   }
 
+
   render() {
 
+    
+
+    // const { mode, systemMode } = useColorScheme();
+    // console.log(mode);
+    // console.log(systemMode);
+
     return (
-      <section className={"bp6-dark"}>
 
-        <div className="App" 
-          style={{            
-            minHeight: this.state.height-40
-        }}>
+      <Box id="TEST">
 
-          <ConnectionDialog />
+        <Stack        
+          direction="column"
+          spacing={2}
+          sx={{
+            alignItems: "center",
+            justifyContent: "center",
+            alignContent: "center",
+            p: 0
+          }}
+        >
 
-          <div style={{
-            flex: 2
-          }}></div>
+            <ConnectionDialog />
 
-          <div className="credits" 
-              style={{            
-                color: Colors.GRAY1
-          }}>
-            <a style={{
-              color: Colors.GRAY1,
-              textDecoration: "underline"
-            }}
-              href="https://github.com/rabbitcontrol/" target="#">
-              rcp-ts-client
-            </a>
-              &nbsp;written by&nbsp;
-            <a style={{
-              color: Colors.GRAY1,
-              textDecoration: "underline"
-            }}
-              href="https://ingorandolf.info/" target="#">
-              i-n-g-o
-            </a>
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            <a style={{
-              color: Colors.GRAY1,
-              textDecoration: "underline"
-            }}
-              href="http://rabbitcontrol.cc/" target="#">
-              rabbitControl
-            </a>
-            <br/>
-            uses&nbsp;
-            <a style={{
-              color: Colors.GRAY1,
-              textDecoration: "underline"
-            }}
-              href="https://blueprintjs.com/" target="#">
-              blueprintjs
-            </a>
-          </div>
-        </div>
+            <Stack direction="row">
+              <Link underline='always'            
+                href="https://github.com/rabbitcontrol/" target="#">
+                rcp-ts-client
+              </Link>
+              <Typography>
+                &nbsp;written by&nbsp;
+              </Typography>
+              <Link underline='always'
+                href="https://ingorandolf.info/" target="#">
+                i-n-g-o
+              </Link>
+              <Typography>
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+              </Typography>
+              <Link underline='always'
+                href="http://rabbitcontrol.cc/" target="#">
+                rabbitControl
+              </Link>
+              <br/>
+              <Typography>
+                uses&nbsp;
+              </Typography>
+              <Link underline='always'
+                href="https://v7.mui.com/joy-ui/getting-started/" target="#">
+                mui
+              </Link>
+            </Stack>
 
-      </section>
+            <br></br>
+        </Stack>
+      </Box>
+
     );
   }
 }

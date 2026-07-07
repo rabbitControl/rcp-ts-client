@@ -1,20 +1,24 @@
 import * as React from 'react';
 import { type InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Colors, Tabs, Tab, type TabId } from '@blueprintjs/core';
 import { Parameter, GroupParameter, TabsWidget } from 'rabbitcontrol';
 import ParameterWidget from './ParameterWidget';
+import Tabs from '@mui/joy/Tabs';
+import TabList from '@mui/joy/TabList';
+import Tab from '@mui/joy/Tab';
+import TabPanel from '@mui/joy/TabPanel';
+
 
 interface Props {
     style?: React.CSSProperties;
 };
 
 interface State {
-    navbarTabId: TabId;
+    navbarTabId: number;
 };
 
 export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, State> {
 
-    static readonly COMPONENT_DEFAULT_COLOR = Colors.GRAY1;
+    static readonly COMPONENT_DEFAULT_COLOR = "#ff0000";
 
     constructor(props: Props & InjectedProps) {
         super(props);
@@ -22,9 +26,9 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
         this.state = {navbarTabId: 0};
     } 
 
-    handleTabChange = (navbarTabId: TabId) => 
+    handleTabChange = () => 
     {
-        this.setState({ navbarTabId });
+        // this.setState({ navbarTabId });
     }
 
     onSubmit = () =>
@@ -119,21 +123,46 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
         .sort((a: Parameter, b: Parameter): number => ((a.order || 0) - (b.order || 0)))
         .map((param, index) => 
         {
-            const g_param = (param as GroupParameter);
-
-            if (this.state.navbarTabId === 0
-                && index === 0
-                && param.label !== undefined)
-            {
-                // set this delayed!
-                this.setState({navbarTabId: (param.label as string)});
-            }
+            // if (this.state.navbarTabId === 0
+            //     && index === 0
+            //     && param.label !== undefined)
+            // {
+            //     // set this delayed!
+            //     this.setState({navbarTabId: (param.id)});
+            // }
 
             return <Tab 
                     key={"tab_" + param.id} 
-                    id={param.label} 
-                    title={param.label} 
-                    panel={<div>
+                    id={param.label + "_tab"}
+                    >
+                        {param.label} 
+                    </Tab>
+        });
+    }
+    
+
+    createTabPanels(parameter: Parameter[])
+    {
+        if (parameter === undefined)
+        {
+            return "";
+        }
+
+        // each parameter gets a tab
+
+        return parameter
+        .filter(param => param instanceof GroupParameter)
+        .sort((a: Parameter, b: Parameter): number => ((a.order || 0) - (b.order || 0)))
+        .map((param, index) => 
+        {
+            const g_param = (param as GroupParameter);
+
+            return <TabPanel
+                    value={index}
+                    key={"tabpanel_" + param.id} 
+                    id={param.label + "_panel"}
+                    >
+                        <div>
                             <div className="inner" style={{
                                 border: "1px solid #454545",
                                 background: "transparent"
@@ -148,29 +177,26 @@ export class ParameterTabsGroupC extends React.Component<Props & InjectedProps, 
                                 </div>
                             : ""
                             }                            
-                            </div>}
-                    />;
+                            </div>
+                    </TabPanel>;
         });
     }
-    
+
     render() 
     {
-        // const param = this.props.parameter;
-        // const label = param?.label ?? "";
-
         return (
-            <div style={this.props.style}>
-
-                <Tabs 
-                    id="navbar"
-                    renderActiveTabPanelOnly={true}
-                    onChange={this.handleTabChange} 
-                    selectedTabId={this.state.navbarTabId}
-                >
-                    {/* {this.props.labelDisabled !== true ? <Tab title={label} disabled={true}></Tab> : <div></div>} */}
+            <Tabs 
+                id="navbar"
+                aria-label="Basic tabs"
+                onChange={this.handleTabChange} 
+                defaultValue={this.state.navbarTabId}
+            >
+                <TabList>
                     {this.createTabWidgets((this.props.parameter as GroupParameter).children)}
-                </Tabs>
-            </div>
+                </TabList>
+
+                {this.createTabPanels((this.props.parameter as GroupParameter).children)}
+            </Tabs>
         );
     }
 

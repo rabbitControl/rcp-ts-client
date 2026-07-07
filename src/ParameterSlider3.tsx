@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { parameterWrapped, type InjectedProps } from './ElementWrapper';
-import { Slider, type SliderProps } from '@blueprintjs/core';
 import { RcpTypes, Vector3, Vector3F32Definition } from 'rabbitcontrol';
 import Measure from 'react-measure';
+import { Slider } from '@mui/joy';
 
-interface Props extends SliderProps {
+interface Props {
     continuous?: boolean;
 };
 
@@ -126,12 +126,12 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
                         value={value ? value.x : 0}
                         min={min ? min.x : undefined}
                         max={max ? max.x : undefined}
-                        stepSize={step.x}
-                        labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max ? max.x : 0}
-                        onChange={this.handleChangeX}
-                        onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
+                        step={step.x}
+                        // labelPrecision={isFloat ? 2 : 0}
+                        // labelStepSize={max ? max.x : 0}
+                        // onChange={this.handleChangeX}
+                        // onRelease={this.handleRelease}
+                        // labelRenderer={this.renderLabel}
                         disabled={readOnly === true}
                     />
                     <Slider
@@ -139,12 +139,12 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
                         value={value ? value.y : 0}
                         min={min ? min.y : undefined}
                         max={max ? max.y : undefined}
-                        stepSize={step.y}
-                        labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max ? max.y : 0}
-                        onChange={this.handleChangeY}
-                        onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
+                        step={step.y}
+                        // labelPrecision={isFloat ? 2 : 0}
+                        // labelStepSize={max ? max.y : 0}
+                        // onChange={this.handleChangeY}
+                        // onRelease={this.handleRelease}
+                        // labelRenderer={this.renderLabel}
                         disabled={readOnly === true}
                     />
                     <Slider
@@ -152,12 +152,12 @@ export class ParameterSlider3C extends React.Component<Props & InjectedProps, St
                         value={value ? value.z : 0}
                         min={min ? min.z : undefined}
                         max={max ? max.z : undefined}
-                        stepSize={step.z}
-                        labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max ? max.z : 0}
-                        onChange={this.handleChangeZ}
-                        onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
+                        step={step.z}
+                        // labelPrecision={isFloat ? 2 : 0}
+                        // labelStepSize={max ? max.z : 0}
+                        // onChange={this.handleChangeZ}
+                        // onRelease={this.handleRelease}
+                        // labelRenderer={this.renderLabel}
                         disabled={readOnly === true}
                     />      
                 </div>

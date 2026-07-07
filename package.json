@@ -13,6 +13,12 @@
     "predeploy": "npm run build && npm run zip"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/roboto": "^5.2.10",
+    "@mui/icons-material": "^9.1.1",
+    "@mui/joy": "^5.0.0-beta.52",
     "qrcode.react": "^4.2.0",
     "rabbitcontrol": "^0.0.49",
     "react": "^18.3.1",
@@ -20,8 +26,6 @@
     "react-measure": "^2.1.3"
   },
   "devDependencies": {
-    "@blueprintjs/core": "^6.11.3",
-    "@blueprintjs/select": "^6.1.8",
     "@eslint/js": "^9.39.4",
     "@types/jest": "^23.3.10",
     "@types/node": "^24.12.0",

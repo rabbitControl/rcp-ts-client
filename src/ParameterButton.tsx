@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { type InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Button, Intent, Alert, type ButtonProps } from '@blueprintjs/core';
+import { Button, Modal } from '@mui/joy';
 
-interface Props extends ButtonProps {
+interface Props {
     className?: string;
     label?: string;
     labelDisabled?: boolean;
@@ -43,7 +43,7 @@ export class ParameterButtonC extends React.Component<Props & InjectedProps, Sta
 
     render() {
 
-        const ld = this.props.labelDisabled;
+        const label_disabled = this.props.labelDisabled;
         let label = this.props.label;
 
         if (this.props.parameter) {
@@ -56,27 +56,30 @@ export class ParameterButtonC extends React.Component<Props & InjectedProps, Sta
             <section>
                 <Button style={{whiteSpace: "nowrap", }}
                     {...filteredProps}
-                    text={ld ? "" : label}
                     onClick={this.handleClick}
-                />
+                >
+                    {label_disabled ? "" : label}
+                </Button>
 
-                <Alert
-                    className={`bp6-dark ${this.props.className}`}
-                    canEscapeKeyCancel={true}
-                    cancelButtonText="Cancel"
-                    confirmButtonText="Send"
-                    icon="warning-sign"
-                    intent={Intent.DANGER}
-                    isOpen={this.state.isOpen}
-                    onCancel={this.handleDialogCancel}
-                    onConfirm={this.handleDialogConfirm}
+                <Modal
+                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    className={`${this.props.className}`}
+                    // canEscapeKeyCancel={true}
+                    // cancelButtonText="Cancel"
+                    // confirmButtonText="Send"
+                    // icon="warning-sign"
+                    // intent={Intent.DANGER}
+                    open={this.state.isOpen}
+                    onClose={() => this.setState({ isOpen: false })}
+                    // onCancel={this.handleDialogCancel}
+                    // onConfirm={this.handleDialogConfirm}
                 >
                     <p>
                         {this.props.confirmationText ? this.props.confirmationText : `text ${label}?`}
                         <br/>
                         {(this.props.parameter && this.props.parameter.description) ? `(${this.props.parameter.description})` : ""}
                     </p>
-                </Alert>
+                </Modal>
             </section>
         );
 

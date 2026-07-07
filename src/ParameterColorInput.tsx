@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { parameterWrapped, type InjectedProps } from './ElementWrapper';
-import { type InputGroupProps, InputGroup } from '@blueprintjs/core';
 import { ValueParameter, RGBAParameter } from 'rabbitcontrol';
+import { Input } from '@mui/joy';
 
-interface Props extends InputGroupProps {
+interface Props {
 };
 
 interface State {
@@ -68,10 +68,10 @@ export class ParameterColorInputC extends React.Component<Props & InjectedProps,
             readOnly = param.readonly;            
         }
 
-        const { onSubmitCb, handleValue, defaultValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
 
         return (     
-            <InputGroup
+            <Input
                 {...filteredProps}
                 value={value}
                 type="color"

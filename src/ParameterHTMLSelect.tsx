@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { parameterWrapped, type InjectedProps } from './ElementWrapper';
-import { HTMLSelect } from '@blueprintjs/core';
 import { EnumParameter } from 'rabbitcontrol';
+import Select from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
 
 interface Props {
 };
@@ -15,10 +16,11 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
         super(props);    
     }    
 
-    handleChange = (event: React.FormEvent<HTMLElement>) => {
+
+    handleChange = (_event: React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element> | React.FocusEvent<Element, Element> | null, value: string | null) => {
 
         if (this.props.handleValue) {
-            this.props.handleValue((event.target as HTMLInputElement).value);
+            this.props.handleValue(value);
         }
 
         if (this.props.onSubmitCb) {
@@ -27,7 +29,7 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
     }
 
     render() {
-        const value = this.props.value as string || "";
+        const value = this.props.value as string || "";
         let readOnly:boolean|undefined;
         let entries:string[]|undefined;
         // let multiSelect:boolean|undefined;
@@ -44,15 +46,17 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
         const { onSubmitCb, handleValue, ...filteredProps } = this.props;
 
         return (
-            <HTMLSelect
+            <Select
                 {...filteredProps}
+                defaultValue={value}
+                variant='soft'
                 onChange={this.handleChange}
                 disabled={readOnly === true}
                 className="test"
                 value={value}
             >
                 {this.renderOptions(param?.id ?? 0, value, entries)}
-            </HTMLSelect>      
+            </Select>      
         );
     }
 
@@ -60,11 +64,11 @@ export class ParameterHTMLSelectC extends React.Component<Props & InjectedProps,
         if (entries)
         {
             return entries.map((e, i) => {
-                return <option
+                return <Option             
                     key={id + "_" + i}
                     value={e}>
                     {e}
-                </option>
+                </Option>
             });
         }
 

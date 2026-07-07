@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { parameterWrapped, type InjectedProps } from './ElementWrapper';
-import { Slider, type SliderProps } from '@blueprintjs/core';
 import { RcpTypes, Vector3F32Definition, Vector2, Vector2F32Definition } from 'rabbitcontrol';
 import Measure from 'react-measure';
+import { Slider } from '@mui/joy';
 
-interface Props extends SliderProps {
+interface Props {
     continuous?: boolean;
 };
 
@@ -28,41 +28,54 @@ export class ParameterSlider2C extends React.Component<Props & InjectedProps, St
         };
     }    
 
-    handleChangeX = (value: number) => {
-
+    handleChangeX = (event: Event, value: number | Array<number>, activeThumb: number) => {
         const vec = (this.props.value as Vector2).clone();
-        vec.x = value;
+        if (!(value instanceof Array))
+        {
+            vec.x = value;
+        }
+        else if (value.length > 0)
+        {
+            vec.x = value[0];
+        }
 
         if (this.props.handleValue) {
             this.props.handleValue(vec);
         }
 
         if (this.props.continuous) {
-            this.handleRelease(0);
+            this.handleRelease(event, value);
         }
     }
-    handleChangeY = (value: number) => {
+    handleChangeY = (event: Event, value: number | Array<number>, activeThumb: number) => {
 
         const vec = (this.props.value as Vector2).clone();
-        vec.y = value;
+        if (!(value instanceof Array))
+        {
+            vec.y = value;
+        }
+        else if (value.length > 0)
+        {
+            vec.y = value[0];
+        }
 
         if (this.props.handleValue) {
             this.props.handleValue(vec);
         }
 
         if (this.props.continuous) {
-            this.handleRelease(0);
+            this.handleRelease(event, value);
         }
     }
 
-    handleRelease = (_value: number) => {
+    handleRelease = (event: React.SyntheticEvent | Event, value: number | Array<number>) => {
         if (this.props.onSubmitCb) {
             this.props.onSubmitCb();
         }
     }
 
     render() {
-        const value = this.props.value as Vector2;
+        let value = this.props.value as Vector2;
         let step = new Vector2(1, 1);
         let isFloat:boolean = false;
         let min:Vector2|undefined = undefined;
@@ -70,7 +83,8 @@ export class ParameterSlider2C extends React.Component<Props & InjectedProps, St
         let readOnly:boolean = false;
 
         const param = this.props.parameter;
-        if (param) {
+        if (param)
+        {
             readOnly = param.readonly || false;
             const numdef = param.typeDefinition as Vector2F32Definition;
             if (numdef !== undefined && 
@@ -108,29 +122,29 @@ export class ParameterSlider2C extends React.Component<Props & InjectedProps, St
             {({ measureRef }) =>
                 <div ref={measureRef}>
                     <Slider
-                        {...filteredProps}
+                        // {...filteredProps}
                         value={value ? value.x : 0}
-                        min={min ? min.x : undefined}
-                        max={max ? max.x : undefined}
-                        stepSize={step.x}
-                        labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max ? max.x : 0}
+                        min={min ? min.x : 0}
+                        max={max ? max.x : 0}
+                        step={step.x}
+                        // labelPrecision={isFloat ? 2 : 0}
+                        // labelStepSize={max ? max.x : 0}
                         onChange={this.handleChangeX}
-                        onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
+                        onChangeCommitted={this.handleRelease}
+                        // labelRenderer={this.renderLabel}
                         disabled={readOnly === true}
                     />
                     <Slider
-                        {...filteredProps}
+                        // {...filteredProps}
                         value={value ? value.y : 0}
                         min={min ? min.y : undefined}
                         max={max ? max.y : undefined}
-                        stepSize={step.y}
-                        labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max ? max.y : 0}
+                        step={step.y}
+                        // labelPrecision={isFloat ? 2 : 0}
+                        // labelStepSize={max ? max.y : 0}
                         onChange={this.handleChangeY}
-                        onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
+                        onChangeCommitted={this.handleRelease}
+                        // labelRenderer={this.renderLabel}
                         disabled={readOnly === true}
                     />    
                 </div>

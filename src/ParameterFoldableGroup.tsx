@@ -1,8 +1,14 @@
 import * as React from 'react';
 import { type InjectedProps, parameterWrapped } from './ElementWrapper';
-import { Colors, Text, Collapse, ControlGroup, Icon } from '@blueprintjs/core';
 import { GroupParameter, Parameter } from 'rabbitcontrol';
 import ParameterWidget from './ParameterWidget';
+import { Add } from '@mui/icons-material';
+
+import Accordion from '@mui/joy/Accordion';
+import AccordionDetails from '@mui/joy/AccordionDetails';
+import AccordionGroup from '@mui/joy/AccordionGroup';
+import AccordionSummary, { accordionSummaryClasses } from '@mui/joy/AccordionSummary';
+
 
 interface Props {
     style?: React.CSSProperties;
@@ -14,7 +20,7 @@ interface State {
 
 export class ParameterFoldableGroupC extends React.Component<Props & InjectedProps, State> {
 
-    static readonly COMPONENT_DEFAULT_COLOR = Colors.GRAY1;
+    static readonly COMPONENT_DEFAULT_COLOR = "#ff0000";
 
     constructor(props: Props & InjectedProps) {
         super(props);
@@ -65,19 +71,44 @@ export class ParameterFoldableGroupC extends React.Component<Props & InjectedPro
         }
 
         return (
-            <div style={this.props.style}>
-                <ControlGroup 
+            <div
+                // style={this.props.style}
+            >
+                {/* <Stack 
+                    sx={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}                
                     style={{marginBottom: this.state.isOpen ? 5 : 0}}
-                    vertical={false} 
+                    direction="row"
                     onClick={this.handleButtonClick}
                 >
-                    <Icon icon={this.state.isOpen ? "remove" : "add"}/>
+                    {this.state.isOpen ? <Remove/> : <Add/>}
                     <div style={{marginLeft: 10}}/>
-                    <Text>{label}</Text>
-                </ControlGroup>
-                <Collapse isOpen={this.state.isOpen}>
-                    {this.renderChildren()}
-                </Collapse>
+                    <p>{label}</p>
+                </Stack> */}
+                <AccordionGroup
+                    sx={{
+                    [`& .${accordionSummaryClasses.indicator}`]: {
+                    transition: '0.2s',
+                    },
+                    [`& [aria-expanded="true"] .${accordionSummaryClasses.indicator}`]: {
+                    transform: 'rotate(45deg)',
+                    },
+                }}
+                >
+                    <Accordion
+                        expanded={this.state.isOpen}
+                        onChange={(event, expanded) => {
+                            this.setState({isOpen: expanded});
+                        }}
+                    >
+                        <AccordionSummary indicator={<Add />}>{label}</AccordionSummary>
+                        <AccordionDetails>
+                            {this.renderChildren()}
+                        </AccordionDetails>
+                    </Accordion>
+                </AccordionGroup>
             </div>
         );
     }

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { parameterWrapped, type InjectedProps } from './ElementWrapper';
-import { type CheckboxProps, Position, Checkbox } from '@blueprintjs/core';
+import Checkbox from '@mui/joy/Checkbox';
 
-interface Props extends CheckboxProps {
+interface Props {
 };
 
 interface State {
@@ -29,25 +29,25 @@ export class ParameterCheckboxC extends React.Component<Props & InjectedProps, S
     }
 
     render() {
-        const value = this.props.value as boolean || false;
+        // const v = this.props.value as boolean || false;
         let readOnly:boolean|undefined;
-
 
         const param = this.props.parameter;
         if (param) {
             readOnly = param.readonly;        
         }
 
-        const { onSubmitCb, handleValue, ...filteredProps } = this.props;
+        const { onSubmitCb, handleValue, value, ...filteredProps } = this.props;
 
         return (
             <Checkbox
                 {...filteredProps}
-                checked={value}
+                checked={value as boolean}
                 onChange={this.handleChange}
                 disabled={readOnly === true}
-                alignIndicator={Position.LEFT}
-                size='large'
+                label={this.props.parameter?.label}
+                // alignIndicator={Position.LEFT}
+                size="lg"
             />      
         );
     }

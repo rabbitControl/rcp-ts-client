@@ -1,14 +1,14 @@
-.App {
+/* .App {
   text-align: left;
   margin: 4px;
   margin-bottom: -30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
+} */
 
 /* bluepring style overwrites*/
-.bp6-slider-handle:focus {
+/* .bp6-slider-handle:focus {
   outline: 0;
 }
 
@@ -44,7 +44,7 @@
 
 .bp6-input:disabled {
   color: unset !important;
-}
+} */
 
 /* gui styles */
 .parameter-label {
@@ -64,12 +64,12 @@
   border-radius: 4px;
 }
 
-.bp6-dialog-body h3:first-child {
+/* .bp6-dialog-body h3:first-child {
   margin-top: 0;
 }
 .bp6-alert-contents h4:first-child {
   margin-top: 0;
-}
+} */
 
 .connection-dialog, .share-connection-dialog {
   margin: 2em;
@@ -79,7 +79,7 @@
   margin-top: -2px;
   margin-left: 4px;
 }
-.share-connection-cta .bp6-button-text {
+/* .share-connection-cta .bp6-button-text {
   font-size: 0.8em;
 }
 
@@ -95,7 +95,7 @@
 .share-connection-dialog .bp6-input-group {
   flex-grow: 1;
   flex-shrink: 1;
-}
+} */
 
 .share-connection-dialog .confirmation-message {
   margin-top: 1em;
@@ -120,14 +120,10 @@
   height: 100%;
 }
 
-.connection_history h4 {
-  margin-bottom: 0.66em;
-}
-
 .connection_history_list {
   max-height: calc(80vh - 17em);
-  overflow-y: scroll;
-  scrollbar-width: none;
+  /* overflow-y: scroll; */
+  /* scrollbar-width: none; */
 }
 .connection_history_list::-webkit-scrollbar {
   display: none;
@@ -154,10 +150,10 @@
 .history_item_ctas button {
   margin: 0 2px 0 3px;
 }
-.bp6-divider {
+/* .bp6-divider {
   margin-left: 0;
   margin-right: 0;
-}
+} */
 
 .rootgroup-wrapper {
   padding: 5px;

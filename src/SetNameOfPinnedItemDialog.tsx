@@ -1,7 +1,6 @@
 import * as React from 'react';
-
-import { Alert, InputGroup, ControlGroup, Text } from '@blueprintjs/core';
 import { ConnectionHistoryProvider } from './ConnectionHistoryProvider';
+import { DialogTitle, Input, Modal, ModalClose, ModalDialog, Stack } from '@mui/joy';
 
 type Props = {
     show: boolean;
@@ -57,26 +56,30 @@ export default class SetNameOfPinnedItemDialog extends React.Component<Props, St
     }
 
     render(): React.ReactNode {
-        return <Alert isOpen={ this.props.show }
-                      className={"bp6-dark"}
-                      icon="pin"
-                      confirmButtonText="Save"
-                      cancelButtonText="Pin without name"
-                      canOutsideClickCancel={ true }
-                      canEscapeKeyCancel={ true }
-                      onConfirm={ this.confirm }
-                      onCancel={ this.props.onCancel }>
+        return <Modal open={ this.props.show }
+                    //   icon="pin"
+                    //   confirmButtonText="Save"
+                    //   cancelButtonText="Pin without name"
+                    //   canOutsideClickCancel={ true }
+                    //   canEscapeKeyCancel={ true }
+                    //   onConfirm={ this.confirm }                    
+                      onClose={ this.props.onCancel }
+                >
 
-            <h4>Set name for pinned item</h4>
-            
-            <ControlGroup style={{alignItems: "center"}}>
-                <Text>Name:&nbsp;</Text>
-                <InputGroup value={ this.state.name }
-                            type="text"
-                            inputRef={ this.inputRef }
-                            onChange={ this.setName } 
-                            onKeyDown={ this.handleEnterKey } />
-            </ControlGroup>
-        </Alert>
+            <ModalDialog>
+                <ModalClose />
+                <DialogTitle>Set name for pinned item</DialogTitle>
+                
+                <Stack direction="row">
+                    <p>Name:&nbsp;</p>
+                    <Input value={ this.state.name }
+                                type="text"
+                                // inputRef={ this.inputRef }
+                                onChange={ this.setName } 
+                                onKeyDown={ this.handleEnterKey }
+                                />
+                </Stack>
+            </ModalDialog>            
+        </Modal>
     }
 }

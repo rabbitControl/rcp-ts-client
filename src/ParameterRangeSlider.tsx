@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { parameterWrapped, type InjectedProps } from './ElementWrapper';
-import { RangeSlider, type RangeSliderProps, type NumberRange } from '@blueprintjs/core';
 import { NumberDefinition, RcpTypes, Range, RangeDefinition } from 'rabbitcontrol';
 import Measure from 'react-measure';
+import { Slider } from '@mui/joy';
 
-interface Props extends RangeSliderProps {
+interface Props {
     continuous?: boolean;
     rangeValue?: Range;
 };
@@ -29,17 +29,20 @@ export class ParameterRangeSliderC extends React.Component<Props & InjectedProps
         };
     }    
 
-    handleChange = (value: NumberRange) => {
-        if (this.props.handleValue) {
+    handleChange = (event: Event, newValue: number | number[], activeThumb: number) => {
+
+        const value = newValue as number[]
+
+        if (value.length > 1 && this.props.handleValue) {
             this.props.handleValue(new Range(value[0], value[1]));
         }
 
         if (this.props.continuous) {
-            this.handleRelease(value);
+            this.handleRelease(event, value);
         }
     }
 
-    handleRelease = (_value: NumberRange) => {
+    handleRelease = (event: React.SyntheticEvent | Event, value: number | Array<number>) => {
         if (this.props.onSubmitCb) {
             this.props.onSubmitCb();
         }
@@ -91,17 +94,17 @@ export class ParameterRangeSliderC extends React.Component<Props & InjectedProps
             >
             {({ measureRef }) =>
                 <div ref={measureRef}>
-                    <RangeSlider
+                    <Slider
                         {...filteredProps}
                         value={value ? [value.value1, value.value2] : [0, 1]}
                         min={min}
                         max={max}
-                        stepSize={step}
-                        labelPrecision={isFloat ? 2 : 0}
-                        labelStepSize={max}
+                        step={step}
+                        // labelPrecision={isFloat ? 2 : 0}
+                        // labelStepSize={max}
                         onChange={this.handleChange}
-                        onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
+                        onChangeCommitted={this.handleRelease}
+                        // labelRenderer={this.renderLabel}
                         disabled={readOnly === true}
                     />      
                 </div>

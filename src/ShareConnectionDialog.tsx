@@ -1,7 +1,11 @@
 import * as React from 'react';
-
-import { Alert, InputGroup, ControlGroup, Text, Button, Colors } from '@blueprintjs/core';
 import { QRCodeSVG } from 'qrcode.react';
+import { Box, DialogTitle, IconButton, Modal, ModalClose, ModalDialog, Stack, Typography } from '@mui/joy';
+import { ContentCopy, Done } from '@mui/icons-material';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 type Props = {
     show: boolean;
@@ -78,39 +82,64 @@ export default class ShareConnectionDialog extends React.Component<Props, State>
     }
 
     render(): React.ReactNode {
-        return <Alert isOpen={ this.props.show }
-            className={"bp6-dark share-connection-dialog"}
-            icon="upload"
-            confirmButtonText="Done"
+        return <Modal 
+            open={ this.props.show }
+            className={"share-connection-dialog"}
+            // icon="upload"
+            // confirmButtonText="Done"
             onClose={ this.onClose }
-            canOutsideClickCancel={ true }
-            canEscapeKeyCancel={ true }>
+            // canOutsideClickCancel={ true }
+            // canEscapeKeyCancel={ true }
+            >
+                
 
-            <h4>Share this connection</h4>
-            
-            <Text className='bp6-text-small bp6-text-muted'>
-                You can share this connection by passing the link below on to other people. When they 
-                open this link, the connection will establish immediatly.
-            </Text>
+            <ModalDialog>
+                <ModalClose />
+                <DialogTitle>Share this connection</DialogTitle>
+                
+                <Typography color='neutral'>
+                    You can share this connection by passing the link below on to other people. When they 
+                    open this link, the connection will establish immediatly.
+                </Typography>
 
-            <ControlGroup style={{alignItems: "center"}}>
-                <Text>Link:</Text>&nbsp;
-                <InputGroup type="text"
-                            readOnly={ true }
-                            value={ this.state.link }
-                            inputRef={ this.inputRef } />
-                <Button icon={ this.state.didCopy ? "tick-circle" : "clipboard" }
-                        onClick={ this.copyLink }/>
-            </ControlGroup>
+                <Stack 
+                    direction="row"
+                    sx={{
+                        p: 1,
+                        border: '1px dashed grey',
+                        display: "flex",
+                        justifyContent: "center",
+                        alignContent: "center",
+                        alignItems: "center"
+                    }}
+                >
+                    <Typography>Link:</Typography>&nbsp;
+                    <Typography
+                                // inputRef={ this.inputRef }
+                                >
+                                    { this.state.link }
+                                    </Typography>
+                    <IconButton onClick={ this.copyLink } >
+                        {this.state.didCopy ? <Done/> : <ContentCopy/>}
+                    </IconButton>
+                </Stack>
 
-            <div className="qr-grid">
-                <div className='qr-container'>
-                    <QRCodeSVG value={ this.state.link } 
-                            size={ 256 }
-                            bgColor={ Colors.BLACK } 
-                            fgColor={ Colors.LIGHT_GRAY5 }/>
-                </div>
-            </div>
-        </Alert>
+                <Box className="qr-grid"
+                sx={{
+        display: 'flex',
+        justifyContent: "center",
+      }}                    
+                >
+                    <div className='qr-container'>
+                        <QRCodeSVG value={ this.state.link } 
+                                size={ 256 }
+                                // bgColor={ Colors.BLACK } 
+                                // fgColor={ Colors.LIGHT_GRAY5 }
+                                />
+                    </div>
+                </Box>
+            </ModalDialog>
+
+        </Modal>
     }
 }

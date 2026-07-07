@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { parameterWrapped, type InjectedProps } from './ElementWrapper';
-import { Slider, type SliderProps } from '@blueprintjs/core';
 import { NumberDefinition, RcpTypes } from 'rabbitcontrol';
 import Measure from 'react-measure';
 import { DEFAULT_PRECISION } from './Globals';
+import { Slider } from '@mui/joy';
 
-interface Props extends SliderProps {
+interface Props {
     continuous?: boolean;
 };
 
@@ -38,24 +38,24 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
         };
     }    
 
-    handleChange = (value: number) => {
+    handleChange = (event: Event, value: number | Array<number>, activeThumb: number) => {
         if (this.props.handleValue) {
             this.props.handleValue(value);
         }
 
         if (this.props.continuous) {
-            this.handleRelease(value);
+            this.handleRelease(event, value);
         }
     }
 
-    handleRelease = (_value: number) => {
+    handleRelease = (event: React.SyntheticEvent | Event, value: number | Array<number>) => {
         if (this.props.onSubmitCb) {
             this.props.onSubmitCb();
         }
     }
 
-    render() {
-        const value = this.props.value as number || 0;
+    render() {        
+        let value = this.props.value as number || 0;
         let step = 1;
         let isFloat:boolean = false;
         let min:number|undefined = undefined;
@@ -103,17 +103,21 @@ export class ParameterSliderC extends React.Component<Props & InjectedProps, Sta
             {({ measureRef }) =>
                 <div ref={measureRef}>
                     <Slider
-                        {...filteredProps}
+                        // {...filteredProps}
                         value={value}
                         min={min}
                         max={max}
-                        stepSize={step}
-                        labelPrecision={isFloat ? this.precision : 0}
-                        labelValues={min != undefined && max != undefined ? [min, max] : []}
-                        showTrackFill={value != 0}
+                        step={step}
+                        // marks={true}
+                        // name='TEST'
+                        size='lg'
+                        valueLabelDisplay='off'
+                        valueLabelFormat={(x) => x.toFixed(this.precision)}
+                        // labelValues={min != undefined && max != undefined ? [min, max] : []}
+                        // showTrackFill={value != 0}
                         onChange={this.handleChange}
-                        onRelease={this.handleRelease}
-                        labelRenderer={this.renderLabel}
+                        onChangeCommitted={this.handleRelease}
+                        // labelRenderer={this.renderLabel}
                         disabled={readOnly === true}
                     />      
                 </div>

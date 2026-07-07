@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { parameterWrapped, type InjectedProps } from './ElementWrapper';
-import { InputGroup } from '@blueprintjs/core';
 import { ValueParameter } from 'rabbitcontrol';
+import Input from '@mui/joy/Input';
+
 
 interface Props {
 };
@@ -55,7 +56,7 @@ export class ParameterTextInputC extends React.Component<Props & InjectedProps, 
 
         return (     
             <form onSubmit={this.handleSubmit}>
-                <InputGroup
+                <Input
                     {...filteredProps}
                     value={value}
                     onChange={this.handleChange}
