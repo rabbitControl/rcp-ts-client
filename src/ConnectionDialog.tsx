@@ -137,6 +137,10 @@ export default class ConnectionDialog extends React.Component<Props, State>
         });
     }
 
+    disconnectClient = () => {
+        this.state.client?.disconnect();
+    }
+
 
     render() 
     {
@@ -167,7 +171,7 @@ export default class ConnectionDialog extends React.Component<Props, State>
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                     <a style={{
                         color: Colors.GRAY1
-                    }} onClick={() => this.state.client?.disconnect()}>Disconnect</a>
+                    }} onClick={this.disconnectClient}>Disconnect</a>
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                     <a
                         style={{
