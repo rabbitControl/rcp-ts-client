@@ -287,7 +287,8 @@ export default class ConnectionDialog extends React.Component<Props, State>
 
     private connectFromHistoryItem = (item: ConnectionHistoryProvider.HistoryItem): void => {
         this.setState({
-            error: undefined
+            error: undefined,
+            rootWithTabs: item.tabsInRoot
         });
 
         this.doConnect(item.address, item.port);
