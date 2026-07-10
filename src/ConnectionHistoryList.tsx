@@ -125,18 +125,18 @@ export default class ConnectionHistoryList extends React.Component<Props, State>
                             </em></Text>
                         </div>
                         <div className="history_item_ctas">
-                            <Button small={ true } 
+                            <Button size="small" 
                                     icon="trash" 
                                     onClick={ () => { this.deleteItemAtIndex(index) } } />
-                            <Button small={ true } 
+                            <Button size="small" 
                                     icon={ entry.isFavourite ? 'unpin' : 'pin' } 
                                     intent={ entry.isFavourite ? Intent.WARNING : undefined }
                                     onClick={ () => { this.toggleIsFavouriteOnHistoryItem(index) } } />
-                            <Button small={ true } 
+                            <Button size="small" 
                                     icon="share" 
                                     onClick={ () => { this.showShareConnectionDialog(entry.address, entry.port) } } />
                             <Button text="Connect" 
-                                    small={ true } 
+                                    size="small" 
                                     onClick={ () => { this.props.onConnectFromHistoryItem(this.state.listEntries[index]) } }/>
                         </div>
                     </section>
